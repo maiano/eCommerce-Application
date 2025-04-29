@@ -11,8 +11,19 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.0.1",
+    "@mantine/carousel": "^7.17.5",
+    "@mantine/core": "^7.17.5",
+    "@mantine/dates": "^7.17.5",
+    "@mantine/form": "^7.17.5",
+    "@mantine/hooks": "^7.17.5",
+    "@mantine/notifications": "^7.17.5",
+    "framer-motion": "^12.9.2",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-hook-form": "^7.56.1",
+    "swr": "^2.3.3",
+    "zod": "^3.24.3"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.0",
