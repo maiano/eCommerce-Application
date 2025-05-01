@@ -16,7 +16,8 @@ Discover your next favorite bottle in just a few clicks!
 
 ### Core
 
-- **Frontend**: <a href="https://reactjs.org/"><img src="https://user-images.githubusercontent.com/25181517/183897015-94a058a6-b86e-4e42-a37f-bf92061753e5.png" width="16" alt="React"> React 18</a> + TypeScript
+- **Frontend**: <a href="https://reactjs.org/"><img src="https://user-images.githubusercontent.com/25181517/183897015-94a058a6-b86e-4e42-a37f-bf92061753e5.png" width="16" alt="React"> React </a> + TypeScript
+- **Routing**: <a href="https://reactrouter.com/"><img src="https://reactrouter.com/favicon-light.png" width="16" alt="React Router"> React Router</a>
 - **State**: <a href="https://zustand-demo.pmnd.rs/"><img src="https://github.com/pmndrs/zustand/blob/main/examples/demo/public/favicon.ico?raw=true" width="16" alt="Zustand"> Zustand</a> + <a href="https://zod.dev/"><img src="https://zod.dev/logo.svg" width="16" alt="Zod"> Zod</a>
 - **Data**: <a href="https://swr.vercel.app/"><img src="https://swr.vercel.app/favicon/apple-touch-icon.png" width="16" alt="SWR"> SWR</a> (Data fetching)
 - **UI**: <a href="https://mantine.dev/"><img src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/logo.svg" width="16" alt="Mantine"> Mantine</a> + Framer Motion
