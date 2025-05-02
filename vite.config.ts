@@ -5,6 +5,10 @@ import path from 'path';
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: './',
+  build: {
+    outDir: 'dist',
+  },
   plugins: [react()],
   resolve: {
     alias: {
