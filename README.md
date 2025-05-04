@@ -1,54 +1,72 @@
-# React + TypeScript + Vite
+# Wine not? - Modern Wine E-Commerce
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## About Us
 
-Currently, two official plugins are available:
+**Wine not?** brings you premium wines from around the world with:  
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Handpicked wines from top vineyards  
+- Easy browsing and cart management  
+- Fast nationwide delivery  
+- Secure registration and checkout  
+- Exclusive deals for regular customers  
 
-## Expanding the ESLint configuration
+Discover your next favorite bottle in just a few clicks!
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Technology Stack
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+### Core
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- **Frontend**: <a href="https://reactjs.org/"><img src="https://user-images.githubusercontent.com/25181517/183897015-94a058a6-b86e-4e42-a37f-bf92061753e5.png" width="16" alt="React"> React </a> + TypeScript
+- **Routing**: <a href="https://reactrouter.com/"><img src="https://reactrouter.com/favicon-light.png" width="16" alt="React Router"> React Router</a>
+- **State**: <a href="https://zustand-demo.pmnd.rs/"><img src="https://github.com/pmndrs/zustand/blob/main/examples/demo/public/favicon.ico?raw=true" width="16" alt="Zustand"> Zustand</a> + <a href="https://zod.dev/"><img src="https://zod.dev/logo.svg" width="16" alt="Zod"> Zod</a>
+- **Data**: <a href="https://swr.vercel.app/"><img src="https://swr.vercel.app/favicon/apple-touch-icon.png" width="16" alt="SWR"> SWR</a> (Data fetching)
+- **UI**: <a href="https://mantine.dev/"><img src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/logo.svg" width="16" alt="Mantine"> Mantine</a> + Framer Motion
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Tooling
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+- **Bundler**: <a href="https://vitejs.dev/"><img src="https://vitejs.dev/logo.svg" width="16" alt="Vite"> Vite</a>
+- **Testing**: <a href="https://vitest.dev/"><img src="https://vitest.dev/logo.svg" width="16" alt="Vitest"> Vitest</a> + Testing Library
+- **Linting**: ESLint + Prettier + Husky
+
+## Quick Start
+
+> [!NOTE]
+> To get started with the development:
+>
+> 1. Clone the repository using `git clone https://github.com/maiano/eCommerce-Application.git`.
+> 2. Install dependencies using `npm install`.
+> 3. Run the development server using `npm run dev`.
+> 4. Build the project using `npm run build`.
+
+<details>
+  <summary>Scripts</summary>
+
+- `build`: Create production build.
+
+- `ci:format`: Check code formatting.
+
+- `dev`: Start development server.
+
+- `format`: Format code with Prettier.
+
+- `lint`: Check for linting errors.
+
+- `lint:fix`: Fix linting errors.
+
+- `prepare`: Sets up Husky.
+
+- `preview`: Preview production build.
+
+- `test`: Run all tests.
+
+- `coverage`: Generate test coverage report.
+
+</details>
+
+## Project Team
+
+The following contributors have worked on this project:
+
+- **Victoria** - Developer | Designer - [GitHub](https://github.com/blk-thorn)
+- **Anna** - Developer | Project manager - [GitHub](https://github.com/ann-sm)
+- **Aleksei** - Developer | Team Lead- [GitHub](https://github.com/maiano)
