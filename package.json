@@ -16,6 +16,8 @@
     "coverage": "vitest run --coverage"
   },
   "dependencies": {
+    "@commercetools/platform-sdk": "^8.8.0",
+    "@commercetools/sdk-client-v2": "^3.0.0",
     "@hookform/resolvers": "^5.0.1",
     "@mantine/carousel": "^7.17.5",
     "@mantine/core": "^7.17.5",
