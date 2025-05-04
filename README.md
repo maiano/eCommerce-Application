@@ -69,4 +69,4 @@ The following contributors have worked on this project:
 
 - **Victoria** - Developer | Designer - [GitHub](https://github.com/blk-thorn)
 - **Anna** - Developer | Project manager - [GitHub](https://github.com/ann-sm)
-- **Aleksei** - Developer - [GitHub](https://github.com/maiano)
+- **Aleksei** - Developer | Team Lead- [GitHub](https://github.com/maiano)
