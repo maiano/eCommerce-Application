@@ -5,8 +5,9 @@
 
 import { ClientBuilder } from '@commercetools/sdk-client-v2';
 import { createApiBuilderFromCtpClient } from '@commercetools/platform-sdk';
-import { authMiddlewareOptions, httpMiddlewareOptions } from './config';
-import { env } from './environment.ts';
+import { httpMiddlewareOptions } from './http-config.ts';
+import { authMiddlewareOptions } from './auth-config.ts';
+import { env } from './environment';
 
 const projectKey = env.VITE_CTP_PROJECT_KEY;
 
