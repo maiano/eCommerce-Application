@@ -10,7 +10,7 @@ import jsxA11y from 'eslint-plugin-jsx-a11y';
 export default [
   // Base
   {
-    ignores: ['dist/**', '**/*.d.ts', 'node_modules', 'vite.config.ts'],
+    ignores: ['dist/**', '**/*.d.ts', 'node_modules', 'vite.http-config.ts'],
   },
 
   // JS
