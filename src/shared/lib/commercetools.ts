@@ -10,7 +10,7 @@ import {
   type HttpMiddlewareOptions, // Required for sending HTTP requests
 } from '@commercetools/sdk-client-v2';
 
-// import fetch from 'node-fetch';
+import fetch from 'isomorphic-fetch';
 
 import { z } from 'zod';
 
@@ -41,13 +41,13 @@ const authMiddlewareOptions: AuthMiddlewareOptions = {
     clientSecret: env.VITE_CTP_CLIENT_SECRET,
   },
   scopes,
-  // httpClient: fetch,
+  fetch: fetch,
 };
 
 // Configure httpMiddlewareOptions
 const httpMiddlewareOptions: HttpMiddlewareOptions = {
   host: env.VITE_CTP_API_URL,
-  // httpClient: fetch,
+  fetch: fetch,
 };
 
 // Export the ClientBuilder
