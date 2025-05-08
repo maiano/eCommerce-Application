@@ -1,0 +1,315 @@
+.hero__container {
+  padding: 1rem;
+  width: 100%;
+}
+
+.hero__image {
+  display: flex;
+  width: 100%;
+  min-height: 600px;
+  flex-direction: column;
+  gap: 1.5rem;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 0.75rem;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.4) 100%),
+    url('../assets/wine.png');
+}
+
+.hero__content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  text-align: center;
+}
+
+.hero__title {
+  color: white;
+  font-size: 2.25rem;
+  font-weight: 900;
+  line-height: 1.25;
+  letter-spacing: -0.033em;
+}
+
+.hero__subtitle {
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.section-title {
+  color: #f8f9fb;
+  font-size: 1.375rem;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  padding: 1.25rem 1rem 0.75rem;
+}
+
+.carousel__container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  padding: 1rem;
+  justify-content: center;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  min-width: 280px;
+  background: #1d2a36;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card__image {
+  width: 100%;
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+}
+
+.card__content {
+  padding: 1.5rem;
+}
+
+.card__title {
+  color: #f8f9fb;
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.card__description {
+  color: #8a9dc0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.card__image--chardonnay {
+  background-image: url('../assets/wine4.png');
+}
+
+.card__image--pinot {
+  background-image: url('../assets/wine2.png');
+}
+
+.card__image--cabernet {
+  background-image: url('../assets/wine1.png');
+}
+
+.card__image--sauvignon {
+  background-image: url('../assets/wine3.png');
+}
+
+.card__content {
+  display: flex;
+  flex-direction: column;
+}
+
+.card__title {
+  color: #f8f9fb;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.card__description {
+  color: #8a9dc0;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.discount-section {
+  padding: 2rem 1rem;
+  background-color: #1d2a36;
+  border-radius: 0.75rem;
+  margin: 2rem 1rem;
+  max-width: 100%;
+}
+
+.discount-container {
+  text-align: center;
+  padding: 1.5rem;
+}
+
+.discount-title {
+  color: #f4c753;
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.discount-description {
+  color: #f8f9fb;
+  font-size: 1.125rem;
+  line-height: 1.6;
+}
+
+.discount-code {
+  color: #f4c753;
+  font-weight: 700;
+  padding: 0.25rem 0.5rem;
+  background-color: #29374c;
+  border-radius: 0.25rem;
+  margin-left: 0.25rem;
+}
+
+.features {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  padding: 2.5rem 1rem;
+}
+
+.features__header {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.features__title {
+  color: #f8f9fb;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.033em;
+  max-width: 720px;
+}
+
+.features__subtitle {
+  color: #f8f9fb;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: normal;
+  max-width: 720px;
+}
+
+.features__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(158px, 1fr));
+  gap: 0.75rem;
+  padding: 0;
+}
+
+.feature-card {
+  display: flex;
+  flex: 1;
+  gap: 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid #32415d;
+  background-color: #1d2a36;
+  padding: 1rem;
+  flex-direction: column;
+}
+
+.feature-card__icon {
+  color: #f8f9fb;
+}
+
+.feature-card__content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.feature-card__title {
+  color: #f8f9fb;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.feature-card__description {
+  color: #8a9dc0;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: normal;
+}
+
+@media (max-width: 768px) {
+  .features__grid {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+  .feature-card {
+    padding: 1.8rem;
+  }
+
+  .discount-section {
+    padding: 1.5rem 1.5rem;
+  }
+
+  .discount-title {
+    font-size: 1.5rem;
+  }
+
+  .discount-description {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 1223px) {
+  .carousel__container {
+    grid-template-columns: repeat(2, minmax(250px, 400px));
+  }
+
+  .card {
+    max-width: 400px;
+  }
+}
+
+@media (max-width: 640px) {
+  .carousel__container {
+    gap: 1rem;
+  }
+
+  .card {
+    max-width: 400px;
+  }
+}
+
+@media (max-width: 620px) {
+  .carousel__container {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    justify-items: center;
+  }
+  .card {
+    width: 70% !important;
+    max-width: 70% !important;
+  }
+  .card__image {
+    height: 250px;
+  }
+}
+
+@media (max-width: 480px) {
+  .carousel__container {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    justify-items: center;
+    padding: 0 1rem;
+  }
+
+  .card {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .card__image {
+    height: 250px;
+  }
+
+  .discount-section {
+    padding: 1.5rem 0.5rem;
+  }
+}
