@@ -1,7 +1,7 @@
-import { HomePage } from '@/pages/Home';
+import { AppProvider } from '@/app/providers';
 
 function App() {
-  return <HomePage />;
+  return <AppProvider />;
 }
 
 export default App;
