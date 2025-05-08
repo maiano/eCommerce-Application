@@ -48,6 +48,6 @@ export default defineConfig({
     globals: true,
     maxConcurrency: 4,
     setupFiles: ['./src/test/setupTests.ts'],
-    cache: { dir: './.vitest-cache' },
+    cache: { dir: './node_modules/.vite/.vitest-cache' },
   },
 });
