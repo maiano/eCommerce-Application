@@ -1,13 +1,11 @@
 import { MantineProvider } from '@mantine/core';
-import { BrowserRouter } from 'react-router-dom';
-import { AppRoutes } from '@/app/router';
+import { RouterProvider } from 'react-router-dom';
+import { router } from '@/app/router';
 
 export const AppProvider = () => {
   return (
     <MantineProvider theme={{ fontFamily: 'Open Sans' }}>
-      <BrowserRouter>
-        <AppRoutes />
-      </BrowserRouter>
+      <RouterProvider router={router} />
     </MantineProvider>
   );
 };
