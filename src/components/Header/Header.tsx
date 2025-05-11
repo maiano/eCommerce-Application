@@ -11,7 +11,7 @@ import {
 } from '@mantine/core';
 import { useDisclosure, useClickOutside } from '@mantine/hooks';
 
-export default function Header() {
+export function Header() {
   const theme = useMantineTheme();
   const [opened, { toggle, close }] = useDisclosure();
   const menuRef = useRef<HTMLElement>(null);

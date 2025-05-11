@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Container, Text } from '@mantine/core';
 
-export default function Footer() {
+export function Footer() {
   return (
     <Container className="footer">
       <Container className="footer__container">

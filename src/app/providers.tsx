@@ -1,16 +1,12 @@
 import { MantineProvider } from '@mantine/core';
-import { BrowserRouter } from 'react-router-dom';
-import { AppRoutes } from '@/app/router';
-import { theme } from '../theme';
-import '../index.css';
+import { RouterProvider } from 'react-router-dom';
+import { router } from '@/app/router';
+import { theme } from '@/app/theme';
 
 export const AppProvider = () => {
   return (
-    <MantineProvider theme={theme} defaultColorScheme="dark"
->
-      <BrowserRouter>
-        <AppRoutes />
-      </BrowserRouter>
+    <MantineProvider theme={theme} defaultColorScheme="dark">
+      <RouterProvider router={router} />
     </MantineProvider>
   );
 };
