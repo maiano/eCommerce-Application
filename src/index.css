@@ -10,9 +10,8 @@
   list-style: none;
 }
 
-.button--icon {
-  background-color: #29374c;
-  gap: 0 !important;
+.no-scroll {
+  overflow: hidden;
 }
 
 body {
@@ -91,6 +90,9 @@ body {
   line-height: normal;
   text-decoration: none;
 }
+.header__nav-item--cart {
+  display: none;
+}
 
 .burger,
 .burger__line {
@@ -121,47 +123,11 @@ body {
 .header__user-icon {
   width: 24px;
   height: 24px;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.3s ease-in-out;
 }
 
 .header__user-icon:hover {
   opacity: 0.8;
-}
-
-.header__dropdown {
-  position: absolute;
-  right: 0;
-  top: 100%;
-  background: #1d2a36;
-  border: 1px solid #29374c;
-  border-radius: 0.5rem;
-  padding: 0.5rem;
-  min-width: 140px;
-  margin-top: 0.5rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  display: none;
-}
-
-.header__user-menu[open] .header__dropdown {
-  display: block;
-}
-
-.header__dropdown-item {
-  padding: 0.25rem 0;
-}
-
-.header__dropdown-link {
-  color: #f8f9fb;
-  font-size: 0.875rem;
-  padding: 0.5rem 1rem;
-  display: block;
-  border-radius: 0.25rem;
-  transition: background-color 0.3s ease;
-}
-
-.header__dropdown-link:hover {
-  background-color: #29374c;
-  text-decoration: none;
 }
 
 .header__user-icon {
@@ -212,12 +178,22 @@ body {
 }
 
 .button--primary {
-  display: none;
   background-color: #f4c753;
   color: #141c24;
 }
 
 .button--secondary {
+  background-color: #29374c;
+  color: #f8f9fb;
+}
+
+.burger-button--primary {
+  display: none;
+  background-color: #f4c753;
+  color: #141c24;
+}
+
+.burger-button--secondary {
   display: none;
   background-color: #29374c;
   color: #f8f9fb;
@@ -267,6 +243,15 @@ body {
 
 .contact-section {
   padding: 1rem;
+}
+
+.carousel {
+  display: flex;
+  flex-direction: column;
+}
+
+.carousel__container {
+  display: flex;
 }
 
 .footer {
@@ -360,62 +345,10 @@ body {
   }
 
   .burger {
-    display: flex;
-    position: relative;
-    width: 40px;
-    height: 40px;
-    cursor: pointer;
-    z-index: 1000;
-  }
-
-  .burger__line {
-    display: flex;
-    position: absolute;
-    width: 21px;
-    height: 2px;
-    background: #f8f9fb;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    transition: all 0.3s ease;
-  }
-
-  .burger::before {
-    content: '';
-    position: absolute;
-    width: 21px;
-    height: 2px;
-    background: #f8f9fb;
-    top: 12px;
-    left: 50%;
-    transform: translateX(-50%);
-    transition: all 0.3s ease;
-  }
-
-  .burger::after {
-    content: '';
-    position: absolute;
-    width: 21px;
-    height: 2px;
-    background: #f8f9fb;
-    bottom: 12px;
-    left: 50%;
-    transform: translateX(-50%);
-    transition: all 0.3s ease;
-  }
-
-  .burger--active .burger__line {
-    opacity: 0;
-  }
-
-  .burger--active::before {
-    transform: translateX(-50%) rotate(45deg);
-    top: 19px;
-  }
-
-  .burger--active::after {
-    transform: translateX(-50%) rotate(-45deg);
-    bottom: 19px;
+    display: block;
+    /* position: absolute;
+    top: 25px;
+    right: 20px; */
   }
 
   .header__nav {
@@ -434,7 +367,7 @@ body {
     top: 0;
     right: 0;
     width: 40%;
-    height: 50%;
+    height: 100%;
     border: 1px solid #32415d;
     background-color: rgba(29, 42, 54, 0.97);
     border-radius: 0.5rem;
@@ -444,7 +377,11 @@ body {
     justify-content: flex-start;
     align-items: center;
     z-index: 999;
-    transition: all 0.3s ease;
+    transition: all 0.3s ease-in-out;
+    box-shadow:
+      0 0 0 100vmax rgba(0, 0, 0, 0.8),
+      15px 0 30px -10px rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(2px);
   }
 
   .header__nav.open .header__nav-item {
@@ -458,28 +395,17 @@ body {
     line-height: 152%;
     letter-spacing: 3px;
     text-transform: uppercase;
-    transition: all 0.3s ease;
+    transition: all 0.3s ease-in-out;
   }
 
   .header__nav.open .header__nav-item:hover {
     background: rgba(0, 0, 0, 0.05);
   }
 
-  .burger--active {
+  .active {
+    top: 15px;
     position: fixed;
     right: 20px;
-  }
-
-  .burger--active::before {
-    background: #8a9dc0;
-    transform: translateX(-50%) rotate(45deg);
-    top: 19px;
-  }
-
-  .burger--active::after {
-    background: #8a9dc0;
-    transform: translateX(-50%) rotate(-45deg);
-    bottom: 19px;
   }
 
   .header__nav.open .button {
@@ -491,8 +417,8 @@ body {
   }
 
   .header__nav.open {
+    padding-top: 5rem;
     padding-bottom: 20px;
-    justify-content: space-between;
   }
 
   .header__nav.open .button--secondary {

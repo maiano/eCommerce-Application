@@ -1,9 +1,12 @@
 import { Link } from 'react-router-dom';
-import Header from '../components/Header/Header';
-import Footer from '../components/Footer/Footer';
 import '../pages/HomePage.css';
+import { Container, Title, Text } from '@mantine/core';
+import { Carousel } from '@mantine/carousel';
+import { useMediaQuery } from '@mantine/hooks';
 
 export function HomePage() {
+  const mobile = useMediaQuery('(max-width: 768px)');
+
   const wines = [
     {
       title: 'Chardonnay',
@@ -77,92 +80,125 @@ export function HomePage() {
   ];
 
   return (
-    <div className="page">
-      <div className="page__container">
-        <Header />
+    <Container fluid className="page" style={{ paddingInline: 0 }}>
+      <Container
+        className="page__container"
+        style={{ marginInline: 0, paddingInline: 0 }}
+      >
 
-        <div className="content">
-          <div className="content__container">
-            <div className="hero">
-              <div className="hero__container">
-                <div className="hero__image">
-                  <div className="hero__content">
-                    <h1 className="hero__title">Explore the Finest Wines</h1>
-                    <h2 className="hero__subtitle">
-                      Discover a curated selection of exceptional wines from
-                      renowned vineyards around the globe.
-                    </h2>
-                  </div>
-                  <Link
-                    to="/catalog"
-                    className="button button--primary button--large"
-                  >
-                    <span className="button__text">Shop Now</span>
-                  </Link>
-                </div>
-              </div>
-            </div>
+        <Container
+          className="content"
+          style={{ marginInline: 0, paddingInline: 0 }}
+        >
+          <Container
+            className="content__container"
+            style={{ marginInline: 0, paddingInline: 0 }}
+          >
+            <Container className="hero__container">
+              <Container className="hero__image">
+                <Container className="hero__content">
+                  <Title className="hero__title">
+                    Explore the Finest Wines
+                  </Title>
+                  <Title className="hero__subtitle">
+                    Discover a curated selection of exceptional wines from
+                    renowned vineyards around the globe.
+                  </Title>
+                </Container>
+                <Link
+                  to="/catalog"
+                  className="button button--primary button--large"
+                >
+                  <Text className="button__text" c="dark.5" fz={'h3'}>
+                    Shop Now
+                  </Text>
+                </Link>
+              </Container>
+            </Container>
 
-            <h2 className="section-title">Featured Selections</h2>
-            <div className="carousel">
-              <div className="carousel__container">
+            <Container className="carousel">
+              <Title className="section-title">Featured Selections</Title>
+              <Carousel
+                className="carousel__container"
+                slideSize="33.333%"
+                height={400}
+                slideGap="md"
+                align="start"
+                slidesToScroll={mobile ? 2 : 4}
+                withControls
+                withIndicators
+                loop
+              >
                 {wines.map((wine, index) => (
-                  <div className="card" key={index}>
-                    <div className={`card__image ${wine.imageClass}`}></div>
-                    <div className="card__content">
-                      <p className="card__title">{wine.title}</p>
-                      <p className="card__description">{wine.description}</p>
-                    </div>
-                  </div>
+                  <Carousel.Slide key={index}>
+                    <Container className="card">
+                      <div className={`card__image ${wine.imageClass}`}></div>
+                      <Container className="card__content">
+                        <Title className="card__title">{wine.title}</Title>
+                        <Text className="card__description">
+                          {wine.description}
+                        </Text>
+                      </Container>
+                    </Container>
+                  </Carousel.Slide>
                 ))}
-              </div>
-            </div>
+              </Carousel>
+            </Container>
 
-            <section className="discount-section">
-              <div className="discount-container">
-                <h2 className="discount-title">Summer Sale!</h2>
-                <p className="discount-description">
-                  To get 25% off all products in your cart use code
-                  <span className="discount-code">SUMMER25</span> at checkout.
-                </p>
-              </div>
-            </section>
-
-            <div className="features">
-              <div className="features__header">
-                <h1 className="features__title">Why Choose us?</h1>
-                <p className="features__subtitle">
+            <Container className="discount-section">
+              <Container className="discount-container">
+                <Title className="discount-title" c="accent.4">
+                  Summer Sale!
+                </Title>
+                <Container className="discount-description">
+                  <Text>To get 25% off all products in your cart use code</Text>
+                  <Text className="discount-code" c="accent.4" bg="dark.5">
+                    SUMMER25
+                  </Text>{' '}
+                  at checkout.
+                </Container>
+              </Container>
+            </Container>
+            <Container className="features">
+              <Container className="features__header">
+                <Title className="features__title">Why Choose us?</Title>
+                <Text className="features__subtitle">
                   Experience the art of wine with us. We offer a wide variety of
                   wines, tasting events, and convenient delivery options to
                   enhance your appreciation.
-                </p>
+                </Text>
                 <Link
                   to="/registration"
                   className="button button--primary button--large"
                 >
-                  <span className="button__text">Join</span>
+                  <Text className="button__text" c="dark.5" fz={'h3'}>
+                    Join
+                  </Text>
                 </Link>
-              </div>
+              </Container>
 
-              <div className="features__grid">
+              <Container className="features__grid">
                 {features.map((feature, index) => (
-                  <div className="feature-card" key={index}>
-                    <div className="feature-card__icon">{feature.icon}</div>
-                    <div className="feature-card__content">
-                      <h2 className="feature-card__title">{feature.title}</h2>
-                      <p className="feature-card__description">
+                  <Container className="feature-card" key={index}>
+                    <Container className="feature-card__icon">
+                      {feature.icon}
+                    </Container>
+                    <Container className="feature-card__content">
+                      <Title className="feature-card__title">
+                        {feature.title}
+                      </Title>
+                      <Text className="feature-card__description">
                         {feature.description}
-                      </p>
-                    </div>
-                  </div>
+                      </Text>
+                    </Container>
+                  </Container>
                 ))}
-              </div>
-            </div>
-          </div>
-        </div>
+              </Container>
+            </Container>
+          </Container>
+        </Container>
 
-        <Footer />
-      </div>
-    </div>
+      </Container>
+    </Container>
   );
 }

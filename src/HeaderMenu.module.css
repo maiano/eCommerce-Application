@@ -1,0 +1,84 @@
+.header {
+  background-color: #131c24;
+  border-bottom: 1px solid #29374c;
+  padding: 0.75rem 1.5rem;
+}
+
+.inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: rem(56px);
+}
+
+.link {
+  display: block;
+  line-height: 1;
+  padding: rem(8px) rem(12px);
+  color: #f8f9fb;
+  font-size: rem(14px);
+  font-weight: 500;
+  transition: color 0.2s;
+
+  &:hover {
+    color: #f4c753;
+    text-decoration: none;
+  }
+}
+
+.userButton {
+  background: red;
+  border: none;
+  padding: rem(8px);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.mobileMenu {
+  position: fixed;
+  top: rem(56px);
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background-color: rgba(29, 42, 54, 0.97);
+  padding: rem(20px);
+  display: flex;
+  flex-direction: column;
+  gap: rem(16px);
+  z-index: 1000;
+}
+
+.mobileLink {
+  color: #8a9dc0;
+  font-size: rem(24px);
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: rem(15px) 0;
+  text-align: center;
+}
+
+.mobileButtonPrimary,
+.mobileButtonSecondary {
+  padding: rem(12px);
+  border-radius: rem(8px);
+  text-align: center;
+  font-weight: 700;
+}
+
+.mobileButtonPrimary {
+  background-color: #f4c753;
+  color: #141c24;
+}
+
+.mobileButtonSecondary {
+  background-color: #29374c;
+  color: #f8f9fb;
+  border: 1px solid #32415d;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
