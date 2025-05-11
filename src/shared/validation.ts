@@ -12,15 +12,16 @@ const email = z
 
 const password = z
   .string()
-  .trim()
   .min(8, 'Password must be at least 8 characters long')
-  .regex(/[A-Z]/, 'Must contain at least one uppercase letter (A-Z)')
-  .regex(/[a-z]/, 'Must contain at least one lowercase letter (a-z)')
-  .regex(/[0-9]/, 'Must contain at least one digit (0-9)')
+  .regex(/[A-Z]/, 'Password must contain at least one uppercase letter (A-Z)')
+  .regex(/[a-z]/, 'Password must contain at least one lowercase letter (a-z)')
+  .regex(/[0-9]/, 'Password must contain at least one digit (0-9)')
   .regex(
     /[!@#$%^&*]/,
     'Password must contain at least one special character (e.g., !@#$%^&*)',
-  );
+  )
+  .refine((pass) => !/\s/.test(pass), 'Password must not contain any spaces')
+  .refine((pass) => !/[<>]/.test(pass), 'Password must not contain < or >');
 
 export const loginSchema = z.object({
   email,
