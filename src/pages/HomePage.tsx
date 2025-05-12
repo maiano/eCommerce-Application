@@ -94,7 +94,7 @@ export function HomePage() {
             className="content__container"
             style={{ marginInline: 0, paddingInline: 0 }}
           >
-            <Container className="hero__container">
+            <Container style={{ marginTop: 80}} className="hero__container">
               <Container className="hero__image">
                 <Container className="hero__content">
                   <Title className="hero__title">

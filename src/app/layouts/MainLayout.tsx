@@ -6,7 +6,7 @@ import { Header } from '@/components/Header/Header';
 export function MainLayout() {
   return (
     <AppShell
-      header={{ height: 60 }}
+      header={{ height: 80 }}
       footer={{ height: 110 }}
       withBorder={false}
     >
