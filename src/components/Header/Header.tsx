@@ -1,48 +1,36 @@
-import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  useMantineTheme,
-  Button,
-  Burger,
-  Container,
-  Title,
-  Text,
-  Menu,
-} from '@mantine/core';
-import { useDisclosure, useClickOutside } from '@mantine/hooks';
+import { useMantineTheme, Button, Burger, Container, Title, Text, Menu } from '@mantine/core';
+import { useDisclosure, useClickOutside, useMediaQuery, useDidUpdate } from '@mantine/hooks';
 
 export function Header() {
   const theme = useMantineTheme();
   const [opened, { toggle, close }] = useDisclosure();
-  const menuRef = useRef<HTMLElement>(null);
-  const burgerRef = useRef<HTMLButtonElement>(null);
+  const isLargeScreen = useMediaQuery('(min-width: 768px)');
 
-  useClickOutside(() => close(), null, [menuRef.current, burgerRef.current]);
+  useDidUpdate(() => {
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
 
-  useEffect(() => {
     if (opened) {
       document.body.classList.add('no-scroll');
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
     } else {
       document.body.classList.remove('no-scroll');
+      document.body.style.paddingRight = '';
     }
-
-    return () => document.body.classList.remove('no-scroll');
   }, [opened]);
 
-  const handleResize = () => {
-    if (window.innerWidth > 768) {
-      close();
-      document.body.classList.remove('no-scroll');
-    }
-  };
+  useDidUpdate(() => {
+    if (isLargeScreen) close();
+  }, [isLargeScreen]);
 
-  useEffect(() => {
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      document.body.classList.remove('no-scroll');
-    };
-  }, []);
+  useClickOutside(
+    () => opened && close(),
+    ['mousedown', 'touchstart'],
+    [
+      document.querySelector('.header__nav'),
+      document.querySelector('.burger-button')
+    ].filter((el): el is HTMLElement => el !== null)
+  );
 
   return (
     <Container className="header">

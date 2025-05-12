@@ -1,9 +1,25 @@
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { HomePage } from '@/pages/HomePage';
 import { MantineProvider } from '@mantine/core';
 import { theme } from '@/app/theme';
+
+const IntersectionObserverMock = vi.fn(() => ({
+  disconnect: vi.fn(),
+  observe: vi.fn(),
+  takeRecords: vi.fn(),
+  unobserve: vi.fn(),
+}))
+
+const ResizeObserverMock = vi.fn(() => ({
+  observe: vi.fn(),
+  unobserve: vi.fn(),
+  disconnect: vi.fn(),
+}));
+
+vi.stubGlobal('IntersectionObserver', IntersectionObserverMock);
+vi.stubGlobal('ResizeObserver', ResizeObserverMock);
 
 describe('HomePage Component', () => {
   it('renders main title', () => {

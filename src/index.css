@@ -10,8 +10,9 @@
   list-style: none;
 }
 
-.no-scroll {
+body.no-scroll {
   overflow: hidden;
+  scrollbar-gutter: stable;
 }
 
 body {
@@ -22,7 +23,6 @@ body {
   display: flex;
   min-height: 100vh;
   background-color: #131c24;
-  overflow-x: hidden;
 }
 
 .page__container {
@@ -33,6 +33,7 @@ body {
   align-content: center;
   width: 100%;
   flex-wrap: wrap;
+  overflow: hidden;
 }
 
 .header {
@@ -149,7 +150,7 @@ body {
   color: #f8f9fb;
   font-size: 1.75rem;
   font-weight: 700;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem !important;
   text-align: center;
 }
 
@@ -346,14 +347,14 @@ body {
 
   .burger {
     display: block;
-    /* position: absolute;
-    top: 25px;
-    right: 20px; */
   }
 
   .header__nav {
     gap: 0;
-    position: relative;
+    position: static;
+    transform: none !important;
+    background: transparent;
+    overflow: visible;
   }
 
   .header__nav-item {
@@ -366,7 +367,7 @@ body {
     position: fixed;
     top: 0;
     right: 0;
-    width: 40%;
+    width: 45%;
     height: 100%;
     border: 1px solid #32415d;
     background-color: rgba(29, 42, 54, 0.97);

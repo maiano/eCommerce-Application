@@ -30,7 +30,7 @@
 
 .hero__title {
   color: white;
-  font-size: 2.25rem;
+  font-size: 2.25rem !important;
   font-weight: 900;
   line-height: 1.25;
   letter-spacing: -0.033em;
@@ -58,14 +58,16 @@
   gap: 1.5rem;
   padding: 1rem;
   justify-content: center;
+  overflow: hidden;
 }
 
 .card {
   padding-top: 10px;
   display: flex;
   flex-direction: column;
-  min-width: 280px;
-  height: 360px;
+  justify-content: space-around;
+  min-width: 280px !important;
+  height: 400px !important;
   background: #1d2a36;
   border-radius: 0.75rem;
   overflow: hidden;
@@ -74,9 +76,11 @@
 
 .card__image {
   width: 100%;
-  height: 200px;
+  height: 260px;
+  min-height: 260px;
   background-size: cover;
   background-position: center;
+  border-radius: 0.75rem;
 }
 
 .card__content {
@@ -85,7 +89,7 @@
 
 .card__title {
   color: #f8f9fb;
-  font-size: 1.25rem;
+  font-size: 1.25rem !important;
   margin-bottom: 0.5rem;
 }
 
@@ -265,7 +269,7 @@
   }
 
   .card {
-    max-width: 400px;
+    max-width: 400px !important;
   }
 }
 
@@ -275,7 +279,7 @@
   }
 
   .card {
-    max-width: 400px;
+    max-width: 400px !important;
   }
 }
 
@@ -303,8 +307,8 @@
   }
 
   .card {
-    width: 100% !important;
-    max-width: 100% !important;
+    width: 70% !important;
+    max-width: 70% !important;
   }
 
   .card__image {

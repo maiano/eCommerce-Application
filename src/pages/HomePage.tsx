@@ -100,7 +100,7 @@ export function HomePage() {
                   <Title className="hero__title">
                     Explore the Finest Wines
                   </Title>
-                  <Title className="hero__subtitle">
+                  <Title fz='h2' className="hero__subtitle">
                     Discover a curated selection of exceptional wines from
                     renowned vineyards around the globe.
                   </Title>
@@ -119,23 +119,25 @@ export function HomePage() {
             <Container className="carousel">
               <Title className="section-title">Featured Selections</Title>
               <Carousel
-                className="carousel__container"
-                slideSize="33.333%"
-                height={400}
-                slideGap="md"
+                height={450}
+                slideSize={{ base: '100%', sm: '50%', md: '33.333%' }}
+                slideGap={{ base: 'xs', md: 'xs' }}
+                controlSize={40}
+                controlsOffset="xxs"
                 align="start"
                 slidesToScroll={mobile ? 2 : 4}
                 withControls
                 withIndicators
                 loop
+                dragFree
               >
                 {wines.map((wine, index) => (
                   <Carousel.Slide key={index}>
-                    <Container className="card">
+                    <Container className="card" style={{ maxWidth: 360, width: '100%' }}>
                       <div className={`card__image ${wine.imageClass}`}></div>
                       <Container className="card__content">
                         <Title className="card__title">{wine.title}</Title>
-                        <Text className="card__description">
+                        <Text className="card__description" c="dark.4">
                           {wine.description}
                         </Text>
                       </Container>
