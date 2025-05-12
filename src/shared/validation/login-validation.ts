@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-const email = z
+export const email = z
   .string()
   .trim()
   .min(1, 'Email is required')
@@ -10,7 +10,7 @@ const email = z
     'Email address must contain a domain name (e.g., example.com)',
   );
 
-const password = z
+export const password = z
   .string()
   .min(8, 'Password must be at least 8 characters long')
   .regex(/[A-Z]/, 'Password must contain at least one uppercase letter (A-Z)')
