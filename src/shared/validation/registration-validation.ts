@@ -21,9 +21,6 @@ const birthDate = z
   // .trim()
   // .min(8, 'Date of birth is required')
   // .regex(/\d{2}\.\d{2}\.\d{4}/)
- 
-const select = z
-.string()
 
 const country = z
   .string()
@@ -60,7 +57,6 @@ export const registrationSchema = z.object({
   firstName,
   lastName,
   birthDate,
-  select,
   country,
   city,
   street,

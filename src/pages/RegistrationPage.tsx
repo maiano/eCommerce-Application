@@ -20,18 +20,17 @@ export function RegistrationPage() {
   }
   
   console.log("BirthDate:", watch("birthDate"));
-  console.log("Test select:", watch("select"));
   console.log("Delivery Country", watch("country"));
   console.log("Billing Country", watch("billingCountry"));
 
+
+  const [calendarValue, setCalendarValue] = useState<Date | null>(null);
 
   const countries = [
     'Italy',
     'France',
     'Spain',
   ];
-
-  const [calendarValue, setCalendarValue] = useState<Date | null>(null);
 
   const deliveryCountry = useCombobox({
     onDropdownClose: () => deliveryCountry.resetSelectedOption(),
@@ -128,36 +127,26 @@ export function RegistrationPage() {
                   />
                   <p>{errors.password?.message}</p>
                   <Fieldset legend="Delivery address">
-                  <Controller
-                    name="select"
-                    control={control}
-                    render={({ field }) => 
-                      <select {...field}>
-                          <option value="Portugal">Portugal</option>
-                          <option value="Germany">Germany</option>
-                          <option value="Austria">Austria</option>
-                      </select>
-                    }
-                  />
-
-                  <Controller<RegistrationFormData>
-                    name="country"
-                    control={control}
-                    render={({ field }): JSX.Element => (
-                      <Combobox
-                        store={deliveryCountry}
-                        withinPortal={false}
-                        value={field.value as string}
-                        onOptionSubmit={(val) => {
-                          setDeliveryCountryValue(val);
-                          deliveryCountry.closeDropdown();
-                        }}
-                        // onOptionSubmit={(val) => {
-                        //   setDeliveryCountryValue(val);
-                        //   deliveryCountry.closeDropdown();
-                        //   field.value = val;
-                        // }}
-                      >
+                    <Controller<RegistrationFormData>
+                      name="country"
+                      control={control}
+                      render={({ field }): JSX.Element => (
+                        <Combobox
+                          store={deliveryCountry}
+                          withinPortal={false}
+                          // value={field.value as string}
+                          // value={deliveryCountryValue}
+                          onOptionSubmit={(value) => {
+                            field.onChange(value);
+                            setDeliveryCountryValue(value);
+                            deliveryCountry.closeDropdown();
+                          }}
+                          // onOptionSubmit={(val) => {
+                          //   setDeliveryCountryValue(val);
+                          //   deliveryCountry.closeDropdown();
+                          //   field.value = val;
+                          // }}
+                        >
                         <Combobox.Target>
                           <InputBase
                             component="button"
@@ -165,6 +154,8 @@ export function RegistrationPage() {
                             pointer
                             rightSection={<Combobox.Chevron />}
                             onClick={() => deliveryCountry.toggleDropdown()}
+                            // value={deliveryCountryValue}
+                            onChange={(event) => setDeliveryCountryValue(event.currentTarget.value)}
                             rightSectionPointerEvents="none"
                           >
                             {deliveryCountryValue || <Input.Placeholder>Select country</Input.Placeholder>}
@@ -174,8 +165,8 @@ export function RegistrationPage() {
                           <Combobox.Options>{options}</Combobox.Options>
                         </Combobox.Dropdown>
                         </Combobox>
-                       )}
-                       />
+                      )}
+                    />
                     <p>{errors.country?.message}</p>
                     <TextInput {...register("street")}
                       id="delivery-street"
@@ -204,30 +195,39 @@ export function RegistrationPage() {
                   </Fieldset>
 
                   <Fieldset legend="Billing address">
-                    <Combobox {...register("billingCountry")}
-                      store={billingCountry}
-                      withinPortal={false}
-                      onOptionSubmit={(val) => {
-                        setBillingCountryValue(val);
-                        billingCountry.closeDropdown();
-                      }}
-                    >
-                      <Combobox.Target>
-                        <InputBase
-                          component="button"
-                          type="button"
-                          pointer
-                          rightSection={<Combobox.Chevron />}
-                          onClick={() => billingCountry.toggleDropdown()}
-                          rightSectionPointerEvents="none"
+                  <Controller<RegistrationFormData>
+                      name="billingCountry"
+                      control={control}
+                      render={({ field }): JSX.Element => (
+                        <Combobox
+                          store={billingCountry}
+                          withinPortal={false}
+                          onOptionSubmit={(value) => {
+                            console.log(value);
+                            field.onChange(value);
+                            setBillingCountryValue(value);
+                            billingCountry.closeDropdown();
+                          }}
                         >
-                          {billingCountryValue || <Input.Placeholder>Select country</Input.Placeholder>}
-                        </InputBase>
-                      </Combobox.Target>
-                      <Combobox.Dropdown>
-                        <Combobox.Options>{options}</Combobox.Options>
-                      </Combobox.Dropdown>
-                    </Combobox>
+                        <Combobox.Target>
+                          <InputBase
+                            component="button"
+                            type="button"
+                            pointer
+                            rightSection={<Combobox.Chevron />}
+                            onClick={() => billingCountry.toggleDropdown()}
+                            onChange={(event) => setBillingCountryValue(event.currentTarget.value)}
+                            rightSectionPointerEvents="none"
+                          >
+                            {billingCountryValue || <Input.Placeholder>Select country</Input.Placeholder>}
+                          </InputBase>
+                        </Combobox.Target>
+                        <Combobox.Dropdown>
+                          <Combobox.Options>{options}</Combobox.Options>
+                        </Combobox.Dropdown>
+                        </Combobox>
+                      )}
+                    />
                     <p>{errors.billingCountry?.message}</p>
                     <TextInput {...register("billingStreet")}
                       id="billing-street"
@@ -259,9 +259,6 @@ export function RegistrationPage() {
                   </Fieldset>
                   <Button className="button button--primary button--large auth-button" variant="filled" type="submit">Sign Up</Button>
                 </form>
-                {watch("country")}
-                {watch("billingCountry")}
-                {watch("birthDate")}
                 <div className="auth-footer">
                   <Text>Already have an account? <Anchor href="./signIn.html" className="auth-link">Log in</Anchor></Text>
                 </div>
