@@ -76,7 +76,6 @@ export function RegistrationForm() {
       label="First Name"
       id="firstname"
       className="form-input"
-      required
       withAsterisk
     />
     <p>{errors.firstName?.message}</p>
@@ -84,7 +83,6 @@ export function RegistrationForm() {
       label="Last Name"
       id="lastname"
       className="form-input"
-      required
       withAsterisk
     />
     <p>{errors.lastName?.message}</p>
@@ -105,7 +103,6 @@ export function RegistrationForm() {
           valueFormat="DD.MM.YYYY"
           placeholder="dd.mm.yyyy"
           maxDate={new Date()}
-          required
           withAsterisk
         />
       }
@@ -115,7 +112,6 @@ export function RegistrationForm() {
       label="Email"
       id="email"
       className="form-input"
-      required
       withAsterisk
     />
     <p>{errors.email?.message}</p>
@@ -123,7 +119,6 @@ export function RegistrationForm() {
       label="Password"
       id="password"
       className="form-input"
-      required
       withAsterisk
     />
     <p>{errors.password?.message}</p>
@@ -167,7 +162,6 @@ export function RegistrationForm() {
         id="delivery-street"
         placeholder="Enter street"
         className="form-input"
-        required
         withAsterisk
       />
       <p>{errors.deliveryAddress?.deliveryStreet?.message}</p>
@@ -175,7 +169,6 @@ export function RegistrationForm() {
         id="delivery-city"
         placeholder="Enter city"
         className="form-input"
-        required
         withAsterisk
       />
       <p>{errors.deliveryAddress?.deliveryCity?.message}</p>
@@ -183,7 +176,6 @@ export function RegistrationForm() {
         id="delivery-postcode"
         placeholder="Enter postcode"
         className="form-input"
-        required
         withAsterisk
       />
       <p>{errors.deliveryAddress?.deliveryPostcode?.message}</p>
@@ -234,7 +226,6 @@ export function RegistrationForm() {
             id="billing-street"
             placeholder="Enter street"
             className="form-input"
-            required
             withAsterisk
           />
           <p>{errors.billingAddress?.billingStreet?.message}</p>
@@ -242,7 +233,6 @@ export function RegistrationForm() {
             id="billing-city"
             placeholder="Enter city"
             className="form-input"
-            required
             withAsterisk
           />
           <p>{errors.billingAddress?.billingCity?.message}</p>
@@ -250,7 +240,6 @@ export function RegistrationForm() {
             id="billing-postcode"
             placeholder="Enter postcode"
             className="form-input"
-            required
             withAsterisk
           />
           <p>{errors.billingAddress?.billingPostcode?.message}</p>

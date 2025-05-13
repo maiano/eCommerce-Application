@@ -17,11 +17,8 @@ const lastName = z
  
 const birthDate = z
   .string()
-  // .date()
-  // .trim()
-  // .min(8, 'Date of birth is required')
-  // .regex(/\d{2}\.\d{2}\.\d{4}/)
-
+  .trim()
+  .min(1, 'Date of birth is required')
   
   const deliveryCountry = z
   .string()
