@@ -1,4 +1,4 @@
-import {createTheme, MantineColorsTuple, rem, Container } from '@mantine/core';
+import {MantineTheme, createTheme, MantineColorsTuple, rem, Container, Box } from '@mantine/core';
 
 
 const primaryColors: MantineColorsTuple = [
@@ -147,7 +147,7 @@ export const theme = createTheme({
         root: {
           paddingInline: '0 !important',
           marginInline: '0 !important',
-          maxWidth: rem(1440),
+          maxWidth: rem(1920),
           width: '100%',
         },
       }),
@@ -173,8 +173,18 @@ export const theme = createTheme({
             backgroundColor: darkColors[3],
             },
           },
-        }
-      }
-    }
+        },
+      },
+    },
+    // Box: Box.extend({
+    //   styles: (theme: MantineTheme) => ({
+    //     root: {
+    //       backgroundColor: theme.colors.dark[6],
+    //       borderRadius: theme.radius.md,
+    //       padding: theme.spacing.lg,
+    //       marginBottom: theme.spacing.xl,
+    //     },
+    //   }),
+    // }),
 );
 

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { useMantineTheme, Button, Burger, Container, Title, Text, Menu } from '@mantine/core';
+import { useMantineTheme, Button, Burger, Box, Group, Title, Text, Menu } from '@mantine/core';
 import { useDisclosure, useClickOutside, useMediaQuery, useDidUpdate } from '@mantine/hooks';
 
 export function Header() {
@@ -33,8 +33,8 @@ export function Header() {
   );
 
   return (
-    <Container className="header">
-      <Container className="header__logo" style={{ justifyContent: 'start' }}>
+    <Box className="header" style={{width: '100%', maxWidth: 1920}}>
+      <Group className="header__logo" style={{ justifyContent: 'start' }}>
         <Link
           className="header__logo-icon"
           to="/main"
@@ -58,13 +58,9 @@ export function Header() {
           </svg>
         </Link>
         <Title className="header__logo-text">Wine not</Title>
-      </Container>
+      </Group>
 
-      <Container
-        className="header__right"
-        style={{ marginInline: 0, paddingInline: 0 }}
-      >
-        <nav className={`header__nav ${opened ? 'open' : ''}`}>
+        <Group className={`header__nav ${opened ? 'open' : ''}`} >
           <Burger
             className={`burger ${opened ? 'active' : ''}`}
             opened={opened}
@@ -107,13 +103,8 @@ export function Header() {
               </Button>
             </>
           )}
-        </nav>
-
-        <Container
-          unstyled
-          className="header__actions"
-          style={{ marginInline: 0, paddingInline: 0 }}
-        >
+          {!opened && (
+            <>
           <Button
             component={Link}
             to="/cart"
@@ -167,8 +158,8 @@ export function Header() {
               </Menu.Item>
             </Menu.Dropdown>
           </Menu>
-        </Container>
-      </Container>
-    </Container>
+          </>)}
+        </Group>
+    </Box>
   );
 }

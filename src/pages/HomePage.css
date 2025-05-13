@@ -1,31 +1,21 @@
-.hero__container {
-  padding: 1rem;
-  width: 100%;
-}
-
-.hero__image {
+.hero {
   display: flex;
-  width: 100%;
-  min-height: 600px;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  max-width: 1920px;
+  min-height: 600px;
+  border-radius: 0.75rem;
+  padding: 1rem;
   gap: 1.5rem;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  border-radius: 0.75rem;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
   background-image:
     linear-gradient(rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.4) 100%),
     url('../assets/wine.png');
-}
-
-.hero__content {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  text-align: center;
 }
 
 .hero__title {
@@ -52,25 +42,13 @@
   padding: 1.25rem 1rem 0.75rem;
 }
 
-.carousel__container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
-  padding: 1rem;
-  justify-content: center;
-  overflow: hidden;
-}
-
 .card {
   padding-top: 10px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  min-width: 280px !important;
-  height: 400px !important;
+  /* min-width: 280px !important; */
+  max-width: 400px !important;
+  height: 420px !important;
   background: #1d2a36;
   border-radius: 0.75rem;
-  overflow: hidden;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
@@ -134,17 +112,16 @@
   line-height: normal;
 }
 
-.discount-section {
-  padding: 2rem 1rem;
+.discount {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   background-color: #1d2a36;
   border-radius: 0.75rem;
   margin: 2rem 1rem;
-  max-width: 100%;
-}
-
-.discount-container {
-  text-align: center;
-  padding: 1.5rem;
+  padding: 2rem 1rem;
+  width: 100%;
+  gap: 1rem;
 }
 
 .discount-title {
@@ -160,25 +137,18 @@
   line-height: 1.6;
 }
 
-.discount-code {
-  color: #f4c753;
-  font-weight: 700;
-  padding: 0.25rem 0.5rem;
-  background-color: #29374c;
-  border-radius: 0.25rem;
-  margin-left: 0.25rem;
-}
-
 .features {
   display: flex;
   flex-direction: column;
   gap: 2.5rem;
   padding: 2.5rem 1rem;
+  width: 100%;
+  max-width: 1920px;
 }
 
 .features__header {
   display: flex;
-  flex-direction: column;
+  flex-direction: column !important;
   gap: 1.5rem;
 }
 
@@ -200,21 +170,19 @@
 }
 
 .features__grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(158px, 1fr));
-  gap: 0.75rem;
-  padding: 0;
+  display: flex;
+  justify-content: center !important;
+  width: 100%;
+  max-width: 1920px;
 }
 
 .feature-card {
   display: flex;
-  flex: 1;
-  gap: 0.75rem;
   border-radius: 0.5rem;
   border: 1px solid #32415d;
   background-color: #1d2a36;
-  padding: 1rem;
-  flex-direction: column;
+  width: 32%;
+  max-height: 142px;
 }
 
 .feature-card__icon {
@@ -222,9 +190,8 @@
 }
 
 .feature-card__content {
-  display: flex;
-  flex-direction: column;
   gap: 0.25rem;
+  padding: 1rem;
 }
 
 .feature-card__title {
@@ -235,6 +202,7 @@
 }
 
 .feature-card__description {
+  align-self: center;
   color: #8a9dc0;
   font-size: 0.875rem;
   font-weight: 400;
@@ -242,14 +210,6 @@
 }
 
 @media (max-width: 768px) {
-  .features__grid {
-    grid-template-columns: 1fr;
-    gap: 0.5rem;
-  }
-  .feature-card {
-    padding: 1.8rem;
-  }
-
   .discount-section {
     padding: 1.5rem 1.5rem;
   }
@@ -263,58 +223,7 @@
   }
 }
 
-@media (max-width: 1223px) {
-  .carousel__container {
-    grid-template-columns: repeat(2, minmax(250px, 400px));
-  }
-
-  .card {
-    max-width: 400px !important;
-  }
-}
-
-@media (max-width: 640px) {
-  .carousel__container {
-    gap: 1rem;
-  }
-
-  .card {
-    max-width: 400px !important;
-  }
-}
-
-@media (max-width: 620px) {
-  .carousel__container {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-    justify-items: center;
-  }
-  .card {
-    width: 70% !important;
-    max-width: 70% !important;
-  }
-  .card__image {
-    height: 250px;
-  }
-}
-
 @media (max-width: 480px) {
-  .carousel__container {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-    justify-items: center;
-    padding: 0 1rem;
-  }
-
-  .card {
-    width: 70% !important;
-    max-width: 70% !important;
-  }
-
-  .card__image {
-    height: 250px;
-  }
-
   .discount-section {
     padding: 1.5rem 0.5rem;
   }
