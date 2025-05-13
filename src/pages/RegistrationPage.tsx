@@ -1,11 +1,15 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Title, Text, Anchor, Fieldset, TextInput, PasswordInput, Combobox, Checkbox, Button, useCombobox, InputBase, Input } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
-import { useState } from 'react';
+import dayjs from 'dayjs';
+import customParseFormat from "dayjs/plugin/customParseFormat";
+import { JSX, useState } from 'react';
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import "@mantine/core/styles.css"
 import "@mantine/dates/styles.css";
 import { RegistrationFormData, registrationSchema } from "@/shared/validation/registration-validation";
+
+dayjs.extend(customParseFormat);
 
 export function RegistrationPage() {
   const { register, handleSubmit, control, watch, formState: { errors } } = useForm<RegistrationFormData>({mode: "onChange", resolver: zodResolver(registrationSchema)});
@@ -19,6 +23,7 @@ export function RegistrationPage() {
   console.log("Test select:", watch("select"));
   console.log("Delivery Country", watch("country"));
   console.log("Billing Country", watch("billingCountry"));
+
 
   const countries = [
     'Italy',
@@ -83,18 +88,23 @@ export function RegistrationPage() {
                     withAsterisk
                   />
                   <p>{errors.lastName?.message}</p>
-                  <Controller
+                  <Controller<RegistrationFormData>
                     name="birthDate"
                     control={control}
-                    render={({ field }) => 
-                      <DateInput {...field}
+                    render={({ field }): JSX.Element => 
+                      <DateInput
                         value={calendarValue}
-                        onChange={setCalendarValue}
+                        onChange={(date: Date | null) => {
+                          setCalendarValue(date);
+                          field.onChange(date?.toLocaleDateString('en-CA'))
+                        }}
                         label="Date of Birth"
                         id="dob"
                         className="form-input"
+                        dateParser={(value) => dayjs(value, 'DD.MM.YYYY').toDate()}
                         valueFormat="DD.MM.YYYY"
                         placeholder="dd.mm.yyyy"
+                        maxDate={new Date()}
                         required
                         withAsterisk
                       />
@@ -130,18 +140,23 @@ export function RegistrationPage() {
                     }
                   />
 
-                  <Controller
+                  <Controller<RegistrationFormData>
                     name="country"
                     control={control}
-                    render={({ field }) => (
-                      <Combobox { ...field}
+                    render={({ field }): JSX.Element => (
+                      <Combobox
                         store={deliveryCountry}
                         withinPortal={false}
+                        value={field.value as string}
                         onOptionSubmit={(val) => {
                           setDeliveryCountryValue(val);
                           deliveryCountry.closeDropdown();
-                          field.value = val;
                         }}
+                        // onOptionSubmit={(val) => {
+                        //   setDeliveryCountryValue(val);
+                        //   deliveryCountry.closeDropdown();
+                        //   field.value = val;
+                        // }}
                       >
                         <Combobox.Target>
                           <InputBase
