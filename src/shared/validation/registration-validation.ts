@@ -20,55 +20,50 @@ const birthDate = z
   .trim()
   .min(1, 'Date of birth is required')
   
-  const deliveryCountry = z
+  const country = z
   .string()
   .trim()
   .min(1, 'Country is required')
   
-  const deliveryCity = z
+  const city = z
   .string()
   .trim()
   .min(1, 'City is required')
   .refine((pass) => !/\d/.test(pass), 'City must not contain any numbers')
   .refine((pass) => !/[^A-Za-z0-9\u0401\u0451\u0410-\u044f\s-]/gu.test(pass), 'City must not contain any special characters')
   
-  const deliveryStreet = z
+  const street = z
   .string()
   .trim()
   .min(1, 'Street is required')
   
-  const deliveryPostcode = z
+  const postcode = z
   .string()
   .trim()
   .refine((pass) => !/[a-zA-Z]/.test(pass), 'Postcode must not contain any letters')
   .refine((pass) => !/[^A-Za-z0-9]/.test(pass), 'Postcode must not contain any special characters')
   .refine((pass) => /^\b\d{5}\b/g.test(pass), 'Postcode must contain 5 digits')
   
-  const isDefaultDeliveryAddress = z
+  const isDefaultAddress = z
   .boolean()
 
   const deliveryAddress = z.object({
-    deliveryCountry,
-    deliveryCity,
-    deliveryStreet,
-    deliveryPostcode,
-    isDefaultDeliveryAddress,
+    country,
+    city,
+    street,
+    postcode,
+    isDefaultAddress,
   })
 
-  const billingCountry = deliveryCountry;
-  const billingCity = deliveryCity;
-  const billingStreet = deliveryStreet;
-  const billingPostcode = deliveryPostcode;
-  const isDefaultBillingAddress = isDefaultDeliveryAddress;
   const sameAsDelivery = z
   .boolean()
 
   const billingAddress = z.object({
-    billingCountry,
-    billingCity,
-    billingStreet,
-    billingPostcode,
-    isDefaultBillingAddress,
+    country,
+    city,
+    street,
+    postcode,
+    isDefaultAddress,
     sameAsDelivery,
   })
 

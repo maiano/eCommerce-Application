@@ -44,6 +44,73 @@ export function RegistrationForm() {
     </Combobox.Option>
   ));
 
+  // Address fields
+  const renderAddressFields = (type: 'delivery' | 'billing') => {
+      return (
+        <Fieldset>
+          {/* <Controller<RegistrationFormData>
+            name={`${type}Address.country`}
+            control={control}
+            render={({ field }): JSX.Element => (
+              <Combobox
+                store={`${type}CountrySelect`}
+                withinPortal={false}
+                onOptionSubmit={(value) => {
+                  field.onChange(value);
+                  setDeliveryCountryValue(value);
+                  deliveryCountrySelect.closeDropdown();
+                }}
+              >
+              <Combobox.Target>
+                <InputBase
+                  component="button"
+                  type="button"
+                  pointer
+                  rightSection={<Combobox.Chevron />}
+                  onClick={() => deliveryCountrySelect.toggleDropdown()}
+                  onChange={(event) => setDeliveryCountryValue(event.currentTarget.value)}
+                  rightSectionPointerEvents="none"
+                >
+                  {deliveryCountryValue || <Input.Placeholder>Select country</Input.Placeholder>}
+                </InputBase>
+              </Combobox.Target>
+              <Combobox.Dropdown>
+                <Combobox.Options>{options}</Combobox.Options>
+              </Combobox.Dropdown>
+              </Combobox>
+            )}
+          />
+          <p>{errors.deliveryAddress?.country?.message}</p> */}
+          <TextInput
+            {...register(`${type}Address.street`)}
+            id={`${type}-street`}
+            placeholder="Enter street"
+            className="form-input"
+            withAsterisk
+          />
+          <p>{errors[`${type}Address`]?.street?.message}</p>
+  
+          <TextInput
+            {...register(`${type}Address.city`)}
+            id={`${type}-city`}
+            placeholder="Enter city"
+            className="form-input"
+            withAsterisk
+          />
+          <p>{errors[`${type}Address`]?.city?.message}</p>
+  
+          <TextInput
+            {...register(`${type}Address.postcode`)}
+            id={`${type}-postcode`}
+            placeholder="Enter postcode"
+            className="form-input"
+            withAsterisk
+          />
+          <p>{errors[`${type}Address`]?.postcode?.message}</p>
+        </Fieldset>
+      );
+    };
+
   // Same address checkbox
   const [sameAddress, setSameAddress] = useState(false);
   const handleSameAddressChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,20 +119,20 @@ export function RegistrationForm() {
   };
 
   const deliveryFields = watch([
-    "deliveryAddress.deliveryCountry",
-    "deliveryAddress.deliveryCity",
-    "deliveryAddress.deliveryStreet", 
-    "deliveryAddress.deliveryPostcode"
+    "deliveryAddress.country",
+    "deliveryAddress.city",
+    "deliveryAddress.street", 
+    "deliveryAddress.postcode"
   ]);
 
   useEffect(() => {
     if (sameAddress) {
       const [deliveryCountry, deliveryCity, deliveryStreet, deliveryPostcode] = deliveryFields;
-      setValue("billingAddress.billingCountry", deliveryCountry);
+      setValue("billingAddress.country", deliveryCountry);
       setBillingCountryValue(deliveryCountry);
-      setValue("billingAddress.billingCity", deliveryCity);
-      setValue("billingAddress.billingStreet", deliveryStreet);
-      setValue("billingAddress.billingPostcode", deliveryPostcode);
+      setValue("billingAddress.city", deliveryCity);
+      setValue("billingAddress.street", deliveryStreet);
+      setValue("billingAddress.postcode", deliveryPostcode);
     }
   }, [deliveryFields, sameAddress, setValue]);
 
@@ -126,7 +193,7 @@ export function RegistrationForm() {
     <Fieldset legend="Delivery address">
       <Fieldset>
       <Controller<RegistrationFormData>
-        name="deliveryAddress.deliveryCountry"
+        name="deliveryAddress.country"
         control={control}
         render={({ field }): JSX.Element => (
           <Combobox
@@ -157,32 +224,11 @@ export function RegistrationForm() {
           </Combobox>
         )}
       />
-      <p>{errors.deliveryAddress?.deliveryCountry?.message}</p>
-      <TextInput {...register("deliveryAddress.deliveryStreet")}
-        id="delivery-street"
-        placeholder="Enter street"
-        className="form-input"
-        withAsterisk
-      />
-      <p>{errors.deliveryAddress?.deliveryStreet?.message}</p>
-      <TextInput {...register('deliveryAddress.deliveryCity')}
-        id="delivery-city"
-        placeholder="Enter city"
-        className="form-input"
-        withAsterisk
-      />
-      <p>{errors.deliveryAddress?.deliveryCity?.message}</p>
-      <TextInput {...register("deliveryAddress.deliveryPostcode")}
-        id="delivery-postcode"
-        placeholder="Enter postcode"
-        className="form-input"
-        withAsterisk
-      />
-      <p>{errors.deliveryAddress?.deliveryPostcode?.message}</p>
-
+      <p>{errors.deliveryAddress?.country?.message}</p>
+      {renderAddressFields('delivery')}
       </Fieldset>
       <Checkbox
-        {...register("deliveryAddress.isDefaultDeliveryAddress")}
+        {...register("deliveryAddress.isDefaultAddress")}
         label="Set as default delivery address"
       />
     </Fieldset>
@@ -190,7 +236,7 @@ export function RegistrationForm() {
     <Fieldset legend="Billing address">
       <Fieldset disabled={sameAddress}>
         <Controller<RegistrationFormData>
-            name="billingAddress.billingCountry"
+            name="billingAddress.country"
             control={control}
             render={({ field }): JSX.Element => (
               <Combobox
@@ -221,29 +267,8 @@ export function RegistrationForm() {
               </Combobox>
             )}
           />
-          <p>{errors.billingAddress?.billingCountry?.message}</p>
-          <TextInput {...register("billingAddress.billingStreet")}
-            id="billing-street"
-            placeholder="Enter street"
-            className="form-input"
-            withAsterisk
-          />
-          <p>{errors.billingAddress?.billingStreet?.message}</p>
-          <TextInput {...register("billingAddress.billingCity")}
-            id="billing-city"
-            placeholder="Enter city"
-            className="form-input"
-            withAsterisk
-          />
-          <p>{errors.billingAddress?.billingCity?.message}</p>
-          <TextInput {...register("billingAddress.billingPostcode")}
-            id="billing-postcode"
-            placeholder="Enter postcode"
-            className="form-input"
-            withAsterisk
-          />
-          <p>{errors.billingAddress?.billingPostcode?.message}</p>
-
+          <p>{errors.billingAddress?.country?.message}</p>
+          {renderAddressFields('billing')}
       </Fieldset>
       <Checkbox
         {...register("billingAddress.sameAsDelivery")}
@@ -252,7 +277,7 @@ export function RegistrationForm() {
         onChange={handleSameAddressChange}
         />
       <Checkbox
-        {...register("billingAddress.isDefaultBillingAddress")}
+        {...register("billingAddress.isDefaultAddress")}
         label="Set as default billing address"
       />
     </Fieldset>
