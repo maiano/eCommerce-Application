@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Fieldset, TextInput, PasswordInput, Combobox, Checkbox, Button, useCombobox, InputBase, Input, Text, Group } from "@mantine/core";
+import { Fieldset, TextInput, PasswordInput, Combobox, Checkbox, Button, useCombobox, InputBase, Input, Text, Group, ComboboxStore, Stack } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
 import dayjs from 'dayjs';
 import customParseFormat from "dayjs/plugin/customParseFormat";
@@ -48,7 +48,6 @@ export function RegistrationForm() {
   // Same address checkbox
   const [sameAddress, setSameAddress] = useState(false);
   const handleSameAddressChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // const checked = event.target.checked;
     setSameAddress(event.target.checked);
   };
   
@@ -70,71 +69,99 @@ export function RegistrationForm() {
     }
   }, [deliveryFields, sameAddress, setValue]);
 
-  // UI
-  const renderAddressFields = (type: 'delivery' | 'billing') => {
-    return (
-      <Fieldset>
-        {/* <Controller<RegistrationFormData>
-          name={`${type}Address.country`}
-          control={control}
-          render={({ field }): JSX.Element => (
-            <Combobox
-              store={`${type}CountrySelect`}
-              withinPortal={false}
-              onOptionSubmit={(value) => {
-                field.onChange(value);
-                setDeliveryCountryValue(value);
-                deliveryCountrySelect.closeDropdown();
-              }}
-            >
+  // Address
+  const renderCountrySelect = (
+    name: 'deliveryAddress.country' | 'billingAddress.country',
+    store: ComboboxStore,
+    value: string | null,
+    setValue: (value: string) => void
+  ) => (
+    <Controller<RegistrationFormData>
+      name={name}
+      control={control}
+      render={({ field }): JSX.Element => (
+        <Stack>
+          <Combobox
+            store={store}
+            withinPortal={false}
+            onOptionSubmit={(value) => {
+              field.onChange(value);
+              setValue(value);
+              store.closeDropdown();
+            }}
+          >
             <Combobox.Target>
               <InputBase
                 component="button"
                 type="button"
                 pointer
                 rightSection={<Combobox.Chevron />}
-                onClick={() => deliveryCountrySelect.toggleDropdown()}
-                onChange={(event) => setDeliveryCountryValue(event.currentTarget.value)}
+                onClick={() => store.toggleDropdown()}
+                onChange={(event) => setValue(event.currentTarget.value)}
                 rightSectionPointerEvents="none"
               >
-                {deliveryCountryValue || <Input.Placeholder>Select country</Input.Placeholder>}
+                {value || <Input.Placeholder>Select country</Input.Placeholder>}
               </InputBase>
             </Combobox.Target>
             <Combobox.Dropdown>
               <Combobox.Options>{options}</Combobox.Options>
             </Combobox.Dropdown>
-            </Combobox>
-          )}
-        />
-        <Text>{errors.deliveryAddress?.country?.message}</Text> */}
+          </Combobox>
+        </Stack>
+      )}
+    />
+  )
+
+  const renderAddressFields = (type: 'delivery' | 'billing') => {
+    const countrySelect = type === 'delivery' ? deliveryCountrySelect : billingCountrySelect;
+    const countryValue = type === 'delivery' ? deliveryCountryValue : billingCountryValue;
+    const setCountryValue = type === 'delivery' ? setDeliveryCountryValue : setBillingCountryValue;
+    const isDisabledOnSameAddress = type === 'delivery' ? false : sameAddress;
+
+    return (
+      <Fieldset legend={`${type.charAt(0).toUpperCase()}${type.slice(1)} address`} disabled={isDisabledOnSameAddress}>
         <Group>
-          <TextInput
-            {...register(`${type}Address.street`)}
-            id={`${type}-street`}
-            placeholder="Enter street"
-            className="form-input"
-            withAsterisk
-          />
-          <Text c="red" size="sm">{errors[`${type}Address`]?.street?.message}</Text>
+          <Stack>
+            {renderCountrySelect(
+              `${type}Address.country`,
+              countrySelect,
+              countryValue,
+              setCountryValue
+            )}
+            <Text c="red" size="sm">{errors[`${type}Address`]?.country?.message}</Text>
+          </Stack>
+          <Stack>
+            <TextInput
+              {...register(`${type}Address.street`)}
+              id={`${type}-street`}
+              placeholder="Enter street"
+              className="form-input"
+              withAsterisk
+            />
+            <Text c="red" size="sm">{errors[`${type}Address`]?.street?.message}</Text>
+          </Stack>
         </Group>
         <Group>
-          <TextInput
-            {...register(`${type}Address.city`)}
-            id={`${type}-city`}
-            placeholder="Enter city"
-            className="form-input"
-            withAsterisk
-          />
-          <Text c="red" size="sm">{errors[`${type}Address`]?.city?.message}</Text>
-
-          <TextInput
-            {...register(`${type}Address.postcode`)}
-            id={`${type}-postcode`}
-            placeholder="Enter postcode"
-            className="form-input"
-            withAsterisk
-          />
-          <Text c="red" size="sm">{errors[`${type}Address`]?.postcode?.message}</Text>
+          <Stack>
+            <TextInput
+              {...register(`${type}Address.city`)}
+              id={`${type}-city`}
+              placeholder="Enter city"
+              className="form-input"
+              withAsterisk
+            />
+            <Text c="red" size="sm">{errors[`${type}Address`]?.city?.message}</Text>
+          </Stack>
+          <Stack>
+            <TextInput
+              {...register(`${type}Address.postcode`)}
+              id={`${type}-postcode`}
+              placeholder="Enter postcode"
+              className="form-input"
+              withAsterisk
+            />
+            <Text c="red" size="sm">{errors[`${type}Address`]?.postcode?.message}</Text>
+          </Stack>
         </Group>
       </Fieldset>
     );
@@ -194,97 +221,25 @@ export function RegistrationForm() {
     />
     <Text c="red" size="sm">{errors.password?.message}</Text>
 
-    <Fieldset legend="Delivery address">
-      <Fieldset>
-      <Controller<RegistrationFormData>
-        name="deliveryAddress.country"
-        control={control}
-        render={({ field }): JSX.Element => (
-          <Combobox
-            store={deliveryCountrySelect}
-            withinPortal={false}
-            onOptionSubmit={(value) => {
-              field.onChange(value);
-              setDeliveryCountryValue(value);
-              deliveryCountrySelect.closeDropdown();
-            }}
-          >
-          <Combobox.Target>
-            <InputBase
-              component="button"
-              type="button"
-              pointer
-              rightSection={<Combobox.Chevron />}
-              onClick={() => deliveryCountrySelect.toggleDropdown()}
-              onChange={(event) => setDeliveryCountryValue(event.currentTarget.value)}
-              rightSectionPointerEvents="none"
-            >
-              {deliveryCountryValue || <Input.Placeholder>Select country</Input.Placeholder>}
-            </InputBase>
-          </Combobox.Target>
-          <Combobox.Dropdown>
-            <Combobox.Options>{options}</Combobox.Options>
-          </Combobox.Dropdown>
-          </Combobox>
-        )}
-      />
-      <Text c="red" size="sm">{errors.deliveryAddress?.country?.message}</Text>
-      {renderAddressFields('delivery')}
-      </Fieldset>
-      <Checkbox
-        {...register("deliveryAddress.isDefaultAddress")}
-        label="Set as default delivery address"
-      />
-    </Fieldset>
+    {renderAddressFields('delivery')}
 
-    <Fieldset legend="Billing address">
-      <Fieldset disabled={sameAddress}>
-        <Controller<RegistrationFormData>
-            name="billingAddress.country"
-            control={control}
-            render={({ field }): JSX.Element => (
-              <Combobox
-                store={billingCountrySelect}
-                withinPortal={false}
-                onOptionSubmit={(value) => {
-                  field.onChange(value);
-                  setBillingCountryValue(value);
-                  billingCountrySelect.closeDropdown();
-                }}
-              >
-              <Combobox.Target>
-                <InputBase
-                  component="button"
-                  type="button"
-                  pointer
-                  rightSection={<Combobox.Chevron />}
-                  onClick={() => billingCountrySelect.toggleDropdown()}
-                  onChange={(event) => setBillingCountryValue(event.currentTarget.value)}
-                  rightSectionPointerEvents="none"
-                >
-                  {billingCountryValue || <Input.Placeholder>Select country</Input.Placeholder>}
-                </InputBase>
-              </Combobox.Target>
-              <Combobox.Dropdown>
-                <Combobox.Options>{options}</Combobox.Options>
-              </Combobox.Dropdown>
-              </Combobox>
-            )}
-          />
-          <Text c="red" size="sm">{errors.billingAddress?.country?.message}</Text>
-          {renderAddressFields('billing')}
-      </Fieldset>
-      <Checkbox
-        {...register("billingAddress.sameAsDelivery")}
-        label="Same as delivery address"
-        checked={sameAddress}
-        onChange={handleSameAddressChange}
-        />
-      <Checkbox
-        {...register("billingAddress.isDefaultAddress")}
-        label="Set as default billing address"
+    <Checkbox
+      {...register("deliveryAddress.isDefaultAddress")}
+      label="Set as default delivery address"
+    />
+
+    {renderAddressFields('billing')}
+
+    <Checkbox
+      {...register("billingAddress.sameAsDelivery")}
+      label="Same as delivery address"
+      checked={sameAddress}
+      onChange={handleSameAddressChange}
       />
-    </Fieldset>
+    <Checkbox
+      {...register("billingAddress.isDefaultAddress")}
+      label="Set as default billing address"
+    />
     <Button className="button button--primary button--large auth-button" variant="filled" type="submit">Sign Up</Button>
     </form>
   )
