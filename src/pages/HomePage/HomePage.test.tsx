@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { describe, it, expect, vi } from 'vitest';
-import { HomePage } from '@/pages/HomePage';
+import { HomePage } from '@/pages/HomePage/HomePage';
 import { MantineProvider } from '@mantine/core';
 import { theme } from '@/app/theme';
 

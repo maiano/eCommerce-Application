@@ -15,7 +15,7 @@
   background-repeat: no-repeat;
   background-image:
     linear-gradient(rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.4) 100%),
-    url('../assets/wine.png');
+    url('../../assets/wine.png');
 }
 
 .hero__title {
@@ -78,19 +78,19 @@
 }
 
 .card__image--chardonnay {
-  background-image: url('../assets/wine4.png');
+  background-image: url('../../assets/wine4.png');
 }
 
 .card__image--pinot {
-  background-image: url('../assets/wine2.png');
+  background-image: url('../../assets/wine2.png');
 }
 
 .card__image--cabernet {
-  background-image: url('../assets/wine1.png');
+  background-image: url('../../assets/wine1.png');
 }
 
 .card__image--sauvignon {
-  background-image: url('../assets/wine3.png');
+  background-image: url('../../assets/wine3.png');
 }
 
 .card__content {

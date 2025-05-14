@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import '../pages/HomePage.css';
+import '@/pages/HomePage/HomePage.css';
 import { Container, Title, Text, Box, Group, Badge } from '@mantine/core';
 import { Slider } from '@/components/Slider/Slider';
 import { ProductCard } from '@/components/Card/Card'

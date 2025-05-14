@@ -3,7 +3,7 @@ import { AuthLayout } from '@/app/layouts/AuthLayouts';
 import { ErrorLayout } from '@/app/layouts/ErrorLayout';
 import { MainLayout } from '@/app/layouts/MainLayout';
 import { ROUTES } from '@/app/routes';
-import { HomePage } from '@/pages/HomePage';
+import { HomePage } from '@/pages/HomePage/HomePage';
 import { LoginPage } from '@/pages/LoginPage';
 import { NotFoundPage } from '@/pages/NotFoundPage';
 import { RegistrationPage } from '@/pages/RegistrationPage';
