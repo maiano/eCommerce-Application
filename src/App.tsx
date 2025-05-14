@@ -1,4 +1,7 @@
 import { AppProvider } from '@/app/providers';
+import '@mantine/core/styles.css';
+import '@mantine/carousel/styles.css';
+import './index.css';
 
 function App() {
   return <AppProvider />;
