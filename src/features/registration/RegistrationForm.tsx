@@ -10,7 +10,7 @@ import "@mantine/core/styles.css"
 import "@mantine/dates/styles.css";
 
 export function RegistrationForm() {
-  const { register, handleSubmit, control, watch, setValue, formState: { errors } } = useForm<RegistrationFormData>({mode: "onChange", resolver: zodResolver(registrationSchema)});
+  const { register, handleSubmit, control, watch, trigger, setValue, formState: { errors } } = useForm<RegistrationFormData>({mode: "onChange", resolver: zodResolver(registrationSchema)});
   
   const onSubmit: SubmitHandler<RegistrationFormData> = (data) => {
     console.log(data);
@@ -28,7 +28,12 @@ export function RegistrationForm() {
   ];
 
   const deliveryCountrySelect = useCombobox({
-    onDropdownClose: () => deliveryCountrySelect.resetSelectedOption(),
+    onDropdownClose: () => {
+      deliveryCountrySelect.resetSelectedOption();
+      setTimeout(() => {
+        triggerErrorCheck();
+      }, 200)
+    },
   });
 
   const billingCountrySelect = useCombobox({
@@ -42,22 +47,30 @@ export function RegistrationForm() {
     <Combobox.Option value={item} key={item}>
       {item}
     </Combobox.Option>
-  ));
-
+  )); 
   
   // Same address checkbox
   const [sameAddress, setSameAddress] = useState(false);
   const handleSameAddressChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSameAddress(event.target.checked);
+    setTimeout(() => {
+      trigger(["billingAddress.country", "billingAddress.city", "billingAddress.street", "billingAddress.postcode"])
+    }, 200);
   };
   
+  const triggerErrorCheck = () => {
+    if (sameAddress) {
+      trigger(["billingAddress.country", "billingAddress.city", "billingAddress.street", "billingAddress.postcode"])
+    }
+  }
+
   const deliveryFields = watch([
     "deliveryAddress.country",
     "deliveryAddress.city",
     "deliveryAddress.street", 
     "deliveryAddress.postcode"
   ]);
-
+  
   useEffect(() => {
     if (sameAddress) {
       const [deliveryCountry, deliveryCity, deliveryStreet, deliveryPostcode] = deliveryFields;
@@ -66,9 +79,10 @@ export function RegistrationForm() {
       setValue("billingAddress.city", deliveryCity);
       setValue("billingAddress.street", deliveryStreet);
       setValue("billingAddress.postcode", deliveryPostcode);
+      
     }
   }, [deliveryFields, sameAddress, setValue]);
-
+  
   // Address
   const renderCountrySelect = (
     name: 'deliveryAddress.country' | 'billingAddress.country',
@@ -89,7 +103,7 @@ export function RegistrationForm() {
               setValue(value);
               store.closeDropdown();
             }}
-          >
+            >
             <Combobox.Target>
               <InputBase
                 component="button"
@@ -99,7 +113,7 @@ export function RegistrationForm() {
                 onClick={() => store.toggleDropdown()}
                 onChange={(event) => setValue(event.currentTarget.value)}
                 rightSectionPointerEvents="none"
-              >
+                >
                 {value || <Input.Placeholder>Select country</Input.Placeholder>}
               </InputBase>
             </Combobox.Target>
@@ -109,16 +123,16 @@ export function RegistrationForm() {
           </Combobox>
         </Stack>
       )}
-    />
-  )
-
-  const renderAddressFields = (type: 'delivery' | 'billing') => {
-    const countrySelect = type === 'delivery' ? deliveryCountrySelect : billingCountrySelect;
-    const countryValue = type === 'delivery' ? deliveryCountryValue : billingCountryValue;
-    const setCountryValue = type === 'delivery' ? setDeliveryCountryValue : setBillingCountryValue;
-    const isDisabledOnSameAddress = type === 'delivery' ? false : sameAddress;
-
-    return (
+      />
+    )
+    
+    const renderAddressFields = (type: 'delivery' | 'billing') => {
+      const countrySelect = type === 'delivery' ? deliveryCountrySelect : billingCountrySelect;
+      const countryValue = type === 'delivery' ? deliveryCountryValue : billingCountryValue;
+      const setCountryValue = type === 'delivery' ? setDeliveryCountryValue : setBillingCountryValue;
+      const isDisabledOnSameAddress = type === 'delivery' ? false : sameAddress;
+      
+      return (
       <Fieldset legend={`${type.charAt(0).toUpperCase()}${type.slice(1)} address`} disabled={isDisabledOnSameAddress}>
         <Group>
           <Stack>
@@ -137,6 +151,7 @@ export function RegistrationForm() {
               placeholder="Enter street"
               className="form-input"
               withAsterisk
+              onKeyUp={triggerErrorCheck}
             />
             <Text c="red" size="sm">{errors[`${type}Address`]?.street?.message}</Text>
           </Stack>
@@ -149,6 +164,7 @@ export function RegistrationForm() {
               placeholder="Enter city"
               className="form-input"
               withAsterisk
+              onKeyUp={triggerErrorCheck}
             />
             <Text c="red" size="sm">{errors[`${type}Address`]?.city?.message}</Text>
           </Stack>
@@ -159,6 +175,7 @@ export function RegistrationForm() {
               placeholder="Enter postcode"
               className="form-input"
               withAsterisk
+              onKeyUp={triggerErrorCheck}
             />
             <Text c="red" size="sm">{errors[`${type}Address`]?.postcode?.message}</Text>
           </Stack>
