@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Fieldset, TextInput, PasswordInput, Combobox, Checkbox, Button, useCombobox, InputBase, Input } from "@mantine/core";
+import { Fieldset, TextInput, PasswordInput, Combobox, Checkbox, Button, useCombobox, InputBase, Input, Text, Group } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
 import dayjs from 'dayjs';
 import customParseFormat from "dayjs/plugin/customParseFormat";
@@ -44,80 +44,14 @@ export function RegistrationForm() {
     </Combobox.Option>
   ));
 
-  // Address fields
-  const renderAddressFields = (type: 'delivery' | 'billing') => {
-      return (
-        <Fieldset>
-          {/* <Controller<RegistrationFormData>
-            name={`${type}Address.country`}
-            control={control}
-            render={({ field }): JSX.Element => (
-              <Combobox
-                store={`${type}CountrySelect`}
-                withinPortal={false}
-                onOptionSubmit={(value) => {
-                  field.onChange(value);
-                  setDeliveryCountryValue(value);
-                  deliveryCountrySelect.closeDropdown();
-                }}
-              >
-              <Combobox.Target>
-                <InputBase
-                  component="button"
-                  type="button"
-                  pointer
-                  rightSection={<Combobox.Chevron />}
-                  onClick={() => deliveryCountrySelect.toggleDropdown()}
-                  onChange={(event) => setDeliveryCountryValue(event.currentTarget.value)}
-                  rightSectionPointerEvents="none"
-                >
-                  {deliveryCountryValue || <Input.Placeholder>Select country</Input.Placeholder>}
-                </InputBase>
-              </Combobox.Target>
-              <Combobox.Dropdown>
-                <Combobox.Options>{options}</Combobox.Options>
-              </Combobox.Dropdown>
-              </Combobox>
-            )}
-          />
-          <p>{errors.deliveryAddress?.country?.message}</p> */}
-          <TextInput
-            {...register(`${type}Address.street`)}
-            id={`${type}-street`}
-            placeholder="Enter street"
-            className="form-input"
-            withAsterisk
-          />
-          <p>{errors[`${type}Address`]?.street?.message}</p>
   
-          <TextInput
-            {...register(`${type}Address.city`)}
-            id={`${type}-city`}
-            placeholder="Enter city"
-            className="form-input"
-            withAsterisk
-          />
-          <p>{errors[`${type}Address`]?.city?.message}</p>
-  
-          <TextInput
-            {...register(`${type}Address.postcode`)}
-            id={`${type}-postcode`}
-            placeholder="Enter postcode"
-            className="form-input"
-            withAsterisk
-          />
-          <p>{errors[`${type}Address`]?.postcode?.message}</p>
-        </Fieldset>
-      );
-    };
-
   // Same address checkbox
   const [sameAddress, setSameAddress] = useState(false);
   const handleSameAddressChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const checked = event.target.checked;
-    setSameAddress(checked);
+    // const checked = event.target.checked;
+    setSameAddress(event.target.checked);
   };
-
+  
   const deliveryFields = watch([
     "deliveryAddress.country",
     "deliveryAddress.city",
@@ -136,7 +70,77 @@ export function RegistrationForm() {
     }
   }, [deliveryFields, sameAddress, setValue]);
 
-  //UI 
+  // UI
+  const renderAddressFields = (type: 'delivery' | 'billing') => {
+    return (
+      <Fieldset>
+        {/* <Controller<RegistrationFormData>
+          name={`${type}Address.country`}
+          control={control}
+          render={({ field }): JSX.Element => (
+            <Combobox
+              store={`${type}CountrySelect`}
+              withinPortal={false}
+              onOptionSubmit={(value) => {
+                field.onChange(value);
+                setDeliveryCountryValue(value);
+                deliveryCountrySelect.closeDropdown();
+              }}
+            >
+            <Combobox.Target>
+              <InputBase
+                component="button"
+                type="button"
+                pointer
+                rightSection={<Combobox.Chevron />}
+                onClick={() => deliveryCountrySelect.toggleDropdown()}
+                onChange={(event) => setDeliveryCountryValue(event.currentTarget.value)}
+                rightSectionPointerEvents="none"
+              >
+                {deliveryCountryValue || <Input.Placeholder>Select country</Input.Placeholder>}
+              </InputBase>
+            </Combobox.Target>
+            <Combobox.Dropdown>
+              <Combobox.Options>{options}</Combobox.Options>
+            </Combobox.Dropdown>
+            </Combobox>
+          )}
+        />
+        <Text>{errors.deliveryAddress?.country?.message}</Text> */}
+        <Group>
+          <TextInput
+            {...register(`${type}Address.street`)}
+            id={`${type}-street`}
+            placeholder="Enter street"
+            className="form-input"
+            withAsterisk
+          />
+          <Text c="red" size="sm">{errors[`${type}Address`]?.street?.message}</Text>
+        </Group>
+        <Group>
+          <TextInput
+            {...register(`${type}Address.city`)}
+            id={`${type}-city`}
+            placeholder="Enter city"
+            className="form-input"
+            withAsterisk
+          />
+          <Text c="red" size="sm">{errors[`${type}Address`]?.city?.message}</Text>
+
+          <TextInput
+            {...register(`${type}Address.postcode`)}
+            id={`${type}-postcode`}
+            placeholder="Enter postcode"
+            className="form-input"
+            withAsterisk
+          />
+          <Text c="red" size="sm">{errors[`${type}Address`]?.postcode?.message}</Text>
+        </Group>
+      </Fieldset>
+    );
+  };
+
+  //Form 
   return (
     <form className="form" onSubmit={handleSubmit(onSubmit)}>
     <TextInput {...register("firstName")}
@@ -145,14 +149,14 @@ export function RegistrationForm() {
       className="form-input"
       withAsterisk
     />
-    <p>{errors.firstName?.message}</p>
+    <Text c="red" size="sm">{errors.firstName?.message}</Text>
     <TextInput {...register("lastName")}
       label="Last Name"
       id="lastname"
       className="form-input"
       withAsterisk
     />
-    <p>{errors.lastName?.message}</p>
+    <Text c="red" size="sm">{errors.lastName?.message}</Text>
     <Controller<RegistrationFormData>
       name="birthDate"
       control={control}
@@ -174,21 +178,21 @@ export function RegistrationForm() {
         />
       }
     />
-    <p>{errors.birthDate?.message}</p>
+    <Text c="red" size="sm">{errors.birthDate?.message}</Text>
     <TextInput {...register("email")}
       label="Email"
       id="email"
       className="form-input"
       withAsterisk
     />
-    <p>{errors.email?.message}</p>
+    <Text c="red" size="sm">{errors.email?.message}</Text>
     <PasswordInput {...register("password")}
       label="Password"
       id="password"
       className="form-input"
       withAsterisk
     />
-    <p>{errors.password?.message}</p>
+    <Text c="red" size="sm">{errors.password?.message}</Text>
 
     <Fieldset legend="Delivery address">
       <Fieldset>
@@ -224,7 +228,7 @@ export function RegistrationForm() {
           </Combobox>
         )}
       />
-      <p>{errors.deliveryAddress?.country?.message}</p>
+      <Text c="red" size="sm">{errors.deliveryAddress?.country?.message}</Text>
       {renderAddressFields('delivery')}
       </Fieldset>
       <Checkbox
@@ -267,7 +271,7 @@ export function RegistrationForm() {
               </Combobox>
             )}
           />
-          <p>{errors.billingAddress?.country?.message}</p>
+          <Text c="red" size="sm">{errors.billingAddress?.country?.message}</Text>
           {renderAddressFields('billing')}
       </Fieldset>
       <Checkbox
