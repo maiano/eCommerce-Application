@@ -1,17 +1,12 @@
-import { Title, Text, Container, Group } from "@mantine/core";
+import { Title, Text, Container, Group, Box } from "@mantine/core";
 import { Link } from 'react-router-dom'
 import { RegistrationForm } from "@/features/registration/RegistrationForm";
-import "@mantine/core/styles.css"
-import "@mantine/dates/styles.css";
+import '@/pages/RegistartionPage.css'
 
 export function RegistrationPage() {
   return (
     <Container className="page">
-      <Container className="page__container">
-        <Container className="content">
-          <Container className="content__container">
-            <Container className="auth-container">
-              <Container className="auth-form">
+              <Box className="auth-form">
                 <Group className="header__logo" style={{justifyContent: 'start'}}>
                   <Link className="header__logo-icon" to="/main" style={{color: 'darkred'}}>
                     <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width="24px" height="24px">
@@ -29,14 +24,10 @@ export function RegistrationPage() {
 
                 <RegistrationForm />
 
-                <Container className="auth-footer">
+                <Group className="auth-footer">
                   <Text>Already have an account? <Link to="/signIn" className="auth-link">Log in</Link></Text>
-                </Container>
-              </Container>
-            </Container>
+                </Group>
+              </Box>
           </Container>
-        </Container>
-      </Container>
-    </Container>
   );
 }

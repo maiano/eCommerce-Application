@@ -174,6 +174,14 @@ export const theme = createTheme({
             },
           },
         },
+        Fieldset: {
+          styles: {
+            root: {
+                backgroundColor: darkColors[6],
+                padding: '0 0.5rem',
+              },
+          },
+        },
       },
     },
 );
