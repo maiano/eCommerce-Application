@@ -42,7 +42,7 @@
 .form-input {
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
-  border: 1px solid #32415d;
+  border: 1px solid #32415d !important;
   background-color: #131c24 !important;
   color: #f8f9fb;
   font-size: 0.875rem;

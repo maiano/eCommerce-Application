@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Fieldset, TextInput, PasswordInput, Combobox, Checkbox, Button, useCombobox, InputBase, Input, Text, Grid, ComboboxStore, Stack } from "@mantine/core";
+import { Fieldset, TextInput, PasswordInput, Combobox, Checkbox, Button, useCombobox, InputBase, Input, Text, Grid, ComboboxStore, Stack, useMantineTheme } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
 import dayjs from 'dayjs';
 import customParseFormat from "dayjs/plugin/customParseFormat";
@@ -8,6 +8,7 @@ import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { RegistrationFormData, registrationSchema } from "@/shared/validation/registration-validation";
 
 export function RegistrationForm() {
+  const theme = useMantineTheme();
   const { register, handleSubmit, control, watch, trigger, setValue, formState: { errors } } = useForm<RegistrationFormData>({mode: "onChange", resolver: zodResolver(registrationSchema)});
 
   const onSubmit: SubmitHandler<RegistrationFormData> = (data) => {
@@ -131,7 +132,7 @@ export function RegistrationForm() {
     const isDisabledOnSameAddress = type === 'delivery' ? false : sameAddress;
 
     return (
-      <Fieldset legend={`${type.charAt(0).toUpperCase()}${type.slice(1)} address`} disabled={isDisabledOnSameAddress}>
+      <Fieldset legend={`${type.charAt(0).toUpperCase()}${type.slice(1)} address`} disabled={isDisabledOnSameAddress} style={{border: 'none', padding: '0.25rem 0'}}>
         <Grid gutter="md">
         <Grid.Col span={{ base: 12, sm: 6 }}>
           <Stack style={{gap: 5}}>
@@ -141,20 +142,19 @@ export function RegistrationForm() {
               countryValue,
               setCountryValue
             )}
-            <Text c="red" size="sm">{errors[`${type}Address`]?.country?.message}</Text>
+            <Text style={{color: theme.colors.red[8]}} size="sm">{errors[`${type}Address`]?.country?.message}</Text>
           </Stack>
           </Grid.Col>
           <Grid.Col span={{ base: 12, sm: 6 }}>
           <Stack style={{gap: 7}}>
             <TextInput
               {...register(`${type}Address.street`)}
-              id={`${type}-street`}
               placeholder="Enter street"
               classNames={{ input: 'form-input' }}
               withAsterisk
               onKeyUp={triggerErrorCheck}
             />
-            <Text c="red" size="sm">{errors[`${type}Address`]?.street?.message}</Text>
+            <Text style={{color: theme.colors.red[8]}} size="sm">{errors[`${type}Address`]?.street?.message}</Text>
           </Stack>
           </Grid.Col>
 
@@ -162,26 +162,24 @@ export function RegistrationForm() {
           <Stack style={{gap: 7}}>
             <TextInput
               {...register(`${type}Address.city`)}
-              id={`${type}-city`}
               placeholder="Enter city"
               classNames={{ input: 'form-input' }}
               withAsterisk
               onKeyUp={triggerErrorCheck}
             />
-            <Text c="red" size="sm">{errors[`${type}Address`]?.city?.message}</Text>
+            <Text style={{color: theme.colors.red[8]}} size="sm">{errors[`${type}Address`]?.city?.message}</Text>
           </Stack>
           </Grid.Col>
           <Grid.Col span={{ base: 12, sm: 6 }}>
           <Stack style={{gap: 7}}>
             <TextInput
               {...register(`${type}Address.postcode`)}
-              id={`${type}-postcode`}
               placeholder="Enter postcode"
               classNames={{ input: 'form-input' }}
               withAsterisk
               onKeyUp={triggerErrorCheck}
             />
-            <Text c="red" size="sm">{errors[`${type}Address`]?.postcode?.message}</Text>
+            <Text style={{color: theme.colors.red[8]}} size="sm">{errors[`${type}Address`]?.postcode?.message}</Text>
           </Stack>
           </Grid.Col>
          </Grid>
@@ -195,20 +193,18 @@ export function RegistrationForm() {
       <TextInput
         {...register("firstName")}
         label="First Name"
-        id="firstname"
         classNames={{ input: 'form-input' }}
         withAsterisk
       />
-      <Text c="red" size="sm">{errors.firstName?.message}</Text>
+      <Text style={{color: theme.colors.red[8]}} size="sm">{errors.firstName?.message}</Text>
 
       <TextInput
         {...register("lastName")}
         label="Last Name"
-        id="lastname"
         classNames={{ input: 'form-input' }}
         withAsterisk
       />
-      <Text c="red" size="sm">{errors.lastName?.message}</Text>
+      <Text style={{color: theme.colors.red[8]}} size="sm">{errors.lastName?.message}</Text>
 
       <Controller<RegistrationFormData>
         name="birthDate"
@@ -221,7 +217,6 @@ export function RegistrationForm() {
               field.onChange(date?.toLocaleDateString('en-CA'))
             }}
             label="Date of Birth"
-            id="dob"
             classNames={{ input: 'form-input' }}
             dateParser={(value) => dayjs(value, 'DD.MM.YYYY').toDate()}
             valueFormat="DD.MM.YYYY"
@@ -231,47 +226,51 @@ export function RegistrationForm() {
           />
         }
       />
-      <Text c="red" size="sm">{errors.birthDate?.message}</Text>
+      <Text style={{color: theme.colors.red[8]}} size="sm">{errors.birthDate?.message}</Text>
 
       <TextInput
         {...register("email")}
         label="Email"
-        id="email"
         classNames={{ input: 'form-input' }}
         withAsterisk
       />
-      <Text c="red" size="sm">{errors.email?.message}</Text>
+      <Text style={{color: theme.colors.red[8]}} size="sm">{errors.email?.message}</Text>
 
       <PasswordInput
         {...register("password")}
         label="Password"
-        id="password"
         classNames={{ input: 'form-input' }}
         withAsterisk
       />
-      <Text c="red" size="sm">{errors.password?.message}</Text>
+      <Text style={{color: theme.colors.red[8]}} size="sm">{errors.password?.message}</Text>
 
       {renderAddressFields('delivery')}
 
-      <Checkbox
+      <Checkbox styles={{ input: {borderRadius: '5px'}, root: {marginBottom: '1rem'}}}
         {...register("deliveryAddress.isDefaultAddress")}
         label="Set as default delivery address"
       />
 
       {renderAddressFields('billing')}
 
-      <Checkbox
+      <Grid gutter="md">
+      <Grid.Col span={{ base: 12, sm: 6 }}>
+      <Checkbox styles={{ input: {borderRadius: '5px'}}}
         {...register("billingAddress.sameAsDelivery")}
         label="Same as delivery address"
         checked={sameAddress}
         onChange={handleSameAddressChange}
       />
-      <Checkbox
+      </Grid.Col>
+      <Grid.Col span={{ base: 12, sm: 6 }}>
+      <Checkbox styles={{ input: {borderRadius: '5px'}}}
         {...register("billingAddress.isDefaultAddress")}
         label="Set as default billing address"
-      />
+        />
+        </Grid.Col>
+        </Grid>
 
-      <Button className="button button--primary button--large auth-button" variant="filled" type="submit">
+      <Button className="button button--primary button--large auth-button" variant="filled" type="submit" style={{margin: '0.5rem'}}>
         Sign Up
       </Button>
     </form>

@@ -7,7 +7,7 @@ export function RegistrationPage() {
   return (
     <Container className="page">
               <Box className="auth-form">
-                <Group className="header__logo" style={{justifyContent: 'start'}}>
+                <Group className="header__logo" style={{justifyContent: 'start', gap: '0'}}>
                   <Link className="header__logo-icon" to="/main" style={{color: 'darkred'}}>
                     <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width="24px" height="24px">
                         <path
