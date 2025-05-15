@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import { HomePage } from '@/pages/Home';
+import { HomePage } from '@/pages/HomePage';
 
 describe('HomePage Component', () => {
   it('renders welcome message', () => {
