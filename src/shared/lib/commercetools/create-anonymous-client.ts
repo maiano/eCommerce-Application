@@ -14,6 +14,10 @@ export const ctpClient = new ClientBuilder()
   .withLoggerMiddleware() // Include middleware for logging
   .build();
 
-export const apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({
+console.log('Anonymous client created');
+
+export const apiRootAnonymous = createApiBuilderFromCtpClient(
+  ctpClient,
+).withProjectKey({
   projectKey,
 });
