@@ -32,11 +32,11 @@ export function NotFoundPage() {
                 </Group>
 
                 <Button
-                  className="button button--primary button--large auth-button"
+                  className="button button--primary button--large"
                   component="a"
                   href="/"
                 >
-                  <Text className="button__text">Go to Homepage</Text>
+                  Go to Homepage
                 </Button>
               </Box>
           </Container>
