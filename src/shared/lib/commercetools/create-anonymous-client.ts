@@ -1,13 +1,8 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-argument*/
-
-import { ClientBuilder } from '@commercetools/sdk-client-v2';
 import { createApiBuilderFromCtpClient } from '@commercetools/platform-sdk';
-import { httpMiddlewareOptions } from './http-config.ts';
-import { AnonymousAuthMiddlewareOptions  } from './auth-config.ts';
+import { ClientBuilder } from '@commercetools/sdk-client-v2';
+import { AnonymousAuthMiddlewareOptions } from './auth-config.ts';
 import { env } from './environment';
+import { httpMiddlewareOptions } from './http-config.ts';
 
 const projectKey = env.VITE_CTP_PROJECT_KEY;
 
