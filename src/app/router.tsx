@@ -5,7 +5,7 @@ import { MainLayout } from '@/app/layouts/MainLayout';
 import { ROUTES } from '@/app/routes';
 import { HomePage } from '@/pages/HomePage/HomePage';
 import { LoginPage } from '@/pages/LoginPage';
-import { NotFoundPage } from '@/pages/NotFoundPage';
+import { NotFoundPage } from '@/pages/NotFoundPage/NotFoundPage';
 import { RegistrationPage } from '@/pages/RegistrationPage';
 
 export const router = createBrowserRouter([
