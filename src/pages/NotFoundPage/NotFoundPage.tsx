@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useMantineTheme, Container, Title, Text, Button, Group, Box } from '@mantine/core';
 import './NotFoundPage.css'
 
@@ -33,8 +34,8 @@ export function NotFoundPage() {
 
                 <Button
                   className="button button--primary button--large"
-                  component="a"
-                  href="/"
+                  component={Link}
+                  to="/"
                 >
                   Go to Homepage
                 </Button>
