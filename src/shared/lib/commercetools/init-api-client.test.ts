@@ -1,5 +1,9 @@
 import { describe, it, expect, beforeAll } from 'vitest';
-import { initApiClient, getCurrentClient, login } from './api-client-manager';
+import {
+  initApiClient,
+  getCurrentClient,
+  loginCustomer,
+} from './api-client-manager';
 
 describe('initApiClient', () => {
   beforeAll(async () => {
@@ -12,7 +16,7 @@ describe('initApiClient', () => {
   });
 
   it('login customer', async () => {
-    await login({
+    await loginCustomer({
       email: 'test-user-1747386875229@example.com',
       password: 'Qwerty123',
     });

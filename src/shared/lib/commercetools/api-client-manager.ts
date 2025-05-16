@@ -18,13 +18,13 @@ export const initApiClient = (): ApiRoot => {
   return currentClient;
 };
 
-export const register = (
+export const registerCustomer = (
   body: MyCustomerDraft,
 ): Promise<ClientResponse<CustomerSignInResult>> => {
   return getCurrentClient().me().signup().post({ body }).execute();
 };
 
-export const login = async (
+export const loginCustomer = async (
   credentials: CustomerSignin,
 ): Promise<ClientResponse<CustomerSignInResult>> => {
   const client = createPasswordClient(credentials.email, credentials.password);
@@ -39,7 +39,7 @@ export const login = async (
     });
 };
 
-export const logout = () => {
+export const logoutCustomer = () => {
   currentClient = createAnonymousClient();
 };
 
