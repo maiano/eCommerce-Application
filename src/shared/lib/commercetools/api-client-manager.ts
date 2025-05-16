@@ -21,7 +21,7 @@ export const initApiClient = (): ApiRoot => {
 export const register = (
   body: MyCustomerDraft,
 ): Promise<ClientResponse<CustomerSignInResult>> => {
-  return createAnonymousClient().me().signup().post({ body }).execute();
+  return getCurrentClient().me().signup().post({ body }).execute();
 };
 
 export const login = async (
