@@ -1,12 +1,11 @@
 // temporarily for API testing
 
-import { apiRootAnonymous } from './create-anonymous-client.ts';
+import { createAnonymousClient } from './create-anonymous-client.ts';
 
 export const getCategories = () => {
-  return apiRootAnonymous.categories().get().execute();
+  return createAnonymousClient().categories().get().execute();
 };
 
-// Retrieve 'category' information and output the result to the log
 getCategories()
   .then((response) => {
     response.body.results.forEach((category) => {
