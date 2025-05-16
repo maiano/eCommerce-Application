@@ -214,12 +214,6 @@ body {
   display: flex;
   justify-content: center;
   margin-top: 2rem;
-}
-
-.footer__container {
-  display: flex;
-  max-width: 960px;
-  flex: 1;
   flex-direction: column;
 }
 
@@ -230,16 +224,6 @@ body {
   justify-content: center;
   gap: 1.5rem;
   padding: 1.25rem 1.25rem 1.5rem;
-}
-
-.footer__link {
-  color: #8a9dc0;
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: normal;
-  min-width: 10rem;
-  text-decoration: none;
-  text-align: center;
 }
 
 .footer__social {

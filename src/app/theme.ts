@@ -134,12 +134,6 @@ export const theme = createTheme({
         root: {
           color: primaryColors[1]
         },
-        variants: {
-          // primary: (theme: MantineTheme) => ({ root: { color: theme.colors.primaryColors[0] } }),
-          // accent: (theme: MantineTheme) => ({ root: { color: theme.colors.accent[3] } }),
-          // dark: (theme: MantineTheme) => ({ root: { color: theme.colors.dark[4] } }),
-          // red: (theme: MantineTheme) => ({ root: { color: theme.colors.red[2] } }),
-        },
       },
     },
     Container: Container.extend({

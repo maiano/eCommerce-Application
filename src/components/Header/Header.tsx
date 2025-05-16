@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { useRef } from 'react';
 import { useMantineTheme, Button, Burger, Box, Group, Title, Text, Menu } from '@mantine/core';
 import { useDisclosure, useClickOutside, useMediaQuery, useDidUpdate } from '@mantine/hooks';
 
@@ -6,6 +7,8 @@ export function Header() {
   const theme = useMantineTheme();
   const [opened, { toggle, close }] = useDisclosure();
   const isLargeScreen = useMediaQuery('(min-width: 768px)');
+  const burgerRef = useRef<HTMLButtonElement>(null);
+  const navRef = useRef<HTMLDivElement>(null);
 
   useDidUpdate(() => {
     const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
@@ -26,11 +29,12 @@ export function Header() {
   useClickOutside(
     () => opened && close(),
     ['mousedown', 'touchstart'],
-    [
-      document.querySelector('.header__nav'),
-      document.querySelector('.burger-button')
-    ].filter((el): el is HTMLElement => el !== null)
+    [burgerRef.current, navRef.current].filter((el): el is HTMLDivElement => el !== null)
   );
+
+  const handleLinkClick = () => {
+    if (opened) close();
+  };
 
   return (
     <Box className="header" style={{width: '100%', maxWidth: 1920}}>
@@ -60,7 +64,10 @@ export function Header() {
         <Title className="header__logo-text">Wine not</Title>
       </Group>
 
-        <Group className={`header__nav ${opened ? 'open' : ''}`} >
+      <Group
+        className={`header__nav ${opened ? 'open' : ''}`}
+        ref={navRef}
+      >
           <Burger
             className={`burger ${opened ? 'active' : ''}`}
             opened={opened}
@@ -69,16 +76,16 @@ export function Header() {
             aria-label="Toggle navigation"
             onClick={toggle}
           />
-          <Link className="header__nav-item" to="/">
-            <Text>Main</Text>
+          <Link to="/" className="header__nav-item" onClick={handleLinkClick}>
+             <Text>Main</Text>
           </Link>
-          <Link className="header__nav-item" to="/catalog">
+          <Link to="/catalog" className="header__nav-item" onClick={handleLinkClick}>
             <Text>Catalog</Text>
           </Link>
-          <Link className="header__nav-item" to="/about">
+          <Link to="/about" className="header__nav-item" onClick={handleLinkClick}>
             <Text>About us</Text>
           </Link>
-          <Link className="header__nav-item header__nav-item--cart" to="/cart">
+          <Link to="/cart" className="header__nav-item header__nav-item--cart" onClick={handleLinkClick}>
             <Text>Cart</Text>
           </Link>
           {opened && (
