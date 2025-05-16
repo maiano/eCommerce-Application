@@ -1,7 +1,7 @@
 export {
   getCurrentClient,
   initApiClient,
-  register,
+  registerCustomer,
   login,
   logout,
 } from '@/shared/lib/commercetools/api-client-manager';

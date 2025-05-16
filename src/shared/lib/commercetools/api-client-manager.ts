@@ -18,7 +18,7 @@ export const initApiClient = (): ApiRoot => {
   return currentClient;
 };
 
-export const register = (
+export const registerCustomer = (
   body: MyCustomerDraft,
 ): Promise<ClientResponse<CustomerSignInResult>> => {
   return getCurrentClient().me().signup().post({ body }).execute();

@@ -45,7 +45,8 @@ const birthDate = z
   .refine((pass) => /^\b\d{5}\b/g.test(pass), 'Postcode must contain 5 digits')
   
   const isDefaultAddress = z
-  .boolean()
+    // .union([z.number().int(), z.literal('')])
+    .boolean()
 
   const deliveryAddress = z.object({
     country,

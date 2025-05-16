@@ -5,6 +5,7 @@ import dayjs from 'dayjs';
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { JSX, useEffect, useState } from 'react';
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
+import {registerCustomer} from './../../shared/lib/commercetools/api-client-manager';
 import { RegistrationFormData, registrationSchema } from "@/shared/validation/registration-validation";
 
 export function RegistrationForm() {
@@ -12,14 +13,43 @@ export function RegistrationForm() {
   const { register, handleSubmit, control, watch, trigger, setValue, formState: { errors } } = useForm<RegistrationFormData>({mode: "onChange", resolver: zodResolver(registrationSchema)});
 
   const onSubmit: SubmitHandler<RegistrationFormData> = (data) => {
-    console.log(data);
+    registerCustomer({
+      email: data.email,
+      password: data.password,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      dateOfBirth: data.birthDate,
+      addresses: [
+        {
+          country: Object.values(countryCodes)[Object.keys(countryCodes).indexOf(data.deliveryAddress.country)],
+          streetName: data.deliveryAddress.street,
+          postalCode: data.deliveryAddress.postcode,
+          city: data.deliveryAddress.city,
+        },
+        {
+          country:  Object.values(countryCodes)[Object.keys(countryCodes).indexOf(data.billingAddress.country)],
+          streetName: data.billingAddress.street,
+          postalCode: data.billingAddress.postcode,
+          city: data.billingAddress.city,
+        }
+      ],
+      defaultShippingAddress: data.deliveryAddress.isDefaultAddress ? 0 : undefined,
+      defaultBillingAddress: data.billingAddress.isDefaultAddress ? 1 : undefined,
+      // shippingAddresses: [0],
+      // billingAddresses: [1],
+    })
   }
 
   // BirthDate Input
   const [calendarValue, setCalendarValue] = useState<Date | null>(null);
   dayjs.extend(customParseFormat);
 
-  // Country selects
+  const countryCodes = {
+    "Italy": "IT",
+    "France": "FR",
+    "Spain": "ES",
+  }
+
   const countries = [
     'Italy',
     'France',
