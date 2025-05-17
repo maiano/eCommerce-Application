@@ -6,6 +6,7 @@ import {
 } from '@commercetools/platform-sdk';
 import { createAnonymousClient } from './create-anonymous-client';
 import { createPasswordClient } from '@/shared/lib/commercetools/create-password-client';
+import { useAuthStore } from '@/shared/lib/commercetools/auth-state'
 
 type ApiRoot = ReturnType<
   typeof createAnonymousClient | typeof createPasswordClient
@@ -35,12 +36,14 @@ export const loginCustomer = async (
     .execute()
     .then((response) => {
       currentClient = client;
+      useAuthStore.getState().login();
       return response;
     });
 };
 
 export const logoutCustomer = () => {
   currentClient = createAnonymousClient();
+  useAuthStore.getState().logout();
 };
 
 export const getCurrentClient = (): ApiRoot => {
