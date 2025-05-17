@@ -1,85 +1,24 @@
-import { ClientResponse, CustomerSignInResult } from '@commercetools/platform-sdk';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Fieldset, TextInput, PasswordInput, Combobox, Checkbox, Button, useCombobox, InputBase, Input, Text, Grid, ComboboxStore, Stack, useMantineTheme } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
-import { notifications } from "@mantine/notifications";
 import dayjs from 'dayjs';
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { JSX, useEffect, useState } from 'react';
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
-import {apiClientManager} from './../../shared/lib/commercetools/api-client-manager';
+import { countries, registrationHandler } from './registration';
 import { RegistrationFormData, registrationSchema } from "@/shared/validation/registration-validation";
-
-const showNotification = async (message: string, color: string) => {
-  notifications.show({
-    message: `${message}`,
-    color: `${color}`,
-    autoClose: 5000,
-    withCloseButton: true,
-  })
-}
 
 export function RegistrationForm() {
   const theme = useMantineTheme();
   const { register, handleSubmit, control, watch, trigger, setValue, formState: { errors } } = useForm<RegistrationFormData>({mode: "onChange", resolver: zodResolver(registrationSchema)});
 
-  const onSubmit: SubmitHandler<RegistrationFormData> = async (data) => {
-    await apiClientManager.register({
-      email: data.email,
-      password: data.password,
-      firstName: data.firstName,
-      lastName: data.lastName,
-      dateOfBirth: data.birthDate,
-      addresses: [
-        {
-          country: Object.values(countryCodes)[Object.keys(countryCodes).indexOf(data.deliveryAddress.country)],
-          streetName: data.deliveryAddress.street,
-          postalCode: data.deliveryAddress.postcode,
-          city: data.deliveryAddress.city,
-        },
-        {
-          country: Object.values(countryCodes)[Object.keys(countryCodes).indexOf(data.billingAddress.country)],
-          streetName: data.billingAddress.street,
-          postalCode: data.billingAddress.postcode,
-          city: data.billingAddress.city,
-        }
-      ],
-      defaultShippingAddress: data.deliveryAddress.isDefaultAddress ? 0 : undefined,
-      defaultBillingAddress: data.billingAddress.isDefaultAddress ? 1 : undefined,
-      shippingAddresses: [0],
-      billingAddresses: [1],
-    })
-    .then(async(response) => {
-      if (response.statusCode === 201) {
-        await showNotification("Account has been successfully created", "green");
-       // redirect
-      }
-    })
-    .catch((error: ClientResponse<CustomerSignInResult>) => {
-      if (error.statusCode === 400) {
-        showNotification("Account with this email already exist. Log in or use another email", "red");
-      } else {
-        showNotification("Something went wrong", "red");
-      }
-    });
-  }
+  const onSubmit: SubmitHandler<RegistrationFormData> = (data) => registrationHandler(data);
 
-  // BirthDate Input
+  // Calendar
   const [calendarValue, setCalendarValue] = useState<Date | null>(null);
   dayjs.extend(customParseFormat);
 
-  const countryCodes = {
-    "Italy": "IT",
-    "France": "FR",
-    "Spain": "ES",
-  }
-
-  const countries = [
-    'Italy',
-    'France',
-    'Spain',
-  ];
-
+  // Selects
   const deliveryCountrySelect = useCombobox({
     onDropdownClose: () => {
       deliveryCountrySelect.resetSelectedOption();
