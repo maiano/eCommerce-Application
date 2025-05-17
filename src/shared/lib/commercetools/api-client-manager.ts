@@ -11,41 +11,55 @@ type ApiRoot = ReturnType<
   typeof createAnonymousClient | typeof createPasswordClient
 >;
 
-let currentClient: ApiRoot | null = null;
+export const apiClientManager = (() => {
+  let client: ApiRoot | null = null;
 
-export const initApiClient = (): ApiRoot => {
-  currentClient = createAnonymousClient();
-  return currentClient;
-};
+  const get = (): ApiRoot => {
+    if (!client) {
+      throw new Error('client not initialized');
+    }
+    return client;
+  };
 
-export const registerCustomer = (
-  body: MyCustomerDraft,
-): Promise<ClientResponse<CustomerSignInResult>> => {
-  return getCurrentClient().me().signup().post({ body }).execute();
-};
+  const init = () => {
+    if (!client) {
+      client = createAnonymousClient();
+    }
+  };
 
-export const login = async (
-  credentials: CustomerSignin,
-): Promise<ClientResponse<CustomerSignInResult>> => {
-  const client = createPasswordClient(credentials.email, credentials.password);
-  return await client
-    .me()
-    .login()
-    .post({ body: credentials })
-    .execute()
-    .then((response) => {
-      currentClient = client;
-      return response;
-    });
-};
+  const register = (
+    body: MyCustomerDraft,
+  ): Promise<ClientResponse<CustomerSignInResult>> => {
+    return get().me().signup().post({ body }).execute();
+  };
 
-export const logout = () => {
-  currentClient = createAnonymousClient();
-};
+  const login = async (
+    credentials: CustomerSignin,
+  ): Promise<ClientResponse<CustomerSignInResult>> => {
+    const authClient = createPasswordClient(
+      credentials.email,
+      credentials.password,
+    );
+    return await authClient
+      .me()
+      .login()
+      .post({ body: credentials })
+      .execute()
+      .then((response) => {
+        client = authClient;
+        return response;
+      });
+  };
 
-export const getCurrentClient = (): ApiRoot => {
-  if (!currentClient) {
-    return initApiClient();
-  }
-  return currentClient;
-};
+  const logout = () => {
+    client = createAnonymousClient();
+  };
+
+  return {
+    get,
+    init,
+    login,
+    register,
+    logout,
+  };
+})();

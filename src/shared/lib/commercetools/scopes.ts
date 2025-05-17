@@ -3,6 +3,7 @@ export const anonymousScopes = [
   'view_published_products:ecom-while-true-wine-not',
   'view_categories:ecom-while-true-wine-not',
   'create_anonymous_token:ecom-while-true-wine-not',
+  'manage_customers:ecom-while-true-wine-not',
 ];
 
 export const customerPasswordFlowScopes = [
