@@ -1,19 +1,20 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useMantineTheme, Button, Burger, Box, Group, Title, Text, Menu } from '@mantine/core';
 import { useDisclosure, useClickOutside, useMediaQuery, useDidUpdate } from '@mantine/hooks';
 import { useAuthStore } from '@/shared/lib/commercetools/auth-state';
-import { ROUTES } from '@/app/routes';
+import { logoutCustomer } from '@/shared/lib/commercetools';
+import { AuthState } from '@/shared/lib/commercetools/auth-state'
 
 
 export function Header() {
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-  const logout = useAuthStore((state) => state.logout);
-
-  const navigate = useNavigate();
+  const isAuthenticated = useAuthStore((state: AuthState) => state.isAuthenticated);
 
   const handleLogout = () => {
-    logout();
-    navigate(ROUTES.HOME);
+    console.log('Before logout:', useAuthStore.getState().isAuthenticated);
+    logoutCustomer();
+    useAuthStore.getState().logout();
+    console.log('After logout:', useAuthStore.getState().isAuthenticated);
+    close();
   };
 
   const theme = useMantineTheme();

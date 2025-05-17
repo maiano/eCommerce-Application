@@ -1,19 +1,27 @@
 import { create } from 'zustand';
+import { persist, createJSONStorage  } from 'zustand/middleware';
 
-type AuthState = {
+export type AuthState = {
   isAuthenticated: boolean;
   login: () => void;
   logout: () => void;
 };
 
-export const useAuthStore = create<AuthState>((set) => ({
-  isAuthenticated: false,
-  login: () => {
-    console.log('User logged in');
-    set({ isAuthenticated: true });
-  },
-  logout: () => {
-    console.log('User logged out');
-    set({ isAuthenticated: false });
-  },
-}));
+export const useAuthStore = create<AuthState>()(
+  persist(
+    (set) => ({
+      isAuthenticated: true,
+      login: () => set({ isAuthenticated: true }),
+      logout: () => {
+        console.log('Logging out');
+        set({ isAuthenticated: false });
+        localStorage.removeItem('auth-store');
+      },
+    }),
+    {
+      name: 'auth-store',
+      storage: createJSONStorage(() => localStorage),
+      partialize: (state) => ({ isAuthenticated: state.isAuthenticated }),
+    },
+  )
+);
