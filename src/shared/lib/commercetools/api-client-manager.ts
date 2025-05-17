@@ -2,7 +2,7 @@ import {
   ClientResponse,
   CustomerSignin,
   CustomerSignInResult,
-  MyCustomerDraft,
+  CustomerDraft,
 } from '@commercetools/platform-sdk';
 import { createAnonymousClient } from './create-anonymous-client';
 import { createPasswordClient } from '@/shared/lib/commercetools/create-password-client';
@@ -28,9 +28,9 @@ export const apiClientManager = (() => {
   };
 
   const register = (
-    body: MyCustomerDraft,
+    body: CustomerDraft,
   ): Promise<ClientResponse<CustomerSignInResult>> => {
-    return get().me().signup().post({ body }).execute();
+    return get().customers().post({ body }).execute();
   };
 
   const login = async (

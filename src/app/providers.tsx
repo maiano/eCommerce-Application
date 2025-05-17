@@ -27,7 +27,7 @@ export const AppProvider = () => {
     initializeApp();
   }, []);
   return (
-    <MantineProvider theme={theme}>
+    <MantineProvider theme={theme} defaultColorScheme="dark">
       <Notifications
         position="top-right"
         styles={{ notification: { maxWidth: '20rem' } }}
