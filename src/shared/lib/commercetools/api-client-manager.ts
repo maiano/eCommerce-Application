@@ -30,7 +30,7 @@ export const apiClientManager = (() => {
   const register = (
     body: CustomerDraft,
   ): Promise<ClientResponse<CustomerSignInResult>> => {
-    return get().customers().post({ body }).execute();
+    return get().customers().post({ body }).execute()
   };
 
   const login = async (

@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Fieldset, TextInput, PasswordInput, Combobox, Checkbox, Button, useCombobox, InputBase, Input, Text, Grid, ComboboxStore, Stack, useMantineTheme } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
+import { notifications } from "@mantine/notifications";
 import dayjs from 'dayjs';
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { JSX, useEffect, useState } from 'react';
@@ -8,12 +9,21 @@ import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import {apiClientManager} from './../../shared/lib/commercetools/api-client-manager';
 import { RegistrationFormData, registrationSchema } from "@/shared/validation/registration-validation";
 
+const showNotification = async (message: string, color: string) => {
+  notifications.show({
+    message: `${message}`,
+    color: `${color}`,
+    autoClose: 5000,
+    withCloseButton: true,
+  })
+}
+
 export function RegistrationForm() {
   const theme = useMantineTheme();
   const { register, handleSubmit, control, watch, trigger, setValue, formState: { errors } } = useForm<RegistrationFormData>({mode: "onChange", resolver: zodResolver(registrationSchema)});
 
-  const onSubmit: SubmitHandler<RegistrationFormData> = (data) => {
-    apiClientManager.register({
+  const onSubmit: SubmitHandler<RegistrationFormData> = async (data) => {
+    const res = await apiClientManager.register({
       email: data.email,
       password: data.password,
       firstName: data.firstName,
@@ -27,7 +37,7 @@ export function RegistrationForm() {
           city: data.deliveryAddress.city,
         },
         {
-          country:  Object.values(countryCodes)[Object.keys(countryCodes).indexOf(data.billingAddress.country)],
+          country: Object.values(countryCodes)[Object.keys(countryCodes).indexOf(data.billingAddress.country)],
           streetName: data.billingAddress.street,
           postalCode: data.billingAddress.postcode,
           city: data.billingAddress.city,
@@ -37,7 +47,25 @@ export function RegistrationForm() {
       defaultBillingAddress: data.billingAddress.isDefaultAddress ? 1 : undefined,
       shippingAddresses: [0],
       billingAddresses: [1],
-    })
+    });
+
+    try {
+      if (res.statusCode === 201) {
+        await showNotification("Account has been successfully created", "green");
+       // redirect
+      }
+      // if (res.statusCode === 400) {
+      //   showNotification("Account with this email already exist. Log in or use another email", "red");
+      // } 
+    } catch (err) {
+      console.log('catch');
+      if (err instanceof Error && 'status' in err && err.status === 400) {
+        showNotification("Account with this email already exist. Log in or use another email", "red");
+      }
+      // if (res.statusCode === 400) {
+      //   showNotification("Account with this email already exist. Log in or use another email", "red");
+      // } 
+    }
   }
 
   // BirthDate Input
