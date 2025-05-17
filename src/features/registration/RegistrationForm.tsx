@@ -1,3 +1,4 @@
+import { ClientResponse, CustomerSignInResult } from '@commercetools/platform-sdk';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Fieldset, TextInput, PasswordInput, Combobox, Checkbox, Button, useCombobox, InputBase, Input, Text, Grid, ComboboxStore, Stack, useMantineTheme } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
@@ -23,7 +24,7 @@ export function RegistrationForm() {
   const { register, handleSubmit, control, watch, trigger, setValue, formState: { errors } } = useForm<RegistrationFormData>({mode: "onChange", resolver: zodResolver(registrationSchema)});
 
   const onSubmit: SubmitHandler<RegistrationFormData> = async (data) => {
-    const res = await apiClientManager.register({
+    await apiClientManager.register({
       email: data.email,
       password: data.password,
       firstName: data.firstName,
@@ -47,25 +48,20 @@ export function RegistrationForm() {
       defaultBillingAddress: data.billingAddress.isDefaultAddress ? 1 : undefined,
       shippingAddresses: [0],
       billingAddresses: [1],
-    });
-
-    try {
-      if (res.statusCode === 201) {
+    })
+    .then(async(response) => {
+      if (response.statusCode === 201) {
         await showNotification("Account has been successfully created", "green");
        // redirect
       }
-      // if (res.statusCode === 400) {
-      //   showNotification("Account with this email already exist. Log in or use another email", "red");
-      // } 
-    } catch (err) {
-      console.log('catch');
-      if (err instanceof Error && 'status' in err && err.status === 400) {
+    })
+    .catch((error: ClientResponse<CustomerSignInResult>) => {
+      if (error.statusCode === 400) {
         showNotification("Account with this email already exist. Log in or use another email", "red");
+      } else {
+        showNotification("Something went wrong", "red");
       }
-      // if (res.statusCode === 400) {
-      //   showNotification("Account with this email already exist. Log in or use another email", "red");
-      // } 
-    }
+    });
   }
 
   // BirthDate Input
