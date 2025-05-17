@@ -1,14 +1,20 @@
 import { Link } from 'react-router-dom';
-import { useRef } from 'react';
 import { useMantineTheme, Button, Burger, Box, Group, Title, Text, Menu } from '@mantine/core';
 import { useDisclosure, useClickOutside, useMediaQuery, useDidUpdate } from '@mantine/hooks';
+import { logoutCustomer } from '@/shared/lib/commercetools';
+
 
 export function Header() {
+  let isAuthenticated = true;
+
+  const handleLogout = () => {
+    logoutCustomer();
+    close();
+  };
+
   const theme = useMantineTheme();
   const [opened, { toggle, close }] = useDisclosure();
   const isLargeScreen = useMediaQuery('(min-width: 768px)');
-  const burgerRef = useRef<HTMLButtonElement>(null);
-  const navRef = useRef<HTMLDivElement>(null);
 
   useDidUpdate(() => {
     const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
@@ -29,15 +35,14 @@ export function Header() {
   useClickOutside(
     () => opened && close(),
     ['mousedown', 'touchstart'],
-    [burgerRef.current, navRef.current].filter((el): el is HTMLDivElement => el !== null)
+    [
+      document.querySelector('.header__nav'),
+      document.querySelector('.burger-button')
+    ].filter((el): el is HTMLElement => el !== null)
   );
 
-  const handleLinkClick = () => {
-    if (opened) close();
-  };
-
   return (
-    <Box className="header" style={{width: '100%', maxWidth: 1920}}>
+    <Box className="header" style={{ width: '100%', maxWidth: 1920 }}>
       <Group className="header__logo" style={{ justifyContent: 'start' }}>
         <Link
           className="header__logo-icon"
@@ -64,31 +69,39 @@ export function Header() {
         <Title className="header__logo-text">Wine not</Title>
       </Group>
 
-      <Group
-        className={`header__nav ${opened ? 'open' : ''}`}
-        ref={navRef}
-      >
-          <Burger
-            className={`burger ${opened ? 'active' : ''}`}
-            opened={opened}
-            color={theme.colors.dark[1]}
-            size="md"
-            aria-label="Toggle navigation"
-            onClick={toggle}
-          />
-          <Link to="/" className="header__nav-item" onClick={handleLinkClick}>
-             <Text>Main</Text>
-          </Link>
-          <Link to="/catalog" className="header__nav-item" onClick={handleLinkClick}>
-            <Text>Catalog</Text>
-          </Link>
-          <Link to="/about" className="header__nav-item" onClick={handleLinkClick}>
-            <Text>About us</Text>
-          </Link>
-          <Link to="/cart" className="header__nav-item header__nav-item--cart" onClick={handleLinkClick}>
-            <Text>Cart</Text>
-          </Link>
-          {opened && (
+      <Group className={`header__nav ${opened ? 'open' : ''}`}>
+        <Burger
+          className={`burger ${opened ? 'active' : ''}`}
+          opened={opened}
+          color={theme.colors.dark[1]}
+          size="md"
+          aria-label="Toggle navigation"
+          onClick={toggle}
+        />
+        <Link className="header__nav-item" to="/">
+          <Text>Main</Text>
+        </Link>
+        <Link className="header__nav-item" to="/catalog">
+          <Text>Catalog</Text>
+        </Link>
+        <Link className="header__nav-item" to="/about">
+          <Text>About us</Text>
+        </Link>
+        <Link className="header__nav-item header__nav-item--cart" to="/cart">
+          <Text>Cart</Text>
+        </Link>
+
+        {opened ? (
+          isAuthenticated ? (
+            <Button
+              variant="filled"
+              color={theme.colors.dark[4]}
+              className="button burger-button--secondary"
+              onClick={handleLogout}
+            >
+              <Text>Logout</Text>
+            </Button>
+          ) : (
             <>
               <Button
                 component={Link}
@@ -103,70 +116,81 @@ export function Header() {
                 component={Link}
                 to="/registration"
                 variant="filled"
-                color="yellow.4"
+                color={theme.colors.yellow[4]}
                 className="button burger-button--primary"
               >
                 <Text c="primary.9">Register</Text>
               </Button>
             </>
-          )}
-          {!opened && (
-            <>
-          <Button
-            component={Link}
-            to="/cart"
-            color="dark.5"
-            className="button button--icon"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20px"
-              height="20px"
-              fill="currentColor"
-              viewBox="0 0 256 256"
+          )
+        ) : null}
+
+        {!opened && (
+          <>
+            <Button
+              component={Link}
+              to="/cart"
+              color={theme.colors.dark[5]}
+              className="button button--icon"
             >
-              <path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,160H40V56H216V200ZM176,88a48,48,0,0,1-96,0,8,8,0,0,1,16,0,32,32,0,0,0,64,0,8,8,0,0,1,16,0Z" />
-            </svg>
-          </Button>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20px"
+                height="20px"
+                fill="currentColor"
+                viewBox="0 0 256 256"
+              >
+                <path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,160H40V56H216V200ZM176,88a48,48,0,0,1-96,0,8,8,0,0,1,16,0,32,32,0,0,0,64,0,8,8,0,0,1,16,0Z" />
+              </svg>
+            </Button>
 
-          <Menu position="bottom-end" width={200} withinPortal>
-            <Menu.Target>
-              <Button color="dark.5" className="button button--icon">
-                <svg
-                  className="header__user-icon"
-                  viewBox="0 0 30 30"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M15 15C18.4518 15 21.25 12.2018 21.25 8.75C21.25 5.29822 18.4518 2.5 15 2.5C11.5482 2.5 8.75 5.29822 8.75 8.75C8.75 12.2018 11.5482 15 15 15Z"
-                    stroke="#f8f9fb"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M25.7377 27.5C25.7377 22.6625 20.9252 18.75 15.0002 18.75C9.07519 18.75 4.2627 22.6625 4.2627 27.5"
-                    stroke="#f8f9fb"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </Button>
-            </Menu.Target>
+            <Menu position="bottom-end" width={200} withinPortal>
+              <Menu.Target>
+                <Button color={theme.colors.dark[5]} className="button button--icon">
+                  <svg
+                    className="header__user-icon"
+                    viewBox="0 0 30 30"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M15 15C18.4518 15 21.25 12.2018 21.25 8.75C21.25 5.29822 18.4518 2.5 15 2.5C11.5482 2.5 8.75 5.29822 8.75 8.75C8.75 12.2018 11.5482 15 15 15Z"
+                      stroke="#f8f9fb"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M25.7377 27.5C25.7377 22.6625 20.9252 18.75 15.0002 18.75C9.07519 18.75 4.2627 22.6625 4.2627 27.5"
+                      stroke="#f8f9fb"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </Button>
+              </Menu.Target>
 
-            <Menu.Dropdown>
-              <Menu.Item component={Link} to="/login">
-                <Text>Login</Text>
-              </Menu.Item>
-              <Menu.Item component={Link} to="/registration">
-                <Text>Register</Text>
-              </Menu.Item>
-            </Menu.Dropdown>
-          </Menu>
-          </>)}
-        </Group>
+              <Menu.Dropdown>
+                {isAuthenticated ? (
+                  <Menu.Item onClick={handleLogout}>
+                    <Text>Logout</Text>
+                  </Menu.Item>
+                ) : (
+                  <>
+                    <Menu.Item component={Link} to="/login">
+                      <Text>Login</Text>
+                    </Menu.Item>
+                    <Menu.Item component={Link} to="/registration">
+                      <Text>Register</Text>
+                    </Menu.Item>
+                  </>
+                )}
+              </Menu.Dropdown>
+            </Menu>
+          </>
+        )}
+      </Group>
     </Box>
   );
 }
