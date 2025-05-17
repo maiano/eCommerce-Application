@@ -5,13 +5,13 @@ import { useEffect } from 'react';
 import { RouterProvider } from 'react-router-dom';
 import { router } from '@/app/router';
 import { theme } from '@/app/theme';
-import { initApiClient } from '@/shared/lib/commercetools';
+import { apiClientManager } from '@/shared/lib/commercetools';
 
 export const AppProvider = () => {
   useEffect(() => {
     const initializeApp = async () => {
       try {
-        await initApiClient();
+        await apiClientManager.init();
       } catch (err) {
         console.error('API client init error:', err);
 
