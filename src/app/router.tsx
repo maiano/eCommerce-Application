@@ -27,30 +27,30 @@ const RedirectGuard = () => {
 };
 
 const AuthGuard = () => {
-  const { isAuthenticated, isPending } = useAuthStore();
-  console.log('[AuthGuard] isPending:', isPending);
+  const { status } = useAuthStore();
+  console.log('[AuthGuard] status:', status);
 
-  if (isPending) {
+  if (status === 'PENDING') {
     return <Loader color="blue" size="lg" type="bars" />;
   }
 
-  return isAuthenticated
+  return status === 'AUTHENTICATED'
     ? <Navigate to={ROUTES.HOME} replace />
     : <Outlet />;
 };
 
 const PrivateGuard = () => {
-  const { isAuthenticated, isPending } = useAuthStore();
+  const { status } = useAuthStore();
   const location = useLocation();
-  console.log('[PrivateGuard] isPending:', isPending);
+  console.log('[PrivateGuard] status:', status);
 
-  if (isPending) {
+  if (status === 'PENDING') {
     return <Loader color="blue" size="lg" type="bars" />;
   }
 
-  return isAuthenticated
+  return status === 'AUTHENTICATED'
     ? <Outlet />
-    : <Navigate to={ROUTES.HOME} replace state={{ from: location.pathname }} />;
+    : <Navigate to={ROUTES.LOGIN} replace state={{ from: location.pathname }} />;
 };
 
 export const router = createBrowserRouter([

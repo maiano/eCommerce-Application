@@ -3,11 +3,11 @@ import { useMantineTheme, Button, Burger, Box, Group, Title, Text, Menu } from '
 import { useDisclosure, useClickOutside, useMediaQuery, useDidUpdate } from '@mantine/hooks';
 import { useAuthStore } from '@/features/auth/auth-state';
 import { apiClientManager } from '@/shared/lib/commercetools/api-client-manager';
-import { AuthState } from '@/features/auth/auth-state'
 
 
 export function Header() {
-  const isAuthenticated = useAuthStore((state: AuthState) => state.isAuthenticated);
+  const status = useAuthStore((state) => state.status);
+  const isAuthenticated = status === 'AUTHENTICATED';
 
   const handleLogout = () => {
     apiClientManager.logout();

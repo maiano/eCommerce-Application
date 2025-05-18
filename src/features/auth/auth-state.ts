@@ -5,34 +5,32 @@ import { persist, createJSONStorage  } from 'zustand/middleware';
 export type AuthStatus = 'AUTHENTICATED' | 'UNAUTHENTICATED' | 'PENDING';
 
 export type AuthState = {
-  isAuthenticated: boolean;
-  isPending: boolean;
+  status: AuthStatus;
   isNeedToRedirect: boolean;
   login: () => void;
   logout: () => void;
-  setPending: (state: boolean) => void;
+  setPending: () => void;
   resetRedirect: () => void;
 };
 
 export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
-      isAuthenticated: false,
-      isPending: false,
+      status: 'UNAUTHENTICATED',
       isNeedToRedirect: false,
-      login: () => set({ isAuthenticated: true }),
+      login: () => set({ status: 'AUTHENTICATED' }),
       logout: () => set({
-        isAuthenticated: false,
+        status: 'UNAUTHENTICATED',
         isNeedToRedirect: true
       }),
-      setPending: (state) => set({ isPending: state }),
+      setPending: () => set({ status: 'PENDING' }),
       resetRedirect: () => set({ isNeedToRedirect: false }),
     }),
     {
       name: 'auth-store',
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
-        isAuthenticated: state.isAuthenticated
+        status: state.status
       }),
     }
   )
