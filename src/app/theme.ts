@@ -1,5 +1,4 @@
-import {MantineTheme, createTheme, MantineColorsTuple, rem, Container } from '@mantine/core';
-
+import { createTheme, MantineColorsTuple, rem, Container } from '@mantine/core';
 
 const primaryColors: MantineColorsTuple = [
   '#f8f9fb', // 0 primary text
@@ -11,7 +10,7 @@ const primaryColors: MantineColorsTuple = [
   '#3a4d6d',
   '#29374c', // 7 Back
   '#1d2a36', // 8
-  '#141c24'  // 9
+  '#141c24', // 9
 ];
 
 const accentColors: MantineColorsTuple = [
@@ -24,7 +23,7 @@ const accentColors: MantineColorsTuple = [
   '#d8ab37',
   '#ca9d29',
   '#bc8f1b',
-  '#ae810d'
+  '#ae810d',
 ];
 
 const darkColors: MantineColorsTuple = [
@@ -37,7 +36,7 @@ const darkColors: MantineColorsTuple = [
   '#1d2a36', // 6 cards
   '#131c24', // 7 background
   '#0a1018',
-  '#00070f'
+  '#00070f',
 ];
 
 const redColors: MantineColorsTuple = [
@@ -50,7 +49,7 @@ const redColors: MantineColorsTuple = [
   '#e53935',
   '#d32f2f',
   '#c62828',
-  '#8b0000' // 9 logo
+  '#8b0000', // 9 logo
 ];
 
 export const theme = createTheme({
@@ -125,14 +124,14 @@ export const theme = createTheme({
     Title: {
       styles: {
         root: {
-          color: primaryColors[1]
+          color: primaryColors[1],
         },
       },
     },
     Text: {
       styles: {
         root: {
-          color: primaryColors[1]
+          color: primaryColors[1],
         },
       },
     },
@@ -141,7 +140,7 @@ export const theme = createTheme({
         root: {
           paddingInline: '0 !important',
           marginInline: '0 !important',
-          maxWidth: rem(1920),
+          // maxWidth: rem(1920),
           width: '100%',
         },
       }),
@@ -150,9 +149,8 @@ export const theme = createTheme({
       styles: {
         root: {
           transition: 'all 0.3s ease-in-out',
-
-        }
-      }
+        },
+      },
     },
     Carousel: {
       styles: {
@@ -160,15 +158,13 @@ export const theme = createTheme({
           transition: 'all 0.3s ease-in-out',
           control: {
             backgroundColor: darkColors[5],
-              cursor: 'not-allowed',
-            },
+            cursor: 'not-allowed',
           },
-          indicator: {
-            backgroundColor: darkColors[3],
-            },
-          },
+        },
+        indicator: {
+          backgroundColor: darkColors[3],
         },
       },
     },
-);
-
+  },
+});
