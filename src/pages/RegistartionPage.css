@@ -39,7 +39,7 @@
   margin-bottom: 0.2rem;
 }
 
-.form-input {
+.form-input, .form-input input {
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
   border: 1px solid #32415d !important;
@@ -49,9 +49,9 @@
   font-weight: 400;
 }
 
-.form-input:focus {
+.form-input:focus, .form-input input:focus {
   outline: none;
-  border-color: #f4c753;
+  border-color: #f4c753 !important;
 }
 
 .form-checkbox {
