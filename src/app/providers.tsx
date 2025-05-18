@@ -21,8 +21,8 @@ export const AppProvider = () => {
     initializeApp();
   }, []);
   return (
-    <MantineProvider theme={theme} defaultColorScheme="dark">
-            {error && (
+    <MantineProvider theme={theme}>
+      {error && (
         <Notification
           color="red"
           withCloseButton
