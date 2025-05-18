@@ -1,11 +1,12 @@
 import '@mantine/notifications/styles.css';
 import { MantineProvider } from '@mantine/core';
-import { Notifications, notifications } from '@mantine/notifications';
+import { Notifications } from '@mantine/notifications';
 import { useEffect } from 'react';
 import { RouterProvider } from 'react-router-dom';
 import { router } from '@/app/router';
 import { theme } from '@/app/theme';
 import { apiClientManager } from '@/shared/lib/commercetools';
+import { notifyError } from '@/shared/utils/custom-notifications';
 
 export const AppProvider = () => {
   useEffect(() => {
@@ -13,14 +14,7 @@ export const AppProvider = () => {
       try {
         await apiClientManager.init();
       } catch (err) {
-        console.error('API client init error:', err);
-
-        notifications.show({
-          message: 'Failed to connect to commercetools',
-          color: 'red',
-          autoClose: 5000,
-          withCloseButton: true,
-        });
+        notifyError(err, { message: 'error' });
       }
     };
 
