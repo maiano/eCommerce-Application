@@ -1,6 +1,6 @@
 import { ClientResponse, CustomerSignInResult } from '@commercetools/platform-sdk';
-import { notifications } from "@mantine/notifications";
 import {apiClientManager} from './../../shared/lib/commercetools/api-client-manager';
+import { notifyError, notifySuccess } from '@/shared/utils/custom-notifications';
 import { RegistrationFormData } from '@/shared/validation/registration-validation';
 
 const countryCodes = {
@@ -17,15 +17,6 @@ export const countries = [
 
 export const getCountryCode = (country: string) => {
   return Object.values(countryCodes)[Object.keys(countryCodes).indexOf(country)];
-}
-
-const showNotification = async (message: string, color: string) => {
-  notifications.show({
-    message: `${message}`,
-    color: `${color}`,
-    autoClose: 5000,
-    withCloseButton: true,
-  })
 }
 
 export const registrationHandler = async (data: RegistrationFormData) => {
@@ -56,15 +47,14 @@ export const registrationHandler = async (data: RegistrationFormData) => {
   })
   .then(async(response) => {
     if (response.statusCode === 201) {
-      await showNotification("Account has been successfully created", "green");
-     // redirect
+      notifySuccess({message: 'Account has been successfully created'})
     }
   })
   .catch((error: ClientResponse<CustomerSignInResult>) => {
     if (error.statusCode === 400) {
-      showNotification("Account with this email already exist. Log in or use another email", "red");
+      notifyError(error,{message: 'Account with this email already exist. Log in or use another email'})
     } else {
-      showNotification("Something went wrong", "red");
+      notifyError(error,{message: 'Something went wrong'})
     }
   });
 
