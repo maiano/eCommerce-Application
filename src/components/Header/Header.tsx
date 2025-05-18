@@ -1,14 +1,14 @@
 import { Link } from 'react-router-dom';
 import { useMantineTheme, Button, Burger, Box, Group, Title, Text, Menu } from '@mantine/core';
 import { useDisclosure, useClickOutside, useMediaQuery, useDidUpdate } from '@mantine/hooks';
-import { logoutCustomer } from '@/shared/lib/commercetools';
+import { apiClientManager } from '@/shared/lib/commercetools';
 
 
 export function Header() {
   let isAuthenticated = true;
 
   const handleLogout = () => {
-    logoutCustomer();
+    apiClientManager.logout();
     close();
   };
 
