@@ -6,7 +6,6 @@ import {
 } from '@commercetools/platform-sdk';
 import { createAnonymousClient } from './create-anonymous-client';
 import { createPasswordClient } from '@/shared/lib/commercetools/create-password-client';
-import { useAuthStore } from './auth-state'
 
 type ApiRoot = ReturnType<
   typeof createAnonymousClient | typeof createPasswordClient
