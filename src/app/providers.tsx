@@ -1,45 +1,31 @@
-import { MantineProvider, Notification } from '@mantine/core';
-import { useEffect, useState } from 'react';
+import '@mantine/notifications/styles.css';
+import { MantineProvider } from '@mantine/core';
+import { Notifications } from '@mantine/notifications';
+import { useEffect } from 'react';
 import { RouterProvider } from 'react-router-dom';
 import { router } from '@/app/router';
 import { theme } from '@/app/theme';
-import { initApiClient } from '@/shared/lib/commercetools';
+import { apiClientManager } from '@/shared/lib/commercetools';
+import { notifyError } from '@/shared/utils/custom-notifications';
 
 export const AppProvider = () => {
-  const [error, setError] = useState<string | null>(null);
-
   useEffect(() => {
     const initializeApp = async () => {
       try {
-        await initApiClient();
+        await apiClientManager.init();
       } catch (err) {
-        console.error('API client init error:', err);
-        setError('Failed to connect to commercetools');
+        notifyError(err, { message: 'Failed to connect to commercetools' });
       }
     };
 
     initializeApp();
   }, []);
   return (
-    <MantineProvider theme={theme}>
-      {error && (
-        <Notification
-          color="red"
-          withCloseButton
-          closeButtonProps={{ 'aria-label': 'Hide notification' }}
-          onClose={() => setError(null)}
-          style={{
-            maxWidth: '280px',
-            position: 'fixed',
-            top: 20,
-            right: 20,
-            zIndex: 1000,
-            borderRadius: '8px',
-          }}
-        >
-          {error}
-        </Notification>
-      )}
+    <MantineProvider theme={theme} defaultColorScheme="dark">
+      <Notifications
+        position="top-right"
+        styles={{ notification: { maxWidth: '20rem' } }}
+      />
       <RouterProvider router={router} />
     </MantineProvider>
   );

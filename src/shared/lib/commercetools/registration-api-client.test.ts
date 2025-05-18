@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll } from 'vitest';
-import { initApiClient, getCurrentClient } from './api-client-manager';
+import { apiClientManager } from './api-client-manager';
 
 const runAllTests = process.env.RUN_ALL_TESTS === 'true';
 
@@ -7,11 +7,11 @@ const describeIf = runAllTests ? describe : describe.skip;
 
 describeIf('Customer registration', () => {
   beforeAll(async () => {
-    await initApiClient();
+    await apiClientManager.init();
   });
 
   it('should create a new customer with address and names', async () => {
-    const client = getCurrentClient();
+    const client = apiClientManager.get();
 
     const email = `test-user-${Date.now()}@example.com`;
 
@@ -47,7 +47,7 @@ describeIf('Customer registration', () => {
   });
 
   it('should create a new customer with separate shipping and billing addresses', async () => {
-    const client = getCurrentClient();
+    const client = apiClientManager.get();
 
     const email = `test-user-${Date.now()}@example.com`;
 

@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { useMantineTheme, Button, Burger, Box, Group, Title, Text, Menu } from '@mantine/core';
 import { useDisclosure, useClickOutside, useMediaQuery, useDidUpdate } from '@mantine/hooks';
 import { useAuthStore } from '@/features/auth/auth-state';
-import { logoutCustomer } from '@/shared/lib/commercetools';
+import { apiClientManager } from '@/shared/lib/commercetools/api-client-manager';
 import { AuthState } from '@/features/auth/auth-state'
 
 
@@ -10,7 +10,7 @@ export function Header() {
   const isAuthenticated = useAuthStore((state: AuthState) => state.isAuthenticated);
 
   const handleLogout = () => {
-    logoutCustomer();
+    apiClientManager.logout();
     useAuthStore.getState().logout();
     close();
   };
