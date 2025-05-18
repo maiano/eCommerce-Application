@@ -49,17 +49,21 @@
   font-weight: 400;
 }
 
+.form-input input {
+  border: 0px solid #32415d !important;
+}
+
 .form-input:focus, .form-input input:focus {
   outline: none;
   border: 1px solid #f4c753 !important;
 }
 
 .error .form-input  {
-  border-color: red !important;
+  border-color: #c62828 !important;
 }
 
 .error .form-input input:focus  {
-  border: 0px solid red !important;
+  border: 0px solid #c62828 !important;
 }
 
 .form-checkbox {
