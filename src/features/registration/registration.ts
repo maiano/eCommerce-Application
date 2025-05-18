@@ -1,23 +1,8 @@
 import { ClientResponse, CustomerSignInResult } from '@commercetools/platform-sdk';
 import {apiClientManager} from './../../shared/lib/commercetools/api-client-manager';
 import { notifyError, notifySuccess } from '@/shared/utils/custom-notifications';
+import { getCountryCode } from '@/shared/utils/get-country-code';
 import { RegistrationFormData } from '@/shared/validation/registration-validation';
-
-const countryCodes = {
-  "Italy": "IT",
-  "France": "FR",
-  "Spain": "ES",
-}
-
-export const countries = [
-  'Italy',
-  'France',
-  'Spain',
-];
-
-export const getCountryCode = (country: string) => {
-  return Object.values(countryCodes)[Object.keys(countryCodes).indexOf(country)];
-}
 
 export const registrationHandler = async (data: RegistrationFormData) => {
   await apiClientManager.register({

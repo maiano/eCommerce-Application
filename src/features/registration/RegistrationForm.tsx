@@ -5,7 +5,8 @@ import dayjs from 'dayjs';
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { JSX, useEffect, useState } from 'react';
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
-import { countries, registrationHandler } from './registration';
+import { registrationHandler } from './registration';
+import { countries } from "@/shared/constants/countries";
 import { RegistrationFormData, registrationSchema } from "@/shared/validation/registration-validation";
 
 export function RegistrationForm() {
@@ -35,7 +36,7 @@ export function RegistrationForm() {
   const [deliveryCountryValue, setDeliveryCountryValue] = useState<string | null>(null);
   const [billingCountryValue, setBillingCountryValue] = useState<string | null>(null);
 
-  const options = countries.map((item) => (
+  const options = Object.values(countries).map((item) => (
     <Combobox.Option value={item} key={item}>
       {item}
     </Combobox.Option>
