@@ -67,11 +67,13 @@ export function RegistrationForm() {
   useEffect(() => {
     if (sameAddress) {
       const [deliveryCountry, deliveryCity, deliveryStreet, deliveryPostcode] = deliveryFields;
-      setValue("billingAddress.country", deliveryCountry);
-      setBillingCountryValue(deliveryCountry);
-      setValue("billingAddress.city", deliveryCity);
-      setValue("billingAddress.street", deliveryStreet);
-      setValue("billingAddress.postcode", deliveryPostcode);
+      if (deliveryCountry) {
+        setValue("billingAddress.country", deliveryCountry);
+        setBillingCountryValue(deliveryCountry);
+        setValue("billingAddress.city", deliveryCity);
+        setValue("billingAddress.street", deliveryStreet);
+        setValue("billingAddress.postcode", deliveryPostcode);
+      }
     }
   }, [deliveryFields, sameAddress, setValue]);
 
@@ -80,6 +82,7 @@ export function RegistrationForm() {
     name: 'deliveryAddress.country' | 'billingAddress.country',
     store: ComboboxStore,
     value: string | null,
+    addressType: 'deliveryAddress' | 'billingAddress',
     setValue: (value: string) => void
   ) => (
     <Controller<RegistrationFormData>
@@ -95,7 +98,7 @@ export function RegistrationForm() {
               setValue(value);
               store.closeDropdown();
             }}
-          >
+            >
             <Combobox.Target>
               <InputBase
                 component="button"
@@ -106,7 +109,9 @@ export function RegistrationForm() {
                 onChange={(event) => setValue(event.currentTarget.value)}
                 rightSectionPointerEvents="none"
                 classNames={{ input: 'form-input' }}
-              >
+                className={ errors[`${addressType}`]?.country ? "error" : ''}
+
+                >
                 {value || <Input.Placeholder>Select country</Input.Placeholder>}
               </InputBase>
             </Combobox.Target>
@@ -116,17 +121,17 @@ export function RegistrationForm() {
           </Combobox>
         </Stack>
       )}
-    />
-  )
-
-  const renderAddressFields = (type: 'delivery' | 'billing') => {
-    const countrySelect = type === 'delivery' ? deliveryCountrySelect : billingCountrySelect;
-    const countryValue = type === 'delivery' ? deliveryCountryValue : billingCountryValue;
-    const setCountryValue = type === 'delivery' ? setDeliveryCountryValue : setBillingCountryValue;
-    const isDisabledOnSameAddress = type === 'delivery' ? false : sameAddress;
-
-    return (
-      <Fieldset legend={`${type.charAt(0).toUpperCase()}${type.slice(1)} address`} disabled={isDisabledOnSameAddress} style={{border: 'none', padding: '0.25rem 0'}}>
+      />
+    )
+    
+    const renderAddressFields = (type: 'delivery' | 'billing') => {
+      const countrySelect = type === 'delivery' ? deliveryCountrySelect : billingCountrySelect;
+      const countryValue = type === 'delivery' ? deliveryCountryValue : billingCountryValue;
+      const setCountryValue = type === 'delivery' ? setDeliveryCountryValue : setBillingCountryValue;
+      const isDisabledOnSameAddress = type === 'delivery' ? false : sameAddress;
+      
+      return (
+        <Fieldset legend={`${type.charAt(0).toUpperCase()}${type.slice(1)} address`} disabled={isDisabledOnSameAddress} style={{border: 'none', padding: '0.25rem 0'}}>
         <Grid gutter="md">
         <Grid.Col span={{ base: 12, sm: 6 }}>
           <Stack style={{gap: 5}}>
@@ -134,6 +139,7 @@ export function RegistrationForm() {
               `${type}Address.country`,
               countrySelect,
               countryValue,
+              `${type}Address`,
               setCountryValue
             )}
             <Text style={{color: theme.colors.red[8]}} size="sm">{errors[`${type}Address`]?.country?.message}</Text>
@@ -145,6 +151,7 @@ export function RegistrationForm() {
               {...register(`${type}Address.street`)}
               placeholder="Enter street"
               classNames={{ input: 'form-input' }}
+              className={errors[`${type}Address`]?.street ? "error" : ''}
               withAsterisk
               onKeyUp={triggerErrorCheck}
             />
@@ -158,9 +165,10 @@ export function RegistrationForm() {
               {...register(`${type}Address.city`)}
               placeholder="Enter city"
               classNames={{ input: 'form-input' }}
+              className={errors[`${type}Address`]?.city ? "error" : ''}
               withAsterisk
               onKeyUp={triggerErrorCheck}
-            />
+              />
             <Text style={{color: theme.colors.red[8]}} size="sm">{errors[`${type}Address`]?.city?.message}</Text>
           </Stack>
           </Grid.Col>
@@ -170,6 +178,7 @@ export function RegistrationForm() {
               {...register(`${type}Address.postcode`)}
               placeholder="Enter postcode"
               classNames={{ input: 'form-input' }}
+              className={errors[`${type}Address`]?.postcode ? "error" : ''}
               withAsterisk
               onKeyUp={triggerErrorCheck}
             />
@@ -188,6 +197,7 @@ export function RegistrationForm() {
         {...register("firstName")}
         label="First Name"
         classNames={{ input: 'form-input' }}
+        className={errors.firstName ? "error" : ''}
         withAsterisk
       />
       <Text style={{color: theme.colors.red[8]}} size="sm">{errors.firstName?.message}</Text>
@@ -196,6 +206,7 @@ export function RegistrationForm() {
         {...register("lastName")}
         label="Last Name"
         classNames={{ input: 'form-input' }}
+        className={errors.lastName ? "error" : ''}
         withAsterisk
       />
       <Text style={{color: theme.colors.red[8]}} size="sm">{errors.lastName?.message}</Text>
@@ -212,6 +223,7 @@ export function RegistrationForm() {
             }}
             label="Date of Birth"
             classNames={{ input: 'form-input' }}
+            className={errors.birthDate ? "error" : ''}
             dateParser={(value) => dayjs(value, 'DD.MM.YYYY').toDate()}
             valueFormat="DD.MM.YYYY"
             placeholder="dd.mm.yyyy"
@@ -227,6 +239,7 @@ export function RegistrationForm() {
         label="Email"
         classNames={{ input: 'form-input' }}
         withAsterisk
+        className={errors.email ? "error" : ''}
       />
       <Text style={{color: theme.colors.red[8]}} size="sm">{errors.email?.message}</Text>
 
@@ -235,6 +248,7 @@ export function RegistrationForm() {
         label="Password"
         classNames={{ input: 'form-input' }}
         withAsterisk
+        className={errors.password ? "error" : ''}
       />
       <Text style={{color: theme.colors.red[8]}} size="sm">{errors.password?.message}</Text>
 
@@ -267,6 +281,7 @@ export function RegistrationForm() {
       <Button className="button button--primary button--large auth-button" variant="filled" type="submit" style={{margin: '0.5rem'}}>
         Sign Up
       </Button>
+
     </form>
   )
 }

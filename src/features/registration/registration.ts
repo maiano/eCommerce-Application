@@ -42,5 +42,4 @@ export const registrationHandler = async (data: RegistrationFormData) => {
       notifyError(error,{message: 'Something went wrong'})
     }
   });
-
 }

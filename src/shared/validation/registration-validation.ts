@@ -14,18 +14,20 @@ const lastName = z
   .min(1, 'Last name is required')
   .refine((val) => !/\d/.test(val), 'Last name must not contain any numbers')
   .refine((val) => !/[^A-Za-z0-9\u0401\u0451\u0410-\u044f\s'-]/gu.test(val), 'Last name must not contain any special characters')
- 
-const birthDate = z
+  
+  const birthDate = z
   .string()
-  .trim()
   .min(1, 'Date of birth is required')
   .refine((val) => 
     new Date().getTime() >= new Date(new Date(Date.parse(val)).getFullYear() + 18, new Date(Date.parse(val)).getMonth(), new Date(Date.parse(val)).getDate()).getTime(), "You must be at least 18 years old")
+  .optional()
+  .refine((val) => val !== undefined, 'Date of birth is required')
   
   const country = z
   .string()
-  .trim()
   .min(1, 'Country is required')
+  .optional()
+  .refine((val) => val !== undefined, 'Country is required')
   
   const city = z
   .string()
