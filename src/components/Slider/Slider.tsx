@@ -1,8 +1,7 @@
-import { Container, Box, Title, Text} from '@mantine/core';
 import { Carousel } from '@mantine/carousel';
+import { Container, Box, Title, Text } from '@mantine/core';
 
 export function Slider() {
-
   const wines = [
     {
       title: 'Chardonnay',
@@ -46,8 +45,7 @@ export function Slider() {
     },
   ];
 
-
-  return(
+  return (
     <Box className="carousel" style={{ maxWidth: 1920, width: '100%' }}>
       <Title className="section-title">Featured Selections</Title>
       <Carousel
@@ -56,7 +54,7 @@ export function Slider() {
           base: '100%',
           sm: '50%',
           md: '33.333%',
-          lg: '25%'
+          lg: '25%',
         }}
         slideGap={{ base: 'xs', md: 'md' }}
         align="start"
@@ -68,22 +66,23 @@ export function Slider() {
         loop
         dragFree
       >
-      {wines.map((wine, index) => (
-        <Carousel.Slide key={index}>
-          <Container className="card" style={{ maxWidth: 460, width: '100%' }}>
-            <div className={`card__image ${wine.imageClass}`}></div>
-            <Container className="card__content">
-              <Title className="card__title">{wine.title}</Title>
-              <Text className="card__description" c="dark.4">
-                {wine.description}
-              </Text>
+        {wines.map((wine, index) => (
+          <Carousel.Slide key={index}>
+            <Container
+              className="card"
+              style={{ maxWidth: 460, width: '100%' }}
+            >
+              <div className={`card__image ${wine.imageClass}`}></div>
+              <Container className="card__content">
+                <Title className="card__title">{wine.title}</Title>
+                <Text className="card__description" c="dark.4">
+                  {wine.description}
+                </Text>
+              </Container>
             </Container>
-          </Container>
-        </Carousel.Slide>
-      ))}
-    </Carousel>
-  </Box>
-  )
+          </Carousel.Slide>
+        ))}
+      </Carousel>
+    </Box>
+  );
 }
-
-

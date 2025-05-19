@@ -1,9 +1,9 @@
 import { MyCustomerSignin } from '@commercetools/platform-sdk';
-import { HttpErrorType } from '@commercetools/sdk-client-v2';
 import { useState } from 'react';
 
 import { useAuthStore } from '@/features/auth/auth-state';
 import { apiClientManager } from '@/shared/lib/commercetools/api-client-manager';
+import { getErrorMessage } from '@/shared/utils/api-error-utils';
 import {
   notifySuccess,
   notifyError,
@@ -19,7 +19,6 @@ export function useLogin() {
 
     try {
       const result = await apiClientManager.login(credentials);
-
       loginState.login();
 
       notifySuccess({
@@ -28,21 +27,7 @@ export function useLogin() {
 
       return result;
     } catch (err: unknown) {
-      let message = 'An unexpected error occurred';
-
-      if (isCommerceToolsError(err)) {
-        const statusCode = err.body?.statusCode;
-
-        if (statusCode === 400 || statusCode === 401) {
-          message = 'Invalid email or password';
-        } else if (statusCode === 403) {
-          message = 'Access denied';
-        } else {
-          message = 'Login failed. Please try again later';
-        }
-      } else {
-        message = 'Network error. Please check your connection';
-      }
+      const message = getErrorMessage(err, 'login');
 
       notifyError(err as Error, {
         message,
@@ -58,13 +43,4 @@ export function useLogin() {
     login,
     loading,
   };
-}
-
-function isCommerceToolsError(error: unknown): error is HttpErrorType {
-  return (
-    typeof error === 'object' &&
-    error !== null &&
-    'body' in error &&
-    typeof (error as HttpErrorType).body === 'object'
-  );
 }
