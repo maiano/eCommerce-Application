@@ -4,7 +4,6 @@ import { useDisclosure, useClickOutside, useMediaQuery, useDidUpdate } from '@ma
 import { useAuthStore } from '@/features/auth/auth-state';
 import { apiClientManager } from '@/shared/lib/commercetools/api-client-manager';
 
-
 export function Header() {
   const status = useAuthStore((state) => state.status);
   const isAuthenticated = status === 'AUTHENTICATED';
@@ -40,19 +39,24 @@ export function Header() {
     ['mousedown', 'touchstart'],
     [
       document.querySelector('.header__nav'),
-      document.querySelector('.burger-button')
-    ].filter((el): el is HTMLElement => el !== null)
+      document.querySelector('.burger-button'),
+    ].filter((el): el is HTMLElement => el !== null),
   );
 
   return (
     <Box className="header" style={{ width: '100%', maxWidth: 1920 }}>
       <Group className="header__logo" style={{ justifyContent: 'start' }}>
         <Link
-          className="header__logo-icon"
-          to="/main"
-          style={{ color: theme.colors.red[9] }}
+          to="/"
+          style={{
+            color: theme.colors.red[9],
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem'
+           }}
         >
           <svg
+            className="header__logo-icon"
             viewBox="0 0 48 48"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -68,8 +72,8 @@ export function Header() {
               fill="currentColor"
             />
           </svg>
-        </Link>
         <Title className="header__logo-text">Wine not</Title>
+        </Link>
       </Group>
 
       <Group className={`header__nav ${opened ? 'open' : ''}`}>
@@ -149,7 +153,10 @@ export function Header() {
 
             <Menu position="bottom-end" width={200} withinPortal>
               <Menu.Target>
-                <Button color={theme.colors.dark[5]} className="button button--icon">
+                <Button
+                  color={theme.colors.dark[5]}
+                  className="button button--icon"
+                >
                   <svg
                     className="header__user-icon"
                     viewBox="0 0 30 30"
