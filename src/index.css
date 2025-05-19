@@ -154,6 +154,11 @@ body {
   color: #141c24;
 }
 
+.button--primary:hover {
+  background-color: #ca9d29;
+  color: #f8f9fb;
+}
+
 .button--secondary {
   background-color: #29374c;
   color: #f8f9fb;
@@ -184,7 +189,7 @@ body {
   font-size: 1rem;
   width: 100%;
   max-width: 300px;
-  margin-top: 1rem;
+  /* margin-top: 1rem; */
 }
 
 .button__text {

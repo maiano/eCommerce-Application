@@ -1,19 +1,20 @@
-import { describe, it, expect, beforeAll } from 'vitest';
+import { describe, it, expect, beforeAll, beforeEach } from 'vitest';
 import { apiClientManager } from './api-client-manager';
 
 const runAllTests = process.env.RUN_ALL_TESTS === 'true';
-
 const describeIf = runAllTests ? describe : describe.skip;
 
-describeIf('Customer registration', () => {
+describeIf('Customer registration via apiClientManager', () => {
   beforeAll(async () => {
-    await apiClientManager.init();
+    apiClientManager.init(true);
   });
 
-  it('should create a new customer with address and names', async () => {
-    const client = apiClientManager.get();
+  beforeEach(() => {
+    apiClientManager.init(true);
+  });
 
-    const email = `test-user-${Date.now()}@example.com`;
+  it('registers a customer with address and names', async () => {
+    const email = `test-${Date.now()}@example.com`;
 
     const customerDraft = {
       email,
@@ -33,23 +34,21 @@ describeIf('Customer registration', () => {
       defaultBillingAddress: 0,
     };
 
-    const result = await client
-      .customers()
-      .post({ body: customerDraft })
-      .execute();
+    const result = await apiClientManager.register(customerDraft);
 
     expect(result.statusCode).toBe(201);
-    expect(result.body.customer).toHaveProperty('id');
-    expect(result.body.customer.email).toBe(email);
-    expect(result.body.customer.firstName).toBe('John');
-    expect(result.body.customer.addresses.length).toBeGreaterThan(0);
-    expect(result.body.customer.defaultShippingAddressId).toBeDefined();
+    const customer = result.body.customer;
+
+    expect(customer).toHaveProperty('id');
+    expect(customer.email).toBe(email);
+    expect(customer.firstName).toBe('John');
+    expect(customer.addresses).toHaveLength(1);
+    expect(customer.defaultShippingAddressId).toBeDefined();
+    expect(customer.defaultBillingAddressId).toBeDefined();
   });
 
-  it('should create a new customer with separate shipping and billing addresses', async () => {
-    const client = apiClientManager.get();
-
-    const email = `test-user-${Date.now()}@example.com`;
+  it('registers a customer with different shipping and billing addresses', async () => {
+    const email = `test-${Date.now()}@example.com`;
 
     const customerDraft = {
       email,
@@ -76,22 +75,37 @@ describeIf('Customer registration', () => {
       defaultBillingAddress: 1,
     };
 
-    const result = await client
-      .customers()
-      .post({ body: customerDraft })
-      .execute();
+    const result = await apiClientManager.register(customerDraft);
 
     expect(result.statusCode).toBe(201);
-    expect(result.body.customer).toHaveProperty('id');
-    expect(result.body.customer.email).toBe(email);
-    expect(result.body.customer.firstName).toBe('John');
+    const customer = result.body.customer;
 
-    const { addresses, defaultShippingAddressId, defaultBillingAddressId } =
-      result.body.customer;
+    expect(customer.email).toBe(email);
+    expect(customer.addresses).toHaveLength(2);
+    expect(customer.defaultShippingAddressId).not.toBe(
+      customer.defaultBillingAddressId,
+    );
+  });
 
-    expect(addresses.length).toBe(2);
-    expect(defaultShippingAddressId).toBeDefined();
-    expect(defaultBillingAddressId).toBeDefined();
-    expect(defaultShippingAddressId).not.toBe(defaultBillingAddressId);
+  it('logs in with newly registered customer', async () => {
+    const email = `test-${Date.now()}@example.com`;
+    const password = 'Qwerty123!';
+
+    const customerDraft = {
+      email,
+      password,
+      firstName: 'Maria',
+      lastName: 'Roth',
+    };
+
+    await apiClientManager.register(customerDraft);
+
+    const loginResult = await apiClientManager.login({
+      email,
+      password,
+    });
+
+    expect(loginResult.statusCode).toBe(200);
+    expect(loginResult.body.customer.email).toBe(email);
   });
 });
