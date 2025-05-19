@@ -1,12 +1,10 @@
+import { Container, Title, Text, Box, Group, Badge, Button } from '@mantine/core';
 import { Link } from 'react-router-dom';
 import '@/pages/HomePage/HomePage.css';
-import { Container, Title, Text, Box, Group, Badge } from '@mantine/core';
+import { ProductCard } from '@/components/Card/Card';
 import { Slider } from '@/components/Slider/Slider';
-import { ProductCard } from '@/components/Card/Card'
-
 
 export function HomePage() {
-
   const features = [
     {
       title: 'Exclusive Selection',
@@ -56,66 +54,73 @@ export function HomePage() {
     },
   ];
 
-
   return (
     <Container fluid className="page">
-            <Box style={{ marginTop: 80}} className="hero">
-                  <Title className="hero__title">
-                    Explore the Finest Wines
-                  </Title>
-                  <Text fz={'h2'} className="hero__subtitle">
-                    Discover a curated selection of exceptional wines from
-                    renowned vineyards around the globe.
-                  </Text>
-                <Link
-                  to="/catalog"
-                  className="button button--primary button--large"
-                >
-                  <Text className="button__text" c="dark.6" fz={'h3'} fw={500}>
-                    Shop Now
-                  </Text>
-                </Link>
-            </Box>
+      <Box style={{ marginTop: 80 }} className="hero">
+        <Title className="hero__title">Explore the Finest Wines</Title>
+        <Text fz={'h2'} className="hero__subtitle">
+          Discover a curated selection of exceptional wines from renowned
+          vineyards around the globe.
+        </Text>
+          <Button
+          className="button button--primary button--large"
+          component={Link}
+          to="/catalog"
+          fz={'h4'}
+          >
+            Shop Now
+          </Button>
+      </Box>
 
-            <Slider />
+      <Slider />
 
-            <Box className="discount">
-                <Title  fz={'h2'} className="discount-title" c="accent.4">
-                  Summer Sale!
-                </Title>
-                <Group className="discount-description">
-                  <Text component="span" fz={'h3'} fw={500}>To get 25% off all products in your cart use code
-                    <Badge className="discount-code" c="accent.4" bg="dark.5" size="xl" radius="md">
-                      SUMMER25
-                    </Badge>
-                    at checkout.</Text>
-                </Group>
-            </Box>
+      <Box className="discount">
+        <Title fz={'h2'} className="discount-title" c="accent.4">
+          Summer Sale!
+        </Title>
+        <Group className="discount-description">
+          <Text component="span" fz={'h3'} fw={500}>
+            To get 25% off all products in your cart use code
+            <Badge
+              className="discount-code"
+              c="accent.4"
+              bg="dark.5"
+              size="xl"
+              radius="md"
+            >
+              SUMMER25
+            </Badge>
+            at checkout.
+          </Text>
+        </Group>
+      </Box>
 
-            <Box className="features">
-              <Group className="features__header">
-                <Title className="features__title" fz={'h2'}>Why Choose us?</Title>
-                <Text className="features__subtitle" fz={'h3'} fw={500}>
-                  Experience the art of wine with us. We offer a wide variety of
-                  wines, tasting events, and convenient delivery options to
-                  enhance your appreciation.
-                </Text>
-                <Link
-                  to="/registration"
-                  className="button button--primary button--large"
-                >
-                  <Text className="button__text" c="dark.5" fz={'h3'}>
-                    Join
-                  </Text>
-                </Link>
-              </Group>
+      <Box className="features">
+        <Group className="features__header">
+          <Title className="features__title" fz={'h2'}>
+            Why Choose us?
+          </Title>
+          <Text className="features__subtitle" fz={'h3'} fw={500}>
+            Experience the art of wine with us. We offer a wide variety of
+            wines, tasting events, and convenient delivery options to enhance
+            your appreciation.
+          </Text>
+          <Button
+          className="button button--primary button--large"
+          component={Link}
+          to="/catalog"
+          fz={'h4'}
+          >
+            Join
+          </Button>
+        </Group>
 
-              <Group className="features__grid">
-              {features.map((feature, index) => (
-                <ProductCard key={index} feature={feature} />
-              ))}
-              </Group>
-            </Box>
-          </Container>
+        <Group className="features__grid">
+          {features.map((feature, index) => (
+            <ProductCard key={index} feature={feature} />
+          ))}
+        </Group>
+      </Box>
+    </Container>
   );
 }

@@ -13,8 +13,8 @@ describe('initApiClient', () => {
 
   it('login customer', async () => {
     await apiClientManager.login({
-      email: 'test-user-1747386875229@example.com',
-      password: 'Qwerty123',
+      email: 'test-user-1747652756012@example.com',
+      password: 'Qwerty123!',
     });
 
     const client = apiClientManager.get();
