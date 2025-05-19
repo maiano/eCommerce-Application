@@ -48,7 +48,7 @@ export function useLogin() {
         message,
       });
 
-      loginState.logout();
+      loginState.setUnauthenticated();
     } finally {
       setLoading(false);
     }

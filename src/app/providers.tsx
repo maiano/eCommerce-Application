@@ -10,21 +10,21 @@ import { apiClientManager } from '@/shared/lib/commercetools';
 import { notifyError } from '@/shared/utils/custom-notifications';
 
 export const AppProvider = () => {
-  const { setPending, logout } = useAuthStore();
+  const { setPending, setUnauthenticated } = useAuthStore();
   useEffect(() => {
     const initializeApp = async () => {
       setPending();
       try {
         await apiClientManager.init();
-        logout();
+        setUnauthenticated();
       } catch (err) {
         notifyError(err, { message: 'Failed to connect to commercetools' });
-        logout();
+        setUnauthenticated();
       }
     };
 
     initializeApp();
-  }, [logout, setPending]);
+  }, [setUnauthenticated, setPending]);
   return (
     <MantineProvider theme={theme} defaultColorScheme="dark">
       <Notifications
