@@ -16,6 +16,7 @@ import { HomePage } from '@/pages/HomePage/HomePage';
 import { LoginPage } from '@/pages/LoginPage';
 import { NotFoundPage } from '@/pages/NotFoundPage/NotFoundPage';
 import { RegistrationPage } from '@/pages/RegistrationPage';
+import { CenterLoader } from '@/shared/ui/CenterLoader';
 
 const RedirectGuard = () => {
   const navigate = useNavigate();
@@ -37,7 +38,7 @@ const AuthGuard = () => {
   console.log('[AuthGuard] status:', status);
 
   if (status === 'PENDING') {
-    return <Loader color="blue" size="lg" type="bars" />;
+    return <CenterLoader />;
   }
 
   return status === 'AUTHENTICATED' ? (
@@ -53,7 +54,7 @@ const PrivateGuard = () => {
   console.log('[PrivateGuard] status:', status);
 
   if (status === 'PENDING') {
-    return <Loader color="blue" size="lg" type="bars" />;
+    return <CenterLoader />;
   }
 
   return status === 'AUTHENTICATED' ? (

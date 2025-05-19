@@ -166,5 +166,11 @@ export const theme = createTheme({
         },
       },
     },
+    Loader: {
+      defaultProps: {
+        type: 'dots',
+        color: 'accent.4',
+      },
+    },
   },
 });
