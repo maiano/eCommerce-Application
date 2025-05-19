@@ -1,4 +1,3 @@
-import { Loader } from '@mantine/core';
 import { useEffect } from 'react';
 import {
   createBrowserRouter,
@@ -20,15 +19,24 @@ import { CenterLoader } from '@/shared/ui/CenterLoader';
 
 const RedirectGuard = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const isNeedToRedirect = useAuthStore((state) => state.isNeedToRedirect);
   const resetRedirect = useAuthStore((state) => state.resetRedirect);
 
   useEffect(() => {
     if (isNeedToRedirect) {
+      if (
+        location.pathname === ROUTES.LOGIN ||
+        location.pathname === ROUTES.REGISTRATION
+      ) {
+        resetRedirect();
+        return;
+      }
+
       navigate(ROUTES.HOME);
       resetRedirect();
     }
-  }, [isNeedToRedirect, navigate, resetRedirect]);
+  }, [isNeedToRedirect, navigate, resetRedirect, location.pathname]);
 
   return <Outlet />;
 };
