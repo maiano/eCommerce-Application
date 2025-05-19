@@ -14,7 +14,7 @@ export const AppProvider = () => {
       try {
         await apiClientManager.init();
       } catch (err) {
-        notifyError(err, { message: 'error' });
+        notifyError(err, { message: 'Failed to connect to commercetools' });
       }
     };
 

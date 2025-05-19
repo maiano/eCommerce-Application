@@ -1,4 +1,4 @@
-import {MantineTheme, createTheme, MantineColorsTuple, rem, Container, Box } from '@mantine/core';
+import {MantineTheme, createTheme, MantineColorsTuple, rem, Container } from '@mantine/core';
 
 
 const primaryColors: MantineColorsTuple = [
@@ -133,12 +133,6 @@ export const theme = createTheme({
       styles: {
         root: {
           color: primaryColors[1]
-        },
-        variants: {
-          // primary: (theme: MantineTheme) => ({ root: { color: theme.colors.primaryColors[0] } }),
-          // accent: (theme: MantineTheme) => ({ root: { color: theme.colors.accent[3] } }),
-          // dark: (theme: MantineTheme) => ({ root: { color: theme.colors.dark[4] } }),
-          // red: (theme: MantineTheme) => ({ root: { color: theme.colors.red[2] } }),
         },
       },
     },

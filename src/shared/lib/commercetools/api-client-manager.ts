@@ -52,7 +52,7 @@ export const apiClientManager = (() => {
   };
 
   const logout = () => {
-    client = createAnonymousClient();
+    client = null;
   };
 
   return {

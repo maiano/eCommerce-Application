@@ -84,7 +84,7 @@ export function HomePage() {
                   Summer Sale!
                 </Title>
                 <Group className="discount-description">
-                  <Text fz={'h3'} fw={500}>To get 25% off all products in your cart use code
+                  <Text component="span" fz={'h3'} fw={500}>To get 25% off all products in your cart use code
                     <Badge className="discount-code" c="accent.4" bg="dark.5" size="xl" radius="md">
                       SUMMER25
                     </Badge>
