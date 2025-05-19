@@ -1,4 +1,3 @@
-import { Loader } from '@mantine/core';
 import { useEffect } from 'react';
 import {
   createBrowserRouter,

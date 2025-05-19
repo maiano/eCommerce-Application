@@ -11,18 +11,13 @@ import {
 import { Link } from 'react-router-dom';
 import { ROUTES } from '@/app/routes';
 import { LoginForm } from '@/features/login/LoginForm';
-import { Logo } from '@/shared/ui/Logo';
+import { LogoWithTitle } from '@/shared/ui/LogoWithTitle';
 export function LoginPage() {
   return (
     <Container size={420}>
       <Box pt="sm">
         <Stack align="center">
-          <Group gap="md">
-            <Logo />
-            <Title order={2} style={{}}>
-              Wine not?
-            </Title>
-          </Group>
+          <LogoWithTitle />
           <Paper withBorder w="100%" radius="sm" p="md" styles={{}}>
             <Title order={1} ta="center" styles={{}}>
               Welcome Back
