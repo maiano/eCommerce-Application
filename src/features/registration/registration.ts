@@ -1,5 +1,7 @@
 import { HttpErrorType } from '@commercetools/sdk-client-v2';
-import {apiClientManager} from './../../shared/lib/commercetools/api-client-manager';
+import {apiClientManager} from '../../shared/lib/commercetools/api-client-manager';
+import { useLogin } from '../login/useLogin';
+import { getErrorMessage } from '@/shared/utils/api-error-utils';
 import { notifyError, notifySuccess } from '@/shared/utils/custom-notifications';
 import { getCountryCode } from '@/shared/utils/get-country-code';
 import { RegistrationFormData } from '@/shared/validation/registration-validation';
@@ -32,14 +34,12 @@ export const registrationHandler = async (data: RegistrationFormData) => {
   })
   .then(async(response) => {
     if (response.statusCode === 201) {
-      notifySuccess({message: 'Account has been successfully created'})
+      notifySuccess({message: 'Account has been successfully created'});
+      useLogin();
     }
   })
   .catch((error: HttpErrorType) => {
-    if (error.statusCode === 400) {
-      notifyError(error, {message: 'Account with this email already exist. Log in or use another email'});
-    } else {
-      notifyError(error, {message: 'Something went wrong. Try again later'})
-    }
+    const message = getErrorMessage(error, 'registration');
+    notifyError(error, {message});
   });
 }

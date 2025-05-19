@@ -5,15 +5,57 @@ import dayjs from 'dayjs';
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { JSX, useEffect, useState } from 'react';
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
-import { registrationHandler } from './registration';
+import { useLogin } from "../login/useLogin";
 import { countries } from "@/shared/constants/countries";
+import { apiClientManager } from "@/shared/lib/commercetools";
+import { getErrorMessage } from "@/shared/utils/api-error-utils";
+import { notifyError, notifySuccess } from "@/shared/utils/custom-notifications";
+import { getCountryCode } from "@/shared/utils/get-country-code";
 import { RegistrationFormData, registrationSchema } from "@/shared/validation/registration-validation";
 
 export function RegistrationForm() {
   const theme = useMantineTheme();
   const { register, handleSubmit, control, watch, trigger, setValue, formState: { errors } } = useForm<RegistrationFormData>({mode: "onChange", resolver: zodResolver(registrationSchema)});
+  
+  const { login } = useLogin();
 
-  const onSubmit: SubmitHandler<RegistrationFormData> = (data) => registrationHandler(data);
+  const onSubmit: SubmitHandler<RegistrationFormData> = async(data) => {
+    try {
+      const response = await apiClientManager.register({
+        email: data.email,
+        password: data.password,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        dateOfBirth: data.birthDate,
+        addresses: [
+          {
+            country: getCountryCode(data.deliveryAddress.country),
+            streetName: data.deliveryAddress.street,
+            postalCode: data.deliveryAddress.postcode,
+            city: data.deliveryAddress.city,
+          },
+          {
+            country: getCountryCode(data.billingAddress.country),
+            streetName: data.billingAddress.street,
+            postalCode: data.billingAddress.postcode,
+            city: data.billingAddress.city,
+          }
+        ],
+        defaultShippingAddress: data.deliveryAddress.isDefaultAddress ? 0 : undefined,
+        defaultBillingAddress: data.billingAddress.isDefaultAddress ? 1 : undefined,
+        shippingAddresses: [0],
+        billingAddresses: [1],
+      })
+      if (response.statusCode === 201) {
+        notifySuccess({message: 'Account has been successfully created'});
+        login({email: data.email, password: data.password});
+      }
+    }
+    catch(error: unknown) {
+      const message = getErrorMessage(error, 'registration');
+      notifyError(error, {message});
+    }
+  }
 
   // Calendar
   const [calendarValue, setCalendarValue] = useState<Date | null>(null);
