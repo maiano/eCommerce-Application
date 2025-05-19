@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router';
+import { createBrowserRouter, Navigate, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { AuthLayout } from '@/app/layouts/AuthLayouts';
 import { ErrorLayout } from '@/app/layouts/ErrorLayout';
 import { MainLayout } from '@/app/layouts/MainLayout';
@@ -7,37 +7,111 @@ import { HomePage } from '@/pages/HomePage/HomePage';
 import { LoginPage } from '@/pages/LoginPage';
 import { NotFoundPage } from '@/pages/NotFoundPage/NotFoundPage';
 import { RegistrationPage } from '@/pages/RegistrationPage';
+import { useAuthStore } from '@/features/auth/auth-state';
+import { useEffect } from 'react';
+import { Loader } from '@mantine/core'
+
+const RedirectGuard = () => {
+  const navigate = useNavigate();
+  const isNeedToRedirect = useAuthStore((state) => state.isNeedToRedirect);
+  const resetRedirect = useAuthStore((state) => state.resetRedirect);
+
+  useEffect(() => {
+    if (isNeedToRedirect) {
+      navigate(ROUTES.HOME);
+      resetRedirect();
+    }
+  }, [isNeedToRedirect, navigate, resetRedirect]);
+
+  return <Outlet />;
+};
+
+const AuthGuard = () => {
+  const { status } = useAuthStore();
+  console.log('[AuthGuard] status:', status);
+
+  if (status === 'PENDING') {
+    return <Loader color="blue" size="lg" type="bars" />;
+  }
+
+  return status === 'AUTHENTICATED'
+    ? <Navigate to={ROUTES.HOME} replace />
+    : <Outlet />;
+};
+
+const PrivateGuard = () => {
+  const { status } = useAuthStore();
+  const location = useLocation();
+  console.log('[PrivateGuard] status:', status);
+
+  if (status === 'PENDING') {
+    return <Loader color="blue" size="lg" type="bars" />;
+  }
+
+  return status === 'AUTHENTICATED'
+    ? <Outlet />
+    : <Navigate to={ROUTES.LOGIN} replace state={{ from: location.pathname }} />;
+};
 
 export const router = createBrowserRouter([
   {
+    path: ROUTES.HOME,
     element: <MainLayout />,
     children: [
       {
-        path: ROUTES.HOME,
+        index: true,
         element: <HomePage />,
-      },
-    ],
+      }
+    ]
   },
   {
-    element: <AuthLayout />,
+    element: <RedirectGuard />,
     children: [
       {
-        path: ROUTES.LOGIN,
-        element: <LoginPage />,
+        element: <PrivateGuard />,
+        children: [
+          {
+            element: <MainLayout />,
+            children: [
+              {
+                path: '/profile',
+                element: <div>ProfilePage</div>,
+              }
+            ]
+          }
+        ]
       },
       {
-        path: ROUTES.REGISTRATION,
-        element: <RegistrationPage />,
+        element: <AuthGuard />,
+        children: [
+          {
+            element: <AuthLayout />,
+            children: [
+              {
+                path: ROUTES.LOGIN,
+                element: <LoginPage />,
+              },
+              {
+                path: ROUTES.REGISTRATION,
+                element: <RegistrationPage />,
+              },
+            ],
+          },
+        ],
       },
-    ],
-  },
-  {
-    element: <ErrorLayout />,
-    children: [
       {
-        path: ROUTES.NOT_FOUND,
-        element: <NotFoundPage />,
+        element: <ErrorLayout />,
+        children: [
+          {
+            path: ROUTES.NOT_FOUND,
+            element: <NotFoundPage />,
+          },
+          {
+            path: '*',
+            element: <Navigate to={ROUTES.NOT_FOUND} replace />,
+          },
+        ],
       },
-    ],
-  },
+    ]
+  }
 ]);

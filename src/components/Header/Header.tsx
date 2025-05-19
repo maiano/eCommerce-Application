@@ -1,14 +1,18 @@
 import { Link } from 'react-router-dom';
 import { useMantineTheme, Button, Burger, Box, Group, Title, Text, Menu } from '@mantine/core';
 import { useDisclosure, useClickOutside, useMediaQuery, useDidUpdate } from '@mantine/hooks';
-import { apiClientManager } from '@/shared/lib/commercetools';
+
+import { useAuthStore } from '@/features/auth/auth-state';
+import { apiClientManager } from '@/shared/lib/commercetools/api-client-manager';
 
 
 export function Header() {
-  let isAuthenticated = true;
+  const status = useAuthStore((state) => state.status);
+  const isAuthenticated = status === 'AUTHENTICATED';
 
   const handleLogout = () => {
     apiClientManager.logout();
+    useAuthStore.getState().logout();
     close();
   };
 
