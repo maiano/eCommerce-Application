@@ -47,11 +47,16 @@ export function Header() {
     <Box className="header" style={{ width: '100%', maxWidth: 1920 }}>
       <Group className="header__logo" style={{ justifyContent: 'start' }}>
         <Link
-          className="header__logo-icon"
-          to="/main"
-          style={{ color: theme.colors.red[9] }}
+          to="/"
+          style={{
+            color: theme.colors.red[9],
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem'
+           }}
         >
           <svg
+            className="header__logo-icon"
             viewBox="0 0 48 48"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -67,8 +72,8 @@ export function Header() {
               fill="currentColor"
             />
           </svg>
-        </Link>
         <Title className="header__logo-text">Wine not</Title>
+        </Link>
       </Group>
 
       <Group className={`header__nav ${opened ? 'open' : ''}`}>

@@ -15,12 +15,21 @@ export function NotFoundPage() {
   return (
     <Container fluid className="page">
       <Box className="not-found-content">
-        <Group className="header__logo" gap="xs">
+      <Group className="header__logo">
+      <Link
+          to="/"
+          style={{
+            color: theme.colors.red[9],
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem'
+           }}
+        >
           <svg
             className="header__logo-icon"
             viewBox="0 0 48 48"
             fill="none"
-            style={{ color: theme.colors.red[9] }}
+            xmlns="http://www.w3.org/2000/svg"
           >
             <path
               d="M13.8261 17.4264C16.7203 18.1174 20.2244 18.5217 24 18.5217C27.7756 18.5217 31.2797 18.1174 34.1739 17.4264C36.9144 16.7722 39.9967 15.2331 41.3563 14.1648L24.8486 40.6391C24.4571 41.267 23.5429 41.267 23.1514 40.6391L6.64374 14.1648C8.00331 15.2331 11.0856 16.7722 13.8261 17.4264Z"
@@ -33,10 +42,9 @@ export function NotFoundPage() {
               fill="currentColor"
             />
           </svg>
-          <Title className="header__logo-text" order={2}>
-            Wine not
-          </Title>
-        </Group>
+        <Title className="header__logo-text">Wine not</Title>
+        </Link>
+      </Group>
 
         <Group className="not-found-text">
           <Title className="not-found-title" order={1}>
