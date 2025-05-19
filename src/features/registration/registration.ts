@@ -1,4 +1,4 @@
-import { ClientResponse, CustomerSignInResult } from '@commercetools/platform-sdk';
+import { HttpErrorType } from '@commercetools/sdk-client-v2';
 import {apiClientManager} from './../../shared/lib/commercetools/api-client-manager';
 import { notifyError, notifySuccess } from '@/shared/utils/custom-notifications';
 import { getCountryCode } from '@/shared/utils/get-country-code';
@@ -35,11 +35,11 @@ export const registrationHandler = async (data: RegistrationFormData) => {
       notifySuccess({message: 'Account has been successfully created'})
     }
   })
-  .catch((error: ClientResponse<CustomerSignInResult>) => {
+  .catch((error: HttpErrorType) => {
     if (error.statusCode === 400) {
-      notifyError(error,{message: 'Account with this email already exist. Log in or use another email'})
+      notifyError(error, {message: 'Account with this email already exist. Log in or use another email'});
     } else {
-      notifyError(error,{message: 'Something went wrong'})
+      notifyError(error, {message: 'Something went wrong. Try again later'})
     }
   });
 }
