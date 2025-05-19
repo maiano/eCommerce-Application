@@ -1,5 +1,6 @@
 import { Button, Group, PasswordInput, Stack, TextInput } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
+import { useLogin } from '@/features/login/useLogin';
 import { loginSchema } from '@/shared/validation';
 import { LoginFormData } from '@/shared/validation/login-validation';
 
@@ -13,8 +14,11 @@ export function LoginForm() {
     validateInputOnBlur: true,
   });
 
-  const handleSubmit = (values: LoginFormData) => {
+  const { login } = useLogin();
+
+  const handleSubmit = async (values: LoginFormData) => {
     console.log('form submitted:', values);
+    await login({ email: values.email, password: values.password });
   };
 
   return (

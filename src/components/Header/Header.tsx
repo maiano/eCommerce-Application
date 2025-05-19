@@ -1,9 +1,22 @@
+import {
+  useMantineTheme,
+  Button,
+  Burger,
+  Box,
+  Group,
+  Title,
+  Text,
+  Menu,
+} from '@mantine/core';
+import {
+  useDisclosure,
+  useClickOutside,
+  useMediaQuery,
+  useDidUpdate,
+} from '@mantine/hooks';
 import { Link } from 'react-router-dom';
-import { useMantineTheme, Button, Burger, Box, Group, Title, Text, Menu } from '@mantine/core';
-import { useDisclosure, useClickOutside, useMediaQuery, useDidUpdate } from '@mantine/hooks';
 import { useAuthStore } from '@/features/auth/auth-state';
 import { apiClientManager } from '@/shared/lib/commercetools/api-client-manager';
-
 
 export function Header() {
   const status = useAuthStore((state) => state.status);
@@ -20,7 +33,8 @@ export function Header() {
   const isLargeScreen = useMediaQuery('(min-width: 768px)');
 
   useDidUpdate(() => {
-    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+    const scrollbarWidth =
+      window.innerWidth - document.documentElement.clientWidth;
 
     if (opened) {
       document.body.classList.add('no-scroll');
@@ -40,8 +54,8 @@ export function Header() {
     ['mousedown', 'touchstart'],
     [
       document.querySelector('.header__nav'),
-      document.querySelector('.burger-button')
-    ].filter((el): el is HTMLElement => el !== null)
+      document.querySelector('.burger-button'),
+    ].filter((el): el is HTMLElement => el !== null),
   );
 
   return (
@@ -149,7 +163,10 @@ export function Header() {
 
             <Menu position="bottom-end" width={200} withinPortal>
               <Menu.Target>
-                <Button color={theme.colors.dark[5]} className="button button--icon">
+                <Button
+                  color={theme.colors.dark[5]}
+                  className="button button--icon"
+                >
                   <svg
                     className="header__user-icon"
                     viewBox="0 0 30 30"

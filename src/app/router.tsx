@@ -1,15 +1,21 @@
-import { createBrowserRouter, Navigate, Outlet, useNavigate, useLocation } from 'react-router-dom';
+import { Loader } from '@mantine/core';
+import { useEffect } from 'react';
+import {
+  createBrowserRouter,
+  Navigate,
+  Outlet,
+  useNavigate,
+  useLocation,
+} from 'react-router-dom';
 import { AuthLayout } from '@/app/layouts/AuthLayouts';
 import { ErrorLayout } from '@/app/layouts/ErrorLayout';
 import { MainLayout } from '@/app/layouts/MainLayout';
 import { ROUTES } from '@/app/routes';
+import { useAuthStore } from '@/features/auth/auth-state';
 import { HomePage } from '@/pages/HomePage/HomePage';
 import { LoginPage } from '@/pages/LoginPage';
 import { NotFoundPage } from '@/pages/NotFoundPage/NotFoundPage';
 import { RegistrationPage } from '@/pages/RegistrationPage';
-import { useAuthStore } from '@/features/auth/auth-state';
-import { useEffect } from 'react';
-import { Loader } from '@mantine/core'
 
 const RedirectGuard = () => {
   const navigate = useNavigate();
@@ -34,9 +40,11 @@ const AuthGuard = () => {
     return <Loader color="blue" size="lg" type="bars" />;
   }
 
-  return status === 'AUTHENTICATED'
-    ? <Navigate to={ROUTES.HOME} replace />
-    : <Outlet />;
+  return status === 'AUTHENTICATED' ? (
+    <Navigate to={ROUTES.HOME} replace />
+  ) : (
+    <Outlet />
+  );
 };
 
 const PrivateGuard = () => {
@@ -48,9 +56,11 @@ const PrivateGuard = () => {
     return <Loader color="blue" size="lg" type="bars" />;
   }
 
-  return status === 'AUTHENTICATED'
-    ? <Outlet />
-    : <Navigate to={ROUTES.LOGIN} replace state={{ from: location.pathname }} />;
+  return status === 'AUTHENTICATED' ? (
+    <Outlet />
+  ) : (
+    <Navigate to={ROUTES.LOGIN} replace state={{ from: location.pathname }} />
+  );
 };
 
 export const router = createBrowserRouter([
@@ -61,8 +71,8 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: <HomePage />,
-      }
-    ]
+      },
+    ],
   },
   {
     element: <RedirectGuard />,
@@ -76,10 +86,10 @@ export const router = createBrowserRouter([
               {
                 path: '/profile',
                 element: <div>ProfilePage</div>,
-              }
-            ]
-          }
-        ]
+              },
+            ],
+          },
+        ],
       },
       {
         element: <AuthGuard />,
@@ -112,6 +122,6 @@ export const router = createBrowserRouter([
           },
         ],
       },
-    ]
-  }
+    ],
+  },
 ]);
