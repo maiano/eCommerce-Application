@@ -24,8 +24,8 @@ export const apiClientManager = (() => {
     return client;
   };
 
-  const init = () => {
-    if (!client) {
+  const init = (force = false) => {
+    if (!client || force) {
       client = createAnonymousClient();
     }
   };
