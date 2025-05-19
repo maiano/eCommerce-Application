@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Container, Box, Group, Text } from '@mantine/core';
+import { Container, Box, Text } from '@mantine/core';
 
 export function Footer() {
   return (
