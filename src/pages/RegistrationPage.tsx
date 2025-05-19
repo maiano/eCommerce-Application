@@ -8,7 +8,7 @@ export function RegistrationPage() {
     <Container className="page">
               <Box className="auth-form">
                 <Group className="header__logo" style={{justifyContent: 'start', gap: '0'}}>
-                  <Link className="header__logo-icon" to="/main" style={{color: 'darkred'}}>
+                  <Link className="header__logo-icon" to="/" style={{color: 'darkred'}}>
                     <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width="24px" height="24px">
                         <path
                             d="M13.8261 17.4264C16.7203 18.1174 20.2244 18.5217 24 18.5217C27.7756 18.5217 31.2797 18.1174 34.1739 17.4264C36.9144 16.7722 39.9967 15.2331 41.3563 14.1648L24.8486 40.6391C24.4571 41.267 23.5429 41.267 23.1514 40.6391L6.64374 14.1648C8.00331 15.2331 11.0856 16.7722 13.8261 17.4264Z"
@@ -25,7 +25,7 @@ export function RegistrationPage() {
                 <RegistrationForm />
 
                 <Group className="auth-footer">
-                  <Text>Already have an account? <Link to="/signIn" className="auth-link">Log in</Link></Text>
+                  <Text>Already have an account? <Link to="/login" className="auth-link">Log in</Link></Text>
                 </Group>
               </Box>
           </Container>
