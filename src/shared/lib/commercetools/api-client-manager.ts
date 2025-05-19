@@ -1,14 +1,17 @@
 import {
   ClientResponse,
-  CustomerSignin,
   CustomerSignInResult,
-  CustomerDraft,
+  MyCustomerDraft,
+  MyCustomerSignin,
 } from '@commercetools/platform-sdk';
 import { createAnonymousClient } from './create-anonymous-client';
 import { createPasswordClient } from '@/shared/lib/commercetools/create-password-client';
+import { createRefreshClient } from '@/shared/lib/commercetools/create-refresh-client';
 
 type ApiRoot = ReturnType<
-  typeof createAnonymousClient | typeof createPasswordClient
+  | typeof createAnonymousClient
+  | typeof createPasswordClient
+  | typeof createRefreshClient
 >;
 
 export const apiClientManager = (() => {
@@ -21,20 +24,20 @@ export const apiClientManager = (() => {
     return client;
   };
 
-  const init = () => {
-    if (!client) {
+  const init = (force = false) => {
+    if (!client || force) {
       client = createAnonymousClient();
     }
   };
 
   const register = (
-    body: CustomerDraft,
+    body: MyCustomerDraft,
   ): Promise<ClientResponse<CustomerSignInResult>> => {
-    return get().customers().post({ body }).execute();
+    return get().me().signup().post({ body }).execute();
   };
 
   const login = async (
-    credentials: CustomerSignin,
+    credentials: MyCustomerSignin,
   ): Promise<ClientResponse<CustomerSignInResult>> => {
     const authClient = createPasswordClient(
       credentials.email,

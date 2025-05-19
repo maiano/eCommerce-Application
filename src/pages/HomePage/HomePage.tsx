@@ -1,4 +1,4 @@
-import { Container, Title, Text, Box, Group, Badge } from '@mantine/core';
+import { Container, Title, Text, Box, Group, Badge, Button } from '@mantine/core';
 import { Link } from 'react-router-dom';
 import '@/pages/HomePage/HomePage.css';
 import { ProductCard } from '@/components/Card/Card';
@@ -62,11 +62,14 @@ export function HomePage() {
           Discover a curated selection of exceptional wines from renowned
           vineyards around the globe.
         </Text>
-        <Link to="/catalog" className="button button--primary button--large">
-          <Text className="button__text" c="dark.6" fz={'h3'} fw={500}>
-            Shop Now
-          </Text>
-        </Link>
+        <Button
+          className="button button--primary button--large"
+          component={Link}
+          to="/catalog"
+          fz={'h4'}
+        >
+          Shop Now
+        </Button>
       </Box>
 
       <Slider />
@@ -102,14 +105,14 @@ export function HomePage() {
             wines, tasting events, and convenient delivery options to enhance
             your appreciation.
           </Text>
-          <Link
-            to="/registration"
+          <Button
             className="button button--primary button--large"
+            component={Link}
+            to="/catalog"
+            fz={'h4'}
           >
-            <Text className="button__text" c="dark.5" fz={'h3'}>
-              Join
-            </Text>
-          </Link>
+            Join
+          </Button>
         </Group>
 
         <Group className="features__grid">

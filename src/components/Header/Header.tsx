@@ -1,20 +1,6 @@
-import {
-  useMantineTheme,
-  Button,
-  Burger,
-  Box,
-  Group,
-  Title,
-  Text,
-  Menu,
-} from '@mantine/core';
-import {
-  useDisclosure,
-  useClickOutside,
-  useMediaQuery,
-  useDidUpdate,
-} from '@mantine/hooks';
 import { Link } from 'react-router-dom';
+import { useMantineTheme, Button, Burger, Box, Group, Title, Text, Menu } from '@mantine/core';
+import { useDisclosure, useClickOutside, useMediaQuery, useDidUpdate } from '@mantine/hooks';
 import { useAuthStore } from '@/features/auth/auth-state';
 import { apiClientManager } from '@/shared/lib/commercetools/api-client-manager';
 
@@ -33,8 +19,7 @@ export function Header() {
   const isLargeScreen = useMediaQuery('(min-width: 768px)');
 
   useDidUpdate(() => {
-    const scrollbarWidth =
-      window.innerWidth - document.documentElement.clientWidth;
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
 
     if (opened) {
       document.body.classList.add('no-scroll');
@@ -62,11 +47,16 @@ export function Header() {
     <Box className="header" style={{ width: '100%', maxWidth: 1920 }}>
       <Group className="header__logo" style={{ justifyContent: 'start' }}>
         <Link
-          className="header__logo-icon"
-          to="/main"
-          style={{ color: theme.colors.red[9] }}
+          to="/"
+          style={{
+            color: theme.colors.red[9],
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem'
+           }}
         >
           <svg
+            className="header__logo-icon"
             viewBox="0 0 48 48"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -82,8 +72,8 @@ export function Header() {
               fill="currentColor"
             />
           </svg>
-        </Link>
         <Title className="header__logo-text">Wine not</Title>
+        </Link>
       </Group>
 
       <Group className={`header__nav ${opened ? 'open' : ''}`}>
