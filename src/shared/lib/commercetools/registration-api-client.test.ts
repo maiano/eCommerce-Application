@@ -17,7 +17,7 @@ describeIf('Customer registration', () => {
 
     const customerDraft = {
       email,
-      password: 'Qwerty123',
+      password: 'Qwerty123!',
       firstName: 'John',
       lastName: 'Doe',
       addresses: [
@@ -53,7 +53,7 @@ describeIf('Customer registration', () => {
 
     const customerDraft = {
       email,
-      password: 'Qwerty123',
+      password: 'Qwerty123!',
       firstName: 'John',
       lastName: 'Doe',
       addresses: [
