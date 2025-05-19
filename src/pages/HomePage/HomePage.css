@@ -1,0 +1,230 @@
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  max-width: 1920px;
+  min-height: 600px;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  gap: 1.5rem;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.4) 100%),
+    url('../../assets/wine.png');
+}
+
+.hero__title {
+  color: white;
+  font-size: 2.25rem !important;
+  font-weight: 900;
+  line-height: 1.25;
+  letter-spacing: -0.033em;
+}
+
+.hero__subtitle {
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.section-title {
+  color: #f8f9fb;
+  font-size: 1.375rem;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  padding: 1.25rem 1rem 0.75rem;
+}
+
+.card {
+  padding-top: 10px;
+  /* min-width: 280px !important; */
+  max-width: 400px !important;
+  height: 420px !important;
+  background: #1d2a36;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card__image {
+  width: 100%;
+  height: 260px;
+  min-height: 260px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 0.75rem;
+}
+
+.card__content {
+  padding: 1.5rem;
+}
+
+.card__title {
+  color: #f8f9fb;
+  font-size: 1.25rem !important;
+  margin-bottom: 0.5rem;
+}
+
+.card__description {
+  color: #8a9dc0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.card__image--chardonnay {
+  background-image: url('../../assets/wine4.png');
+}
+
+.card__image--pinot {
+  background-image: url('../../assets/wine2.png');
+}
+
+.card__image--cabernet {
+  background-image: url('../../assets/wine1.png');
+}
+
+.card__image--sauvignon {
+  background-image: url('../../assets/wine3.png');
+}
+
+.card__content {
+  display: flex;
+  flex-direction: column;
+}
+
+.card__title {
+  color: #f8f9fb;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.card__description {
+  color: #8a9dc0;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.discount {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #1d2a36;
+  border-radius: 0.75rem;
+  margin: 2rem 1rem;
+  padding: 2rem 1rem;
+  width: 100%;
+  gap: 1rem;
+}
+
+.discount-title {
+  color: #f4c753;
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.discount-description {
+  color: #f8f9fb;
+  font-size: 1.125rem;
+  line-height: 1.6;
+}
+
+.features {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  padding: 2.5rem 1rem;
+  width: 100%;
+  max-width: 1920px;
+}
+
+.features__header {
+  display: flex;
+  flex-direction: column !important;
+  gap: 1.5rem;
+}
+
+.features__title {
+  color: #f8f9fb;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.033em;
+  max-width: 720px;
+}
+
+.features__subtitle {
+  color: #f8f9fb;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: normal;
+  max-width: 720px;
+}
+
+.features__grid {
+  display: flex;
+  justify-content: center !important;
+  width: 100%;
+  max-width: 1920px;
+}
+
+.feature-card {
+  display: flex;
+  border-radius: 0.5rem;
+  border: 1px solid #32415d;
+  background-color: #1d2a36;
+  width: 32%;
+  max-height: 142px;
+}
+
+.feature-card__icon {
+  color: #f8f9fb;
+}
+
+.feature-card__content {
+  gap: 0.25rem;
+  padding: 1rem;
+}
+
+.feature-card__title {
+  color: #f8f9fb;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.feature-card__description {
+  align-self: center;
+  color: #8a9dc0;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: normal;
+}
+
+@media (max-width: 768px) {
+  .discount-section {
+    padding: 1.5rem 1.5rem;
+  }
+
+  .discount-title {
+    font-size: 1.5rem;
+  }
+
+  .discount-description {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .discount-section {
+    padding: 1.5rem 0.5rem;
+  }
+}
