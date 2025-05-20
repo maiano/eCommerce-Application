@@ -20,18 +20,8 @@ import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { JSX, useEffect, useState } from 'react';
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
-import { useLogin } from '../login/useLogin';
+import { useRegistration } from '@/features/registration/useRegistration';
 import { countries } from '@/shared/constants/countries';
-import { apiClientManager } from '@/shared/lib/commercetools';
-import { getErrorMessage } from '@/shared/utils/api-error-utils';
-import {
-  notifyError,
-  notifySuccess,
-} from '@/shared/utils/custom-notifications';
-import {
-  createCustomerDraft,
-  getAddressIndexes,
-} from '@/shared/utils/customer-draft-utils';
 import {
   RegistrationFormData,
   registrationSchema,
@@ -52,24 +42,10 @@ export function RegistrationForm() {
     resolver: zodResolver(registrationSchema),
   });
 
-  const { login } = useLogin();
+  const { registerUser } = useRegistration();
 
   const onSubmit: SubmitHandler<RegistrationFormData> = async (data) => {
-    try {
-      const draft = createCustomerDraft(data, sameAddress);
-      const addressIndexes = getAddressIndexes(sameAddress);
-
-      const response = await apiClientManager.register(
-        Object.assign(draft, addressIndexes),
-      );
-      if (response.statusCode === 201) {
-        notifySuccess({ message: 'Account has been successfully created' });
-        login({ email: data.email, password: data.password });
-      }
-    } catch (error: unknown) {
-      const message = getErrorMessage(error, 'registration');
-      notifyError(error, { message });
-    }
+    await registerUser(data, sameAddress);
   };
 
   // Calendar
