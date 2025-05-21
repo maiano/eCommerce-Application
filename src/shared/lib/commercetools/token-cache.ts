@@ -85,8 +85,8 @@ export function makeTokenCache(
 export const isEmptyToken = (token: TokenStore): boolean =>
   token.token === '' || token.expirationTime <= Date.now();
 
-export const getRefreshToken = (tokenKey: TokenKey): string | undefined =>
-  makeTokenCache(tokenKey).get().refreshToken;
+// export const getRefreshToken = (tokenKey: TokenKey): string | undefined =>
+//   makeTokenCache(tokenKey).get().refreshToken;
 
 export const deleteToken = (tokenKey: TokenKey): void => {
   safeStorage.remove(tokenKey);

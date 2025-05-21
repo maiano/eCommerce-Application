@@ -58,11 +58,23 @@ export const apiClientManager = (() => {
     client = null;
   };
 
+  const restore = () => {
+    const refreshClient = createRefreshClient('wine-not-password-token');
+
+    if (refreshClient) {
+      client = refreshClient;
+      return;
+    }
+
+    init();
+  };
+
   return {
     get,
     init,
     login,
     register,
     logout,
+    restore,
   };
 })();
