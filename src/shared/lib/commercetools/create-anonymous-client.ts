@@ -10,6 +10,7 @@ import { env } from './environment';
 import { httpMiddlewareOptions } from './http-config.ts';
 import { anonymousScopes } from '@/shared/lib/commercetools/scopes.ts';
 import { makeTokenCache } from '@/shared/lib/commercetools/token-cache.ts';
+import { debug } from '@/shared/utils/debug-log.ts';
 
 const projectKey = env.VITE_CTP_PROJECT_KEY;
 
@@ -53,11 +54,11 @@ export const createAnonymousClient = (options?: {
     tokenCache: {
       get: () => {
         const token = anonymousTokenCache.get();
-        console.log('TokenCache.get() called, returning:', token);
+        debug('token-cache:get', token);
         return token;
       },
       set: (token) => {
-        console.log('TokenCache.set() called with:', token);
+        debug('token-cache:set', token);
         anonymousTokenCache.set(token);
         return token;
       },

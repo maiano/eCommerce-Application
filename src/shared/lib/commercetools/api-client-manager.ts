@@ -53,7 +53,10 @@ export const apiClientManager = (() => {
     client = createAnonymousClient();
 
     try {
-      await client.me().get().execute();
+      await client
+        .categories()
+        .get({ queryArgs: { limit: 1 } })
+        .execute();
     } catch (error) {
       console.error('Anonymous client init failed:', error);
     }
