@@ -14,15 +14,19 @@ import {
   isEmptyToken,
   makeTokenCache,
 } from '@/shared/lib/commercetools/token-cache';
+import { debug } from '@/shared/utils/debug-log';
 
-type ApiRoot = ReturnType<
-  | typeof createAnonymousClient
-  | typeof createPasswordClient
-  | typeof createRefreshClient
->;
+type AnonymousApiRoot = ReturnType<typeof createAnonymousClient>;
+type PasswordApiRoot = ReturnType<typeof createPasswordClient>;
+type RefreshApiRoot = ReturnType<typeof createRefreshClient>;
+
+type ApiRoot = AnonymousApiRoot | PasswordApiRoot | RefreshApiRoot;
+
+type AuthType = 'anonymous' | 'password' | 'refresh';
 
 export const apiClientManager = (() => {
   let client: ApiRoot | null = null;
+  let authType: AuthType = 'anonymous';
 
   const passwordTokenCache = makeTokenCache('wine-not-password-token');
   const anonymousTokenCache = makeTokenCache('wine-not-anonymous-token');
@@ -36,7 +40,7 @@ export const apiClientManager = (() => {
 
   const init = async (force = false) => {
     if (client && !force) {
-      return;
+      return { client, authType };
     }
 
     console.log('initializing client');
@@ -45,12 +49,14 @@ export const apiClientManager = (() => {
       const restoredClient = restore();
       if (restoredClient) {
         console.log('Client restored from cache');
-        client = restoredClient;
-        return;
+        client = restoredClient.client;
+        authType = restoredClient.authType;
+        return { client, authType };
       }
     }
     console.log('creating new anonymous client');
     client = createAnonymousClient();
+    authType = 'anonymous';
 
     try {
       await client
@@ -60,6 +66,7 @@ export const apiClientManager = (() => {
     } catch (error) {
       console.error('Anonymous client init failed:', error);
     }
+    return { client, authType };
   };
 
   const register = (
@@ -82,6 +89,7 @@ export const apiClientManager = (() => {
       .execute()
       .then((response) => {
         client = authClient;
+        authType = 'password';
         return response;
       });
   };
@@ -89,15 +97,25 @@ export const apiClientManager = (() => {
   const logout = () => {
     console.log('Logging out...');
     passwordTokenCache.clear();
-    client = restore() || createAnonymousClient();
+    const restored = restore();
+    if (restored) {
+      client = restored.client;
+      authType = restored.authType;
+    } else {
+      client = createAnonymousClient();
+      authType = 'anonymous';
+    }
   };
 
-  const restore = () => {
+  const restore = (): { client: ApiRoot; authType: AuthType } | null => {
     const passwordToken = passwordTokenCache.get();
     if (passwordToken.token && passwordToken.refreshToken) {
       try {
-        console.log('restore pass: ', passwordToken);
-        return createRefreshClient('wine-not-password-token');
+        debug('restore pass: ', passwordToken);
+        return {
+          client: createRefreshClient('wine-not-password-token'),
+          authType: 'password',
+        };
       } catch {
         passwordTokenCache.clear();
       }
@@ -106,8 +124,11 @@ export const apiClientManager = (() => {
     const anonymousToken = anonymousTokenCache.get();
     if (!isEmptyToken(anonymousToken) && anonymousToken.refreshToken) {
       try {
-        console.log('restore anonym refresh: ', anonymousToken);
-        return createRefreshClient('wine-not-anonymous-token');
+        debug('restore anonymous refresh: ', anonymousToken);
+        return {
+          client: createRefreshClient('wine-not-anonymous-token'),
+          authType: 'anonymous',
+        };
       } catch {
         anonymousTokenCache.clear();
         clearAnonymousId();
@@ -124,5 +145,6 @@ export const apiClientManager = (() => {
     login,
     register,
     logout,
+    getAuthType: () => authType,
   };
 })();
