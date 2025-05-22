@@ -4,9 +4,16 @@ import {
   MyCustomerDraft,
   MyCustomerSignin,
 } from '@commercetools/platform-sdk';
-import { createAnonymousClient } from './create-anonymous-client';
+import {
+  clearAnonymousId,
+  createAnonymousClient,
+} from '@/shared/lib/commercetools/create-anonymous-client';
 import { createPasswordClient } from '@/shared/lib/commercetools/create-password-client';
 import { createRefreshClient } from '@/shared/lib/commercetools/create-refresh-client';
+import {
+  isEmptyToken,
+  makeTokenCache,
+} from '@/shared/lib/commercetools/token-cache';
 
 type ApiRoot = ReturnType<
   | typeof createAnonymousClient
@@ -17,6 +24,9 @@ type ApiRoot = ReturnType<
 export const apiClientManager = (() => {
   let client: ApiRoot | null = null;
 
+  const passwordTokenCache = makeTokenCache('wine-not-password-token');
+  const anonymousTokenCache = makeTokenCache('wine-not-anonymous-token');
+
   const get = (): ApiRoot => {
     if (!client) {
       throw new Error('client not initialized');
@@ -24,9 +34,28 @@ export const apiClientManager = (() => {
     return client;
   };
 
-  const init = (force = false) => {
-    if (!client || force) {
-      client = createAnonymousClient();
+  const init = async (force = false) => {
+    if (client && !force) {
+      return;
+    }
+
+    console.log('initializing client');
+
+    if (!force) {
+      const restoredClient = restore();
+      if (restoredClient) {
+        console.log('Client restored from cache');
+        client = restoredClient;
+        return;
+      }
+    }
+    console.log('creating new anonymous client');
+    client = createAnonymousClient();
+
+    try {
+      await client.me().get().execute();
+    } catch (error) {
+      console.error('Anonymous client init failed:', error);
     }
   };
 
@@ -55,18 +84,35 @@ export const apiClientManager = (() => {
   };
 
   const logout = () => {
-    client = null;
+    console.log('Logging out...');
+    passwordTokenCache.clear();
+    client = restore() || createAnonymousClient();
   };
 
   const restore = () => {
-    const refreshClient = createRefreshClient('wine-not-password-token');
-
-    if (refreshClient) {
-      client = refreshClient;
-      return;
+    const passwordToken = passwordTokenCache.get();
+    if (passwordToken.token && passwordToken.refreshToken) {
+      try {
+        console.log('restore pass: ', passwordToken);
+        return createRefreshClient('wine-not-password-token');
+      } catch {
+        passwordTokenCache.clear();
+      }
     }
 
-    init();
+    const anonymousToken = anonymousTokenCache.get();
+    if (!isEmptyToken(anonymousToken) && anonymousToken.refreshToken) {
+      try {
+        console.log('restore anonym refresh: ', anonymousToken);
+        return createRefreshClient('wine-not-anonymous-token');
+      } catch {
+        anonymousTokenCache.clear();
+        clearAnonymousId();
+      }
+    }
+
+    console.log('no valid sessions');
+    return null;
   };
 
   return {
@@ -75,6 +121,5 @@ export const apiClientManager = (() => {
     login,
     register,
     logout,
-    restore,
   };
 })();
