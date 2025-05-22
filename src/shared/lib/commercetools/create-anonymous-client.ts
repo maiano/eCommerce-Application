@@ -31,16 +31,7 @@ export const clearAnonymousId = () => {
 
 const anonymousTokenCache = makeTokenCache('wine-not-anonymous-token');
 
-export const createAnonymousClient = (options?: {
-  token?: string;
-}): ByProjectKeyRequestBuilder => {
-  if (options?.token) {
-    anonymousTokenCache.set({
-      token: options.token,
-      expirationTime: Date.now() + 3600 * 1000,
-    });
-  }
-
+export const createAnonymousClient = (): ByProjectKeyRequestBuilder => {
   const authOptions: AnonymousAuthMiddlewareOptions = {
     host: env.VITE_CTP_AUTH_URL,
     projectKey,
