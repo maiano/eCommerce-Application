@@ -1,6 +1,4 @@
 import { MyCustomerSignin } from '@commercetools/platform-sdk';
-import { useState } from 'react';
-
 import { useAuthStore } from '@/features/auth/auth-state';
 import { apiClientManager } from '@/shared/lib/commercetools/api-client-manager';
 import { getErrorMessage } from '@/shared/utils/api-error-utils';
@@ -10,11 +8,9 @@ import {
 } from '@/shared/utils/custom-notifications';
 
 export function useLogin() {
-  const [loading, setLoading] = useState(false);
   const loginState = useAuthStore();
 
   const login = async (credentials: MyCustomerSignin) => {
-    setLoading(true);
     loginState.setPending();
 
     try {
@@ -35,12 +31,10 @@ export function useLogin() {
 
       loginState.setUnauthenticated();
     } finally {
-      setLoading(false);
     }
   };
 
   return {
     login,
-    loading,
   };
 }

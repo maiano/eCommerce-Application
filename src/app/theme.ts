@@ -172,5 +172,13 @@ export const theme = createTheme({
         color: 'accent.4',
       },
     },
+    Fieldset: {
+      styles: {
+        root: {
+            backgroundColor: darkColors[6],
+            padding: '0 0.5rem',
+        },
+      },
+    },
   },
 });

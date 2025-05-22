@@ -10,6 +10,7 @@ import fetch from 'isomorphic-fetch';
 import { env } from './environment';
 import { httpMiddlewareOptions } from './http-config.ts';
 import { customerPasswordFlowScopes } from './scopes.ts';
+import { makeTokenCache } from '@/shared/lib/commercetools/token-cache.ts';
 
 const projectKey = env.VITE_CTP_PROJECT_KEY;
 
@@ -26,6 +27,7 @@ const buildPasswordFlowOptions = (
   },
   scopes: customerPasswordFlowScopes,
   fetch,
+  tokenCache: makeTokenCache('wine-not-password-token'),
 });
 
 export const createPasswordClient = (
