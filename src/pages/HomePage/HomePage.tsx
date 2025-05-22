@@ -1,6 +1,15 @@
-import { Container, Title, Text, Box, Group, Badge, Button } from '@mantine/core';
+import {
+  Container,
+  Title,
+  Text,
+  Box,
+  Group,
+  Badge,
+  Button,
+} from '@mantine/core';
 import { Link } from 'react-router-dom';
 import '@/pages/HomePage/HomePage.css';
+import { ROUTES } from '@/app/routes';
 import { ProductCard } from '@/components/Card/Card';
 import { Slider } from '@/components/Slider/Slider';
 
@@ -108,7 +117,7 @@ export function HomePage() {
           <Button
             className="button button--primary button--large"
             component={Link}
-            to="/catalog"
+            to={ROUTES.REGISTRATION}
             fz={'h4'}
           >
             Join
