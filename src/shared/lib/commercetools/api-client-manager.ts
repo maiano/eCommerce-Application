@@ -43,18 +43,18 @@ export const apiClientManager = (() => {
       return { client, authType };
     }
 
-    console.log('initializing client');
+    debug('initializing client');
 
     if (!force) {
       const restoredClient = restore();
       if (restoredClient) {
-        console.log('Client restored from cache');
+        debug('Client restored from cache');
         client = restoredClient.client;
         authType = restoredClient.authType;
         return { client, authType };
       }
     }
-    console.log('creating new anonymous client');
+    debug('creating new anonymous client');
     client = createAnonymousClient();
     authType = 'anonymous';
 
@@ -95,7 +95,7 @@ export const apiClientManager = (() => {
   };
 
   const logout = () => {
-    console.log('Logging out...');
+    debug('Logging out...');
     passwordTokenCache.clear();
     const restored = restore();
     if (restored) {
@@ -135,7 +135,7 @@ export const apiClientManager = (() => {
       }
     }
 
-    console.log('no valid sessions');
+    debug('no valid sessions');
     return null;
   };
 

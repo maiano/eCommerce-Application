@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 export type TokenKey = 'wine-not-anonymous-token' | 'wine-not-password-token';
 
-const TOKEN_THRESHOLD = 2500;
+const TOKEN_THRESHOLD = 60000;
 const EMPTY_TOKEN: TokenStore = { token: '', expirationTime: 0 };
 
 const TokenSchema = z.object({
@@ -14,9 +14,8 @@ const TokenSchema = z.object({
 
 const validateToken = (raw: string): TokenStore | null => {
   try {
-    const parsed: unknown = JSON.parse(raw);
-    const token = TokenSchema.parse(parsed);
-    return token.expirationTime >= Date.now() + TOKEN_THRESHOLD ? token : null;
+    const parsed = TokenSchema.parse(JSON.parse(raw));
+    return parsed.expirationTime > Date.now() + TOKEN_THRESHOLD ? parsed : null;
   } catch (error) {
     console.error('Token validation failed:', error);
     return null;
@@ -55,17 +54,23 @@ export function makeTokenCache(
 
   return {
     get: (): TokenStore => {
+      if (current.token && current.expirationTime > Date.now()) {
+        return current;
+      }
       const raw = safeStorage.get(tokenKey);
-      if (!raw) return EMPTY_TOKEN;
+      if (!raw) {
+        current = EMPTY_TOKEN;
+        return EMPTY_TOKEN;
+      }
 
       const token = validateToken(raw);
       if (!token) {
-        safeStorage.remove(tokenKey);
+        current = EMPTY_TOKEN;
         return EMPTY_TOKEN;
       }
 
       current = token;
-      return current;
+      return token;
     },
 
     set: (newValue: TokenStore): TokenStore => {
@@ -83,4 +88,4 @@ export function makeTokenCache(
 }
 
 export const isEmptyToken = (token: TokenStore): boolean =>
-  token.token === '' || token.expirationTime <= Date.now();
+  token.token === '' || token.expirationTime <= Date.now() + TOKEN_THRESHOLD;

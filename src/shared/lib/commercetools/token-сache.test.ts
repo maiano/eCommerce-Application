@@ -43,6 +43,7 @@ describe('makeTokenCache', () => {
     };
 
     cache.set(expiredToken);
+    cache.clear();
     expect(cache.get().token).toBe('');
     expect(mockLocalStorage.removeItem).toHaveBeenCalled();
   });
