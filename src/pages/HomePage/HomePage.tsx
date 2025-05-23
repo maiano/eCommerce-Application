@@ -10,7 +10,7 @@ import {
 import { Link } from 'react-router-dom';
 import '@/pages/HomePage/HomePage.css';
 import { ROUTES } from '@/app/routes';
-import { ProductCard } from '@/components/Card/Card';
+import { FeatureCard } from '@/components/Card/FeatureCard.tsx';
 import { Slider } from '@/components/Slider/Slider';
 
 export function HomePage() {
@@ -126,7 +126,7 @@ export function HomePage() {
 
         <Group className="features__grid">
           {features.map((feature, index) => (
-            <ProductCard key={index} feature={feature} />
+            <FeatureCard key={index} feature={feature} />
           ))}
         </Group>
       </Box>

@@ -138,10 +138,10 @@ export const theme = createTheme({
     Container: Container.extend({
       styles: () => ({
         root: {
-          paddingInline: '0 !important',
-          marginInline: '0 !important',
-          // maxWidth: rem(1920),
-          width: '100%',
+          paddingInline: 0,
+          marginInline: 0,
+          maxWidth: rem(1920),
+          // width: '100%',
         },
       }),
     }),

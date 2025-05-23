@@ -9,12 +9,14 @@ import {
 import { AuthLayout } from '@/app/layouts/AuthLayouts';
 import { ErrorLayout } from '@/app/layouts/ErrorLayout';
 import { MainLayout } from '@/app/layouts/MainLayout';
+import { CatalogLayout } from '@/app/layouts/CatalogLayout';
 import { ROUTES } from '@/app/routes';
 import { useAuthStore } from '@/features/auth/auth-state';
 import { HomePage } from '@/pages/HomePage/HomePage';
 import { LoginPage } from '@/pages/LoginPage';
 import { NotFoundPage } from '@/pages/NotFoundPage/NotFoundPage';
 import { RegistrationPage } from '@/pages/RegistrationPage';
+import { CatalogPage } from '@/pages/CatalogPage';
 import { CenterLoader } from '@/shared/ui/CenterLoader';
 
 const RedirectGuard = () => {
@@ -86,6 +88,17 @@ export const router = createBrowserRouter([
   {
     element: <RedirectGuard />,
     children: [
+      {
+        element: <CatalogLayout />,
+        children: [
+          {
+            path: ROUTES.CATALOG,
+            element: <CatalogPage />,
+          },
+
+        ],
+      },
+
       {
         element: <PrivateGuard />,
         children: [

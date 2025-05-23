@@ -6,6 +6,7 @@ interface Feature {
   icon: ReactElement;
 }
 
-export interface ProductCardProps {
-  feature: Feature;
+export interface CardProps {
+  feature?: Feature;
+  wine?: { title: string; description: string; imageClass: string }
 }

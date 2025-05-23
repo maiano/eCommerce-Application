@@ -1,5 +1,7 @@
 import { Carousel } from '@mantine/carousel';
-import { Container, Box, Title, Text } from '@mantine/core';
+import { Box, Title } from '@mantine/core';
+import { ProductCard } from '@/components/Card/ProductCard.tsx';
+
 
 export function Slider() {
   const wines = [
@@ -68,18 +70,9 @@ export function Slider() {
       >
         {wines.map((wine, index) => (
           <Carousel.Slide key={index}>
-            <Container
-              className="card"
-              style={{ maxWidth: 460, width: '100%' }}
-            >
-              <div className={`card__image ${wine.imageClass}`}></div>
-              <Container className="card__content">
-                <Title className="card__title">{wine.title}</Title>
-                <Text className="card__description" c="dark.4">
-                  {wine.description}
-                </Text>
-              </Container>
-            </Container>
+            <ProductCard
+              wine={wine}
+            />
           </Carousel.Slide>
         ))}
       </Carousel>
