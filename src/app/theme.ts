@@ -97,7 +97,7 @@ export const theme = createTheme({
           backgroundColor: darkColors[7],
         },
         main: {
-          paddingTop: 0,
+          // paddingTop: 0,
           paddingLeft: 0,
           paddingRight: 0,
         },
@@ -138,8 +138,8 @@ export const theme = createTheme({
     Container: Container.extend({
       styles: () => ({
         root: {
-          paddingInline: 0,
-          marginInline: 0,
+          // paddingInline: 0,
+          // marginInline: 0,
           maxWidth: rem(1920),
           // width: '100%',
         },
@@ -177,6 +177,13 @@ export const theme = createTheme({
         root: {
             backgroundColor: darkColors[6],
             padding: '0 0.5rem',
+        },
+      },
+    },
+    TextInput: {
+      styles: {
+        root: {
+          borderColor: darkColors[6],
         },
       },
     },

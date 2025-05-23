@@ -9,7 +9,6 @@ import {
 import { AuthLayout } from '@/app/layouts/AuthLayouts';
 import { ErrorLayout } from '@/app/layouts/ErrorLayout';
 import { MainLayout } from '@/app/layouts/MainLayout';
-import { CatalogLayout } from '@/app/layouts/CatalogLayout';
 import { ROUTES } from '@/app/routes';
 import { useAuthStore } from '@/features/auth/auth-state';
 import { HomePage } from '@/pages/HomePage/HomePage';
@@ -89,7 +88,7 @@ export const router = createBrowserRouter([
     element: <RedirectGuard />,
     children: [
       {
-        element: <CatalogLayout />,
+        element: <MainLayout />,
         children: [
           {
             path: ROUTES.CATALOG,
