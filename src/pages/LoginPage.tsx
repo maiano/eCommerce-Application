@@ -14,7 +14,7 @@ import { LoginForm } from '@/features/login/LoginForm';
 import { LogoWithTitle } from '@/shared/ui/LogoWithTitle';
 export function LoginPage() {
   return (
-    <Container size={420}>
+    <Container size={420} mx="auto">
       <Box pt="sm">
         <Stack align="center">
           <LogoWithTitle />
