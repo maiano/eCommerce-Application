@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 export type TokenKey = 'wine-not-anonymous-token' | 'wine-not-password-token';
 
-const TOKEN_THRESHOLD = 60000;
+const TOKEN_THRESHOLD = 300_000;
 const EMPTY_TOKEN: TokenStore = { token: '', expirationTime: 0 };
 
 const TokenSchema = z.object({

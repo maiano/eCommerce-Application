@@ -1,6 +1,20 @@
+import {
+  useMantineTheme,
+  Button,
+  Burger,
+  Box,
+  Group,
+  Title,
+  Text,
+  Menu,
+} from '@mantine/core';
+import {
+  useDisclosure,
+  useClickOutside,
+  useMediaQuery,
+  useDidUpdate,
+} from '@mantine/hooks';
 import { Link } from 'react-router-dom';
-import { useMantineTheme, Button, Burger, Box, Group, Title, Text, Menu } from '@mantine/core';
-import { useDisclosure, useClickOutside, useMediaQuery, useDidUpdate } from '@mantine/hooks';
 import { useAuthStore } from '@/features/auth/auth-state';
 import { apiClientManager } from '@/shared/lib/commercetools/api-client-manager';
 
@@ -19,7 +33,8 @@ export function Header() {
   const isLargeScreen = useMediaQuery('(min-width: 768px)');
 
   useDidUpdate(() => {
-    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+    const scrollbarWidth =
+      window.innerWidth - document.documentElement.clientWidth;
 
     if (opened) {
       document.body.classList.add('no-scroll');
@@ -52,8 +67,8 @@ export function Header() {
             color: theme.colors.red[9],
             display: 'flex',
             alignItems: 'center',
-            gap: '0.5rem'
-           }}
+            gap: '0.5rem',
+          }}
         >
           <svg
             className="header__logo-icon"
@@ -72,7 +87,7 @@ export function Header() {
               fill="currentColor"
             />
           </svg>
-        <Title className="header__logo-text">Wine not</Title>
+          <Title className="header__logo-text">Wine not</Title>
         </Link>
       </Group>
 
