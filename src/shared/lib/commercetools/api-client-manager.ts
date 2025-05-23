@@ -5,8 +5,8 @@ import {
   MyCustomerSignin,
 } from '@commercetools/platform-sdk';
 import {
-  clearAnonymousId,
   createAnonymousClient,
+  getAnonymousId,
 } from '@/shared/lib/commercetools/create-anonymous-client';
 import { createPasswordClient } from '@/shared/lib/commercetools/create-password-client';
 import { createRefreshClient } from '@/shared/lib/commercetools/create-refresh-client';
@@ -23,6 +23,14 @@ type RefreshApiRoot = ReturnType<typeof createRefreshClient>;
 type ApiRoot = AnonymousApiRoot | PasswordApiRoot | RefreshApiRoot;
 
 type AuthType = 'anonymous' | 'password' | 'refresh';
+
+type MyExtendedCustomerSignin = MyCustomerSignin & {
+  anonymousId?: string;
+  activeCartSignInMode?:
+    | 'MergeWithExistingCustomerCart'
+    | 'UseAsNewActiveCustomerCart';
+  updateProductData?: boolean;
+};
 
 export const apiClientManager = (() => {
   let client: ApiRoot | null = null;
@@ -82,10 +90,18 @@ export const apiClientManager = (() => {
       credentials.email,
       credentials.password,
     );
+
+    const body: MyExtendedCustomerSignin = {
+      ...credentials,
+      anonymousId: getAnonymousId(),
+      activeCartSignInMode: 'MergeWithExistingCustomerCart',
+      updateProductData: true,
+    };
+
     return await authClient
       .me()
       .login()
-      .post({ body: credentials })
+      .post({ body })
       .execute()
       .then((response) => {
         client = authClient;
@@ -131,7 +147,6 @@ export const apiClientManager = (() => {
         };
       } catch {
         anonymousTokenCache.clear();
-        clearAnonymousId();
       }
     }
 

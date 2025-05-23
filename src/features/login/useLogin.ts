@@ -8,14 +8,14 @@ import {
 } from '@/shared/utils/custom-notifications';
 
 export function useLogin() {
-  const loginState = useAuthStore();
+  const { setAuthenticated, setPending, setUnauthenticated } = useAuthStore();
 
   const login = async (credentials: MyCustomerSignin) => {
-    loginState.setPending();
+    setPending();
 
     try {
       const result = await apiClientManager.login(credentials);
-      loginState.login();
+      setAuthenticated();
 
       notifySuccess({
         message: `Welcome back, ${credentials.email}`,
@@ -29,8 +29,7 @@ export function useLogin() {
         message,
       });
 
-      loginState.setUnauthenticated();
-    } finally {
+      setUnauthenticated();
     }
   };
 

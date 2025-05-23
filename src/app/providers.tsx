@@ -10,14 +10,14 @@ import { apiClientManager } from '@/shared/lib/commercetools';
 import { notifyError } from '@/shared/utils/custom-notifications';
 
 export const AppProvider = () => {
-  const { setPending, setUnauthenticated, login } = useAuthStore();
+  const { setPending, setUnauthenticated, setAuthenticated } = useAuthStore();
   useEffect(() => {
     const initializeApp = async () => {
       setPending();
       try {
         const { authType } = await apiClientManager.init();
         if (authType === 'password') {
-          login();
+          setAuthenticated();
         } else {
           setUnauthenticated();
         }
@@ -28,7 +28,7 @@ export const AppProvider = () => {
     };
 
     initializeApp();
-  }, [setUnauthenticated, setPending, login]);
+  }, [setUnauthenticated, setPending, setAuthenticated]);
   return (
     <MantineProvider theme={theme} defaultColorScheme="dark">
       <Notifications

@@ -16,7 +16,7 @@ const projectKey = env.VITE_CTP_PROJECT_KEY;
 
 const ANONYMOUS_ID_KEY = 'wine-not-anonymous-id';
 
-const getAnonymousId = (): string => {
+export const getAnonymousId = (): string => {
   let id = localStorage.getItem(ANONYMOUS_ID_KEY);
   if (!id) {
     id = crypto.randomUUID();
