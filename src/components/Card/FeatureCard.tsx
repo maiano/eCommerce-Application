@@ -1,17 +1,17 @@
 import { Card, Title, Text} from '@mantine/core';
-import { CardProps } from '@/types/types';
+import { FeatureCardProps } from '@/types/types';
 
 
-export function FeatureCard({ feature }: CardProps) {
+export function FeatureCard({ feature }: FeatureCardProps) {
   return (
     <Card padding="lg" className="feature-card">
-        {feature?.icon}
+        {feature.icon}
       <Card.Section className="feature-card__content">
         <Title className="feature-card__title">
-          {feature?.title}
+          {feature.title}
         </Title>
         <Text className="feature-card__description">
-          {feature?.description}
+          {feature.description}
         </Text>
       </Card.Section>
     </Card>

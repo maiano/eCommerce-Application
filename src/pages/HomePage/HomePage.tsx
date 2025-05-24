@@ -65,7 +65,7 @@ export function HomePage() {
 
   return (
     <Container fluid className="page">
-      <Box style={{ marginTop: 80 }} className="hero">
+      <Box style={{ marginTop: 20 }} className="hero">
         <Title className="hero__title">Explore the Finest Wines</Title>
         <Text fz={'h2'} className="hero__subtitle">
           Discover a curated selection of exceptional wines from renowned
@@ -74,7 +74,7 @@ export function HomePage() {
         <Button
           className="button button--primary button--large"
           component={Link}
-          to="/catalog"
+          to={ROUTES.CATALOG}
           fz={'h4'}
         >
           Shop Now

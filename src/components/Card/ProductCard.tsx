@@ -1,18 +1,81 @@
-import { Card, Title, Text, Group, Image } from '@mantine/core';
-import { CardProps } from '@/types/types';
+import { Card, Text, Group, Image, Box, Button, Badge, Anchor } from '@mantine/core';
+import { WineCardProps } from '@/types/types';
+import { ROUTES } from '@/app/routes.tsx';
 
-export function ProductCard({ wine }: CardProps) {
+export function ProductCard({ wine }: WineCardProps) {
   return (
     <Card
-      className="card"
-      style={{ maxWidth: 460, width: '100%' }}
+      padding="lg"
+      style={{
+        display: 'flex',
+        width: '100%',
+        height: '100%',
+        maxWidth: 400,
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+      }}
     >
-      <Image className={`card__image ${wine?.imageClass}`}></Image>
-      <Group className="card__content">
-        <Title className="card__title">{wine?.title}</Title>
-        <Text className="card__description" c="dark.4">
-          {wine?.description}
+      <Box flex={1}>
+        <Card.Section>
+          <Image
+            className={`product-card__image product-card__image--${wine.id}`}
+            style={{ height: 300 }}
+            fit={'scale-down'}
+            // fallbackSrc="./src/assets/fallback_1.png"
+          />
+        </Card.Section>
+
+        <Group justify="space-between" align="center" mt="sm" wrap="nowrap">
+          <Text fw={500} size="lg">
+            {wine.title}
+          </Text>
+          <Anchor href={ROUTES.CATALOG} underline="never">
+            <Badge
+              size="md"
+              radius="md"
+              color='accent.4'
+              c="dark.9"
+              style={{ cursor: 'pointer'}}
+            >
+              More info
+            </Badge>
+          </Anchor>
+        </Group>
+
+        <Group justify="space-between" mt="sm" wrap="nowrap">
+          <Text
+            c="dimmed"
+            size="sm"
+            lineClamp={2}
+            style={{ flex: 1, minWidth: 0 }}
+          >
+            {wine.description}
+          </Text>
+          <Group gap={4} ml="xs">
+            <Text fw={500} c="yellow.7">
+              ★ {wine.rating}
+            </Text>
+            <Text c="dimmed" size="sm">
+              /5
+            </Text>
+          </Group>
+        </Group>
+      </Box>
+
+      <Group justify="space-between" mt="md">
+        <Text fw={700} size="xl">
+          ${wine.price}
         </Text>
+        <Button
+          className="button button--primary"
+          radius="md"
+          size="sm"
+          variant="light"
+          color="blue"
+          style={{ flexShrink: 0 }}
+        >
+          Add to Cart
+        </Button>
       </Group>
     </Card>
   );

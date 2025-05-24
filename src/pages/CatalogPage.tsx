@@ -9,21 +9,14 @@ import {
   useCombobox,
   InputBase,
   Group,
-  Text,
   TextInput,
   Grid,
-  Card,
-  Image,
 } from '@mantine/core';
 import { useState, useEffect } from 'react';
+import type {Wine} from '@/types/types.tsx';
+import { wines } from '@/types/types.tsx';
+import { ProductCard } from '@/components/Card/ProductCard.tsx';
 
-type Product = {
-  id: number;
-  title: string;
-  price: number;
-  rating: number;
-  description: string;
-};
 
 const sortOptions = [
   { label: 'Price: Low to High', value: 'price_asc' },
@@ -32,27 +25,16 @@ const sortOptions = [
   { label: 'Rating: Low to High', value: 'rating_asc' },
 ];
 
-const initialProducts: Product[] = [
-  { id: 1, title: 'Estate Pinot Noir', price: 140, rating: 4.8, description: 'Elegant red wine with cherry and earthy tones' },
-  { id: 2, title: 'Sparkling Delight', price: 80, rating: 4.5, description: 'Festive sparkling wine with fine persistent bubbles' },
-  { id: 3, title: 'Coastal Breeze Sauvignon', price: 200, rating: 4.7, description: 'Refreshing white wine with tropical fruit accents' },
-  { id: 4, title: 'Hillside Blend', price: 100, rating: 5, description: 'Complex blend with blackcurrant and spice flavors' },
-  { id: 5, title: 'Sunset Rosé', price: 150, rating: 3.9, description: 'Fruity rosé with strawberry undertones' },
-  { id: 6, title: 'Valley White', price: 60, rating: 4.2, description: 'Crisp white wine with citrus notes' },
-  { id: 7, title: 'Vineyard Reserve', price: 299, rating: 4.4, description: 'Aged oak barrel red wine' },
-  { id: 8, title: 'Chateau Rouge', price: 120, rating: 5, description: 'Rich red wine with dark berry aromas' },
-];
-
 export function CatalogPage() {
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
   });
 
   const [sortBy, setSortBy] = useState<string>('price_asc');
-  const [products, setProducts] = useState<Product[]>(initialProducts);
+  const [allWines, setProducts] = useState<Wine[]>(wines);
 
   useEffect(() => {
-    const sorted = [...initialProducts].sort((a, b) => {
+    const sorted = [...wines].sort((a, b) => {
       switch (sortBy) {
         case 'price_asc':
           return a.price - b.price;
@@ -145,9 +127,9 @@ export function CatalogPage() {
       </Box>
 
       <Grid gutter="xl" justify="center" style={{ width: '100%' }}>
-        {products.map((product) => (
+        {allWines.map((wine) => (
           <Grid.Col
-            key={product.id}
+            key={wine.id}
             span={{
               base: 12,
               xs: 6,
@@ -157,62 +139,7 @@ export function CatalogPage() {
             }}
             style={{ display: 'flex', justifyContent: 'center', minWidth: 400 }}
           >
-            <Card
-              padding="lg"
-              style={{
-                width: '100%',
-                maxWidth: 300,
-                height: '100%',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-              }}
-            >
-              <Box flex={1}>
-                <Image
-                  className={`product-card__image product-card__image--${product.id}`}
-                  style={{ height: 200 }}
-                />
-                <Text fw={500} size="lg" mt="md">
-                  {product.title}
-                </Text>
-
-                <Group justify="space-between" mt="sm" wrap="nowrap">
-                  <Text
-                    c="dimmed"
-                    size="sm"
-                    lineClamp={2}
-                    style={{ flex: 1, minWidth: 0 }}
-                  >
-                    {product.description}
-                  </Text>
-                  <Group gap={4} ml="xs">
-                    <Text fw={500} c="yellow.7">
-                      ★ {product.rating}
-                    </Text>
-                    <Text c="dimmed" size="sm">
-                      /5
-                    </Text>
-                  </Group>
-                </Group>
-              </Box>
-
-              <Group justify="space-between" mt="md">
-                <Text fw={700} size="xl">
-                  ${product.price}
-                </Text>
-                <Button
-                  className="button button--primary"
-                  radius="md"
-                  size="sm"
-                  variant="light"
-                  color="blue"
-                  style={{ flexShrink: 0 }}
-                >
-                  Add to Cart
-                </Button>
-              </Group>
-            </Card>
+            <ProductCard wine={wine} />
           </Grid.Col>
         ))}
       </Grid>
@@ -226,9 +153,9 @@ export function CatalogPage() {
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
             className="icon icon-tabler icons-tabler-outline icon-tabler-chevron-left-pipe"
           >
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -248,9 +175,9 @@ export function CatalogPage() {
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
             className="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right-pipe"
           >
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
