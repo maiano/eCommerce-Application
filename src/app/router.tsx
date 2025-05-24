@@ -15,7 +15,7 @@ import { HomePage } from '@/pages/HomePage/HomePage';
 import { LoginPage } from '@/pages/LoginPage';
 import { NotFoundPage } from '@/pages/NotFoundPage/NotFoundPage';
 import { RegistrationPage } from '@/pages/RegistrationPage';
-import { CatalogPage } from '@/pages/CatalogPage';
+import { CatalogPage } from '@/pages/CatalogPage/CatalogPage.tsx';
 import { CenterLoader } from '@/shared/ui/CenterLoader';
 
 const RedirectGuard = () => {

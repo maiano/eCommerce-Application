@@ -1,11 +1,13 @@
-import { Card, Text, Group, Image, Box, Button, Badge, Anchor } from '@mantine/core';
+import { Card, Text, Group, Image, Box, Button } from '@mantine/core';
 import { WineCardProps } from '@/types/types';
 import { ROUTES } from '@/app/routes.tsx';
+import { Link } from 'react-router-dom';
 
 export function ProductCard({ wine }: WineCardProps) {
   return (
     <Card
       padding="lg"
+      className={'product-card'}
       style={{
         display: 'flex',
         width: '100%',
@@ -29,17 +31,14 @@ export function ProductCard({ wine }: WineCardProps) {
           <Text fw={500} size="lg">
             {wine.title}
           </Text>
-          <Anchor href={ROUTES.CATALOG} underline="never">
-            <Badge
-              size="md"
-              radius="md"
-              color='accent.4'
-              c="dark.9"
-              style={{ cursor: 'pointer'}}
+            <Button
+              className="button button--primary"
+              component={Link}
+              to={ROUTES.CATALOG}
+              style={{ cursor: 'pointer', width: 90, height: 35 }}
             >
               More info
-            </Badge>
-          </Anchor>
+            </Button>
         </Group>
 
         <Group justify="space-between" mt="sm" wrap="nowrap">
@@ -70,8 +69,6 @@ export function ProductCard({ wine }: WineCardProps) {
           className="button button--primary"
           radius="md"
           size="sm"
-          variant="light"
-          color="blue"
           style={{ flexShrink: 0 }}
         >
           Add to Cart

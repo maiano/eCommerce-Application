@@ -126,7 +126,7 @@ export function CatalogPage() {
         </Group>
       </Box>
 
-      <Grid gutter="xl" justify="center" style={{ width: '100%' }}>
+      <Grid justify="center" style={{ width: '100%' }}>
         {allWines.map((wine) => (
           <Grid.Col
             key={wine.id}

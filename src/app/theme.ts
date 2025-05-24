@@ -156,13 +156,17 @@ export const theme = createTheme({
       styles: {
         root: {
           transition: 'all 0.3s ease-in-out',
-          control: {
-            backgroundColor: darkColors[5],
-            cursor: 'not-allowed',
-          },
         },
-        indicator: {
-          backgroundColor: darkColors[3],
+        viewport: {
+          overflowY: 'visible',
+        },
+        slide: {
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        },
+        container: {
+          alignItems: 'stretch',
         },
       },
     },

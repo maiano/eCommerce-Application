@@ -213,6 +213,7 @@ body {
 
 .carousel__container {
   display: flex;
+  justify-content: center;
 }
 
 .footer {
