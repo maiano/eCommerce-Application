@@ -27,26 +27,38 @@ export function ProductCard({ wine }: WineCardProps) {
           />
         </Card.Section>
 
-        <Group justify="space-between" align="center" mt="sm" wrap="nowrap">
-          <Text fw={500} size="lg">
+        <Group justify="space-between" align="center" wrap="nowrap"  style={{ alignItems: "center" }}>
+          <Text
+            fw={500}
+            size="lg"
+            style={{
+              height: 60,
+              display: "flex",
+              alignItems: "center"
+          }}
+          >
             {wine.title}
           </Text>
             <Button
               className="button button--primary"
               component={Link}
               to={ROUTES.CATALOG}
-              style={{ cursor: 'pointer', width: 90, height: 35 }}
+              style={{
+                cursor: 'pointer',
+                width: 90,
+                height: 35,
+                alignSelf: "center" }}
             >
               More info
             </Button>
         </Group>
 
-        <Group justify="space-between" mt="sm" wrap="nowrap">
+        <Group justify="space-between" wrap="nowrap">
           <Text
             c="dimmed"
             size="sm"
             lineClamp={2}
-            style={{ flex: 1, minWidth: 0 }}
+            style={{ flex: 1, height: 60 }}
           >
             {wine.description}
           </Text>
@@ -61,7 +73,7 @@ export function ProductCard({ wine }: WineCardProps) {
         </Group>
       </Box>
 
-      <Group justify="space-between" mt="md">
+      <Group justify="space-between">
         <Text fw={700} size="xl">
           ${wine.price}
         </Text>

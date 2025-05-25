@@ -84,16 +84,32 @@ export function CatalogPage() {
         />
       </Box>
 
-      <Group className="filters" mb="xl">
-        <Group>
-          <Button variant="default">Red wines</Button>
-          <Button variant="default">White wines</Button>
-          <Button variant="default">Sparkling wines</Button>
-          <Button variant="default">Rose wines</Button>
-          <Button variant="default">Dessert wines</Button>
-        </Group>
+      <Group className="filters" mb="xl" style={{ display: 'flex', justifyContent: 'center' }}>
+        <Grid
+          className="filter-group"
+          gutter="md"
+          grow
+          justify="center"
+          style={{ width: 'fit-content' }}
+        >
+          <Grid.Col span={{ base: 'auto', sm: 'auto', md: 'auto' }}>
+            <Button fullWidth className="filter-button" variant="default">Red</Button>
+          </Grid.Col>
+          <Grid.Col span={{ base: 'auto', sm: 'auto', md: 'auto' }}>
+            <Button fullWidth className="filter-button" variant="default">White</Button>
+          </Grid.Col>
+          <Grid.Col span={{ base: 'auto', sm: 'auto', md: 'auto' }}>
+            <Button fullWidth className="filter-button" variant="default">Sparkling</Button>
+          </Grid.Col>
+          <Grid.Col span={{ base: 'auto', sm: 'auto', md: 'auto' }}>
+            <Button fullWidth className="filter-button" variant="default">Rose</Button>
+          </Grid.Col>
+          <Grid.Col span={{ base: 'auto', sm: 'auto', md: 'auto' }}>
+            <Button fullWidth className="filter-button" variant="default">Dessert</Button>
+          </Grid.Col>
+        </Grid>
 
-        <Stack className="filter-group" style={{ maxWidth: 300 }} >
+        <Stack className="filter-group" style={{ minWidth: 212 }} >
           <Combobox
             store={combobox}
             onOptionSubmit={(val) => {
@@ -133,18 +149,17 @@ export function CatalogPage() {
         </Stack>
       </Group>
 
-      <Grid justify="center" style={{ width: '100%' }}>
-        {allWines.map((wine) => (
+      <Grid justify="center" style={{ width: '100%' }} >
+        {allWines.map((wine: Wine) => (
           <Grid.Col
             key={wine.id}
             span={{
               base: 12,
-              xs: 6,
-              sm: 4,
+              sm: 6,
               md: 3,
-              lg: 2.4,
+              lg: 3,
             }}
-            style={{ display: 'flex', justifyContent: 'center', minWidth: 400 }}
+            style={{ display: 'flex', justifyContent: 'center', minWidth: 350, maxWidth: 400 }}
           >
             <ProductCard wine={wine} />
           </Grid.Col>
