@@ -82,7 +82,7 @@ export const apiClientManager = (() => {
   ): Promise<ClientResponse<CustomerSignInResult>> => {
     const draft = {
       ...body,
-      anonymousId: getAnonymousId,
+      anonymousId: getAnonymousId(),
       anonymousCartSignInMode: 'MergeWithExistingCustomerCart',
     };
 
