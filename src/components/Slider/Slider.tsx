@@ -19,7 +19,6 @@ export function Slider() {
           lg: '25%',
         }}
         slideGap={{ base: 'xs', md: 'md' }}
-        align="center"
         slidesToScroll="auto"
         withControls
         controlSize={50}

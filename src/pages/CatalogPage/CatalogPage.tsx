@@ -23,6 +23,8 @@ const sortOptions = [
   { label: 'Price: High to Low', value: 'price_desc' },
   { label: 'Rating: High to Low', value: 'rating_desc' },
   { label: 'Rating: Low to High', value: 'rating_asc' },
+  { label: 'Year: Newest First', value: 'year_desc' },
+  { label: 'Year: Oldest First', value: 'year_asc' },
 ];
 
 export function CatalogPage() {
@@ -44,6 +46,10 @@ export function CatalogPage() {
           return b.rating - a.rating;
         case 'rating_asc':
           return a.rating - b.rating;
+        case 'year_desc':
+          return parseInt(b.year) - parseInt(a.year);
+        case 'year_asc':
+          return parseInt(a.year) - parseInt(b.year);
         default:
           return 0;
       }
@@ -78,8 +84,16 @@ export function CatalogPage() {
         />
       </Box>
 
-      <Box className="filters" mb="xl">
-        <Stack className="filter-group">
+      <Group className="filters" mb="xl">
+        <Group>
+          <Button variant="default">Red wines</Button>
+          <Button variant="default">White wines</Button>
+          <Button variant="default">Sparkling wines</Button>
+          <Button variant="default">Rose wines</Button>
+          <Button variant="default">Dessert wines</Button>
+        </Group>
+
+        <Stack className="filter-group" style={{ maxWidth: 300 }} >
           <Combobox
             store={combobox}
             onOptionSubmit={(val) => {
@@ -117,14 +131,7 @@ export function CatalogPage() {
             </Combobox.Dropdown>
           </Combobox>
         </Stack>
-        <Group>
-          <Button variant="default">Red wines</Button>
-          <Button variant="default">White wines</Button>
-          <Button variant="default">Sparkling wines</Button>
-          <Button variant="default">Rose wines</Button>
-          <Button variant="default">Dessert wines</Button>
-        </Group>
-      </Box>
+      </Group>
 
       <Grid justify="center" style={{ width: '100%' }}>
         {allWines.map((wine) => (

@@ -25,11 +25,10 @@
 
 
 .filters {
-  /*display: flex;*/
-  /*max-width: 480px;*/
+  max-width: 1340px;
+  width: 80%;
   flex-wrap: wrap;
-  align-items: flex-end;
-  gap: 1rem;
+  justify-content: space-between;
   padding: 0.75rem 1rem;
 }
 
@@ -37,8 +36,8 @@
   display: flex;
   flex: 1;
   flex-direction: column;
+  justify-content: space-between;
   min-width: 10rem;
-  margin-bottom: 1rem;
 }
 
 .filter-group__label {
