@@ -80,7 +80,13 @@ export const apiClientManager = (() => {
   const register = (
     body: MyCustomerDraft,
   ): Promise<ClientResponse<CustomerSignInResult>> => {
-    return get().me().signup().post({ body }).execute();
+    const draft = {
+      ...body,
+      anonymousId: getAnonymousId,
+      anonymousCartSignInMode: 'MergeWithExistingCustomerCart',
+    };
+
+    return get().me().signup().post({ body: draft }).execute();
   };
 
   const login = async (
