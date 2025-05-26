@@ -170,7 +170,7 @@ export const theme = createTheme({
     Loader: {
       defaultProps: {
         type: 'dots',
-        color: 'accent.4',
+        color: accentColors[4],
       },
     },
     Fieldset: {
@@ -188,5 +188,19 @@ export const theme = createTheme({
         },
       },
     },
+    Paper: {
+      styles: {
+        root: {
+          backgroundColor: darkColors[6],
+        },
+      },
+    },
+  Anchor: {
+    styles: {
+      root: {
+        color: accentColors[4],
+      },
+    },
+  }
   },
 });
