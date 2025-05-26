@@ -16,7 +16,7 @@ import { useState, useEffect } from 'react';
 import type {Wine} from '@/types/types.tsx';
 import { wines } from '@/types/types.tsx';
 import { ProductCard } from '@/components/Card/ProductCard.tsx';
-
+import { CloseButton } from '@mantine/core';
 
 const sortOptions = [
   { label: 'Price: Low to High', value: 'price_asc' },
@@ -34,6 +34,22 @@ export function CatalogPage() {
 
   const [sortBy, setSortBy] = useState<string>('price_asc');
   const [allWines, setProducts] = useState<Wine[]>(wines);
+
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+
+  const toggleCategory = (category: string) => {
+    if (selectedCategories.includes(category)) {
+      setSelectedCategories(selectedCategories.filter(c => c !== category));
+    } else {
+      setSelectedCategories([...selectedCategories, category]);
+    }
+  };
+
+  const resetCategories = () => {
+    setSelectedCategories([]);
+  };
+
+  const categories = ['Red', 'White', 'Sparkling', 'Rose', 'Dessert'];
 
   useEffect(() => {
     const sorted = [...wines].sort((a, b) => {
@@ -92,20 +108,40 @@ export function CatalogPage() {
           justify="center"
           style={{ width: 'fit-content' }}
         >
+          {categories.map((category) => (
+            <Grid.Col key={category} span={{ base: 'auto', sm: 'auto', md: 'auto' }}>
+              <Button
+                fullWidth
+                className={`filter-button ${selectedCategories.includes(category) ? 'button--primary' : ''}`}
+                variant={selectedCategories.includes(category) ? 'filled' : 'default'}
+                onClick={() => toggleCategory(category)}
+                rightSection={
+                  selectedCategories.includes(category) ? (
+                    <CloseButton
+                      className={'button--primary'}
+                      size="md"
+                      variant="subtle"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleCategory(category);
+                      }}
+                    />
+                  ) : null
+                }
+              >
+                {category}
+              </Button>
+            </Grid.Col>
+          ))}
           <Grid.Col span={{ base: 'auto', sm: 'auto', md: 'auto' }}>
-            <Button fullWidth className="filter-button" variant="default">Red</Button>
-          </Grid.Col>
-          <Grid.Col span={{ base: 'auto', sm: 'auto', md: 'auto' }}>
-            <Button fullWidth className="filter-button" variant="default">White</Button>
-          </Grid.Col>
-          <Grid.Col span={{ base: 'auto', sm: 'auto', md: 'auto' }}>
-            <Button fullWidth className="filter-button" variant="default">Sparkling</Button>
-          </Grid.Col>
-          <Grid.Col span={{ base: 'auto', sm: 'auto', md: 'auto' }}>
-            <Button fullWidth className="filter-button" variant="default">Rose</Button>
-          </Grid.Col>
-          <Grid.Col span={{ base: 'auto', sm: 'auto', md: 'auto' }}>
-            <Button fullWidth className="filter-button" variant="default">Dessert</Button>
+            <Button
+              fullWidth
+              className="filter-button"
+              variant="default"
+              onClick={resetCategories}
+            >
+              Reset All
+            </Button>
           </Grid.Col>
         </Grid>
 

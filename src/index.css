@@ -149,14 +149,16 @@ body {
   letter-spacing: 0.015em;
 }
 
-.button--primary {
+.button--primary,
+.button--primary .mantine-CloseButton-root{
   background-color: #f4c753;
   color: #141c24;
 }
 
-.button--primary:hover {
+.button--primary:hover,
+.button--primary:hover .mantine-CloseButton-root {
   background-color: #ca9d29;
-  color: #f8f9fb;
+  color: #f8f9fb !important;
 }
 
 .button--secondary {
@@ -189,7 +191,6 @@ body {
   font-size: 1rem;
   width: 100%;
   max-width: 300px;
-  /* margin-top: 1rem; */
 }
 
 .button__text {
