@@ -40,8 +40,13 @@ export function LoginForm() {
           {...form.getInputProps('password')}
         />
 
-        <Group mt="md">
-          <Button w="100%" type="submit" variant="filled">
+        <Group mt="md" style={{ justifyContent: 'center' }}>
+          <Button
+            className="button button--primary button--large"
+            w="100%"
+            type="submit"
+            variant="filled"
+          >
             Sign In
           </Button>
         </Group>

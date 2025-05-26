@@ -161,9 +161,19 @@ body {
   color: #f8f9fb !important;
 }
 
+
 .button--secondary {
-  background-color: #29374c;
+  /*background-color: #29374c;*/
+  /*border-color: rgba(202, 157, 41, 0.38);*/
+  background-color: #32415D;
+  border-color: #516185;
   color: #f8f9fb;
+}
+
+.button--secondary:hover {
+  background-color: #516185;
+  border-color: #516185;
+  color: #e6e9f2;
 }
 
 .burger-button--primary {

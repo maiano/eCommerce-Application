@@ -40,14 +40,15 @@ export function ProductCard({ wine }: WineCardProps) {
             {wine.title}
           </Text>
             <Button
-              className="button button--primary"
+              className="button button--secondary"
               component={Link}
               to={ROUTES.CATALOG}
               style={{
                 cursor: 'pointer',
                 width: 90,
                 height: 35,
-                alignSelf: "center" }}
+                alignSelf: "center"
+            }}
             >
               More info
             </Button>
