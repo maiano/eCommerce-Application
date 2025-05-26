@@ -97,7 +97,7 @@ export const theme = createTheme({
           backgroundColor: darkColors[7],
         },
         main: {
-          paddingTop: 0,
+          // paddingTop: 0,
           paddingLeft: 0,
           paddingRight: 0,
         },
@@ -138,10 +138,7 @@ export const theme = createTheme({
     Container: Container.extend({
       styles: () => ({
         root: {
-          paddingInline: '0 !important',
-          marginInline: '0 !important',
-          // maxWidth: rem(1920),
-          width: '100%',
+          maxWidth: rem(1920),
         },
       }),
     }),
@@ -156,20 +153,24 @@ export const theme = createTheme({
       styles: {
         root: {
           transition: 'all 0.3s ease-in-out',
-          control: {
-            backgroundColor: darkColors[5],
-            cursor: 'not-allowed',
-          },
         },
-        indicator: {
-          backgroundColor: darkColors[3],
+        viewport: {
+          overflowY: 'visible',
+        },
+        slide: {
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        },
+        container: {
+          alignItems: 'stretch',
         },
       },
     },
     Loader: {
       defaultProps: {
         type: 'dots',
-        color: 'accent.4',
+        color: accentColors[4],
       },
     },
     Fieldset: {
@@ -180,5 +181,26 @@ export const theme = createTheme({
         },
       },
     },
+    TextInput: {
+      styles: {
+        root: {
+          borderColor: darkColors[6],
+        },
+      },
+    },
+    Paper: {
+      styles: {
+        root: {
+          backgroundColor: darkColors[6],
+        },
+      },
+    },
+  Anchor: {
+    styles: {
+      root: {
+        color: accentColors[4],
+      },
+    },
+  }
   },
 });

@@ -9,15 +9,16 @@ import {
 } from '@mantine/core';
 import { Link } from 'react-router-dom';
 import './NotFoundPage.css';
+import { ROUTES } from '@/app/routes.tsx';
 
 export function NotFoundPage() {
   const theme = useMantineTheme();
   return (
-    <Container fluid className="page">
+    <Container className="page" pt="20vh">
       <Box className="not-found-content">
       <Group className="header__logo">
       <Link
-          to="/"
+        to={ROUTES.HOME}
           style={{
             color: theme.colors.red[9],
             display: 'flex',
@@ -54,14 +55,14 @@ export function NotFoundPage() {
             Page Not Found
           </Title>
           <Text className="not-found-description">
-            This page have been removed or is temporarily unavailable.
+            This page is unavailable or under construction.
           </Text>
         </Group>
 
         <Button
           className="button button--primary button--large"
           component={Link}
-          to="/"
+          to={ROUTES.HOME}
         >
           Go to Homepage
         </Button>

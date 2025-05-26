@@ -25,6 +25,7 @@ export function LoginForm() {
     <form onSubmit={form.onSubmit(handleSubmit)}>
       <Stack>
         <TextInput
+          classNames={{ input: 'form-input' }}
           label="Email"
           placeholder="Email"
           withAsterisk
@@ -32,6 +33,7 @@ export function LoginForm() {
         />
 
         <PasswordInput
+          classNames={{ input: 'form-input' }}
           label="Password"
           placeholder="Password"
           withAsterisk
