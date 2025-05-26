@@ -1,11 +1,29 @@
+import { ClientResponse, Customer } from "@commercetools/platform-sdk";
 import { Avatar, Badge, Box, Button, Container, Grid, Group, Stack, Text, Title, useMantineTheme } from "@mantine/core";
 import '@/pages/ProfilePage/ProfilePage.css';
+import { useEffect, useState } from "react";
+import { useAuthStore } from "@/features/auth/auth-state";
 import { getUserInfo } from "@/features/profile/profile";
-
-const user = await getUserInfo();
 
 export function ProfilePage() {
   const theme = useMantineTheme();
+
+  const status = useAuthStore((state) => state.status);
+  const isAuthenticated = status === 'AUTHENTICATED';
+
+  const [user, setUser] = useState<ClientResponse<Customer> | null>(null);
+
+  useEffect(() => {
+    const getUser = async () => {
+      if (isAuthenticated) {
+        const user = await getUserInfo();
+        if (user) {
+          setUser(user);
+        }
+      }
+    };
+    getUser();
+  }, [isAuthenticated]);
 
   return (
     <Container className="page">
