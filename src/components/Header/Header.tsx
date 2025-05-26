@@ -115,14 +115,19 @@ export function Header() {
 
         {opened ? (
           isAuthenticated ? (
-            <Button
-              variant="filled"
-              color={theme.colors.dark[4]}
-              className="button burger-button--secondary"
-              onClick={handleLogout}
-            >
-              <Text>Logout</Text>
-            </Button>
+            <>
+              <Link className="header__nav-item" to="/profile">
+                <Text>Profile</Text>
+              </Link>
+              <Button
+                variant="filled"
+                color={theme.colors.dark[4]}
+                className="button burger-button--secondary"
+                onClick={handleLogout}
+              >
+                <Text>Logout</Text>
+              </Button>
+            </>
           ) : (
             <>
               <Button
@@ -198,9 +203,14 @@ export function Header() {
 
               <Menu.Dropdown>
                 {isAuthenticated ? (
-                  <Menu.Item onClick={handleLogout}>
-                    <Text>Logout</Text>
-                  </Menu.Item>
+                  <>
+                    <Menu.Item component={Link} to="/profile">
+                      <Text>Profile</Text>
+                    </Menu.Item>
+                    <Menu.Item onClick={handleLogout}>
+                      <Text>Logout</Text>
+                    </Menu.Item>
+                  </>
                 ) : (
                   <>
                     <Menu.Item component={Link} to="/login">
