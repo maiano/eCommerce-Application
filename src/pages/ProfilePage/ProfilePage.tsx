@@ -3,6 +3,7 @@ import { Avatar, Badge, Box, Button, Container, Grid, Group, Stack, Text, Title,
 import '@/pages/ProfilePage/ProfilePage.css';
 import { useEffect, useState } from "react";
 import { useAuthStore } from "@/features/auth/auth-state";
+import { deleteAddress } from "@/features/profile/address";
 import { getUserInfo } from "@/features/profile/profile";
 
 export function ProfilePage() {
@@ -99,8 +100,24 @@ export function ProfilePage() {
                     <Text className="address-text">{address.country}</Text>
                   </Box>
                   <Group>
-                    <Button className="button button--secondary">Edit</Button>
-                    <Button className="button button--secondary">Remove</Button>
+                    <Button 
+                      className="button button--secondary"
+                      // onClick={() => showAddressModal(address)}
+                      >
+                        Edit
+                    </Button>
+                    <Button
+                      className="button button--secondary"
+                      onClick={async() => {
+                        deleteAddress(address.id);
+                        const updatedUser = await getUserInfo();
+                        if (updatedUser) {
+                          setUser(updatedUser);
+                        }
+                      }}
+                      >
+                        Remove
+                    </Button>
                   </Group>
                 </Group>
               </Container>
