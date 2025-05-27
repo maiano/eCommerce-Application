@@ -10,34 +10,25 @@ import {
   InputBase,
   Group,
   TextInput,
-  Grid,
+  Grid, ComboboxStore,
 } from '@mantine/core';
-import { useState, useEffect } from 'react';
-import type {Wine} from '@/types/types.tsx';
+import { useState } from 'react';
+import type { Wine } from '@/types/types.tsx';
 import { wines } from '@/types/types.tsx';
 import { ProductCard } from '@/components/Card/ProductCard.tsx';
 import { CloseButton } from '@mantine/core';
-
-const sortOptions = [
-  { label: 'Price: Low to High', value: 'price_asc' },
-  { label: 'Price: High to Low', value: 'price_desc' },
-  { label: 'Rating: High to Low', value: 'rating_desc' },
-  { label: 'Rating: Low to High', value: 'rating_asc' },
-  { label: 'Year: Newest First', value: 'year_desc' },
-  { label: 'Year: Oldest First', value: 'year_asc' },
-];
+import { useWineSorting } from '@/features/sorting/useWineSorting.tsx';
 
 export function CatalogPage() {
-  const combobox = useCombobox({
-    onDropdownClose: () => combobox.resetSelectedOption(),
+  const combobox: ComboboxStore = useCombobox({
+    onDropdownClose: (): void => combobox.resetSelectedOption(),
   });
 
-  const [sortBy, setSortBy] = useState<string>('price_asc');
-  const [allWines, setProducts] = useState<Wine[]>(wines);
-
+  const { sortedWines, sortBy, setSortBy, sortOptions } = useWineSorting(wines);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const categories = ['Red', 'White', 'Sparkling', 'Rose', 'Dessert'];
 
-  const toggleCategory = (category: string) => {
+  const toggleCategory: (category: string) => void = (category: string): void => {
     if (selectedCategories.includes(category)) {
       setSelectedCategories(selectedCategories.filter(c => c !== category));
     } else {
@@ -45,33 +36,9 @@ export function CatalogPage() {
     }
   };
 
-  const resetCategories = () => {
+  const resetCategories: () => void = (): void => {
     setSelectedCategories([]);
   };
-
-  const categories = ['Red', 'White', 'Sparkling', 'Rose', 'Dessert'];
-
-  useEffect(() => {
-    const sorted = [...wines].sort((a, b) => {
-      switch (sortBy) {
-        case 'price_asc':
-          return a.price - b.price;
-        case 'price_desc':
-          return b.price - a.price;
-        case 'rating_desc':
-          return b.rating - a.rating;
-        case 'rating_asc':
-          return a.rating - b.rating;
-        case 'year_desc':
-          return parseInt(b.year) - parseInt(a.year);
-        case 'year_asc':
-          return parseInt(a.year) - parseInt(b.year);
-        default:
-          return 0;
-      }
-    });
-    setProducts(sorted);
-  }, [sortBy]);
 
   return (
     <Container fluid className="page">
@@ -108,7 +75,7 @@ export function CatalogPage() {
           justify="center"
           style={{ width: 'fit-content' }}
         >
-          {categories.map((category) => (
+          {categories.map((category: string) => (
             <Grid.Col key={category} span={{ base: 'auto', sm: 'auto', md: 'auto' }}>
               <Button
                 fullWidth
@@ -204,7 +171,7 @@ export function CatalogPage() {
       </Group>
 
       <Grid justify="center" style={{ width: '100%' }} >
-        {allWines.map((wine: Wine) => (
+        {sortedWines.map((wine: Wine) => (
           <Grid.Col
             key={wine.id}
             span={{

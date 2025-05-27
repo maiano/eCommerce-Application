@@ -12,7 +12,7 @@ export type Wine = {
   price: number;
   rating: number;
   description: string;
-  year: string
+  year: string;
 };
 
 export interface WineCardProps {
