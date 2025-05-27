@@ -69,7 +69,6 @@ const postcode = z
   .refine((val) => /^\b\d{5}\b/g.test(val), 'Postcode must contain 5 digits');
 
 const isDefaultAddress = z
-  // .union([z.number().int(), z.literal('')])
   .boolean();
 
 const deliveryAddress = z.object({
@@ -102,3 +101,12 @@ export const registrationSchema = z.object({
 });
 
 export type RegistrationFormData = z.infer<typeof registrationSchema>;
+
+export const addressSchema = z.object({
+  country,
+  city,
+  street,
+  postcode,
+})
+
+export type AddressFormData = z.infer<typeof addressSchema>;
