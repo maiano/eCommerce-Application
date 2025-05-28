@@ -26,7 +26,7 @@ export function LoginPage() {
             </Title>
             <LoginForm />
             <Group gap="xs" className="auth-footer">
-              <Text mt="md" ta="center">
+              <Text mt="md" ta="center" style={{ margin: 'auto' }}>
                 Don't have an account?
                 <Anchor ml="xs" component={Link} to={ROUTES.REGISTRATION}>
                   Sign Up

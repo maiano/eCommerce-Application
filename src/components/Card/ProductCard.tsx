@@ -8,6 +8,8 @@ export function ProductCard({ wine }: WineCardProps) {
     <Card
       padding="lg"
       className={'product-card'}
+      component={Link}
+      to={ROUTES.CATALOG}
       style={{
         display: 'flex',
         width: '100%',
@@ -40,14 +42,15 @@ export function ProductCard({ wine }: WineCardProps) {
             {wine.title}
           </Text>
             <Button
-              className="button button--primary"
+              className="button button--secondary"
               component={Link}
               to={ROUTES.CATALOG}
               style={{
                 cursor: 'pointer',
                 width: 90,
                 height: 35,
-                alignSelf: "center" }}
+                alignSelf: "center"
+            }}
             >
               More info
             </Button>
@@ -74,9 +77,21 @@ export function ProductCard({ wine }: WineCardProps) {
       </Box>
 
       <Group justify="space-between">
-        <Text fw={700} size="xl">
-          ${wine.price}
-        </Text>
+        {wine.discountedPrice ? (
+          <Group gap="xs">
+            <Text fw={700} size="xl" c="yellow.4">
+              ${wine.discountedPrice}
+            </Text>
+            <Text fw={700} size="sm" c="dimmed" style={{ textDecoration: 'line-through' }}>
+              ${wine.price}
+            </Text>
+          </Group>
+        ) : (
+          <Text fw={700} size="xl">
+            ${wine.price}
+          </Text>
+        )}
+
         <Button
           className="button button--primary"
           radius="md"
