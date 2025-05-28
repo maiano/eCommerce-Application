@@ -11,7 +11,7 @@ import { updateUserInfo } from "./personal-info";
 import { getUserInfo } from "./profile";
 import { PersonalInfoFormData, personalInfoSchema } from "@/shared/validation/profile-validation";
 
-export function PersonalInfoForm() {
+export function PersonalInfoForm({ onClose }: { onClose: () => void }) {
   const theme = useMantineTheme();
 
   const [calendarValue, setCalendarValue] = useState<Date | null>(null);
@@ -22,18 +22,6 @@ export function PersonalInfoForm() {
   
   const [user, setUser] = useState<ClientResponse<Customer> | null>(null);
   
-  useEffect(() => {
-    const getUser = async () => {
-      if (isAuthenticated) {
-        const user = await getUserInfo();
-        if (user) {
-          setUser(user);
-        }
-      }
-    };
-    getUser();
-  }, [isAuthenticated]);
-
   const {
     register,
     handleSubmit,
@@ -45,30 +33,32 @@ export function PersonalInfoForm() {
     resolver: zodResolver(personalInfoSchema)
   });
 
+  useEffect(() => {
+    const getUser = async () => {
+      if (isAuthenticated) {
+        const user = await getUserInfo();
+        if (user) {
+          setUser(user);
+          setValue('firstName', user.body.firstName || '', { shouldValidate: true });
+          setValue('lastName', user.body.lastName || '', { shouldValidate: true });
+          setValue('email', user.body.email, { shouldValidate: true }) ;
+          if (user.body.dateOfBirth) {
+            const birthDate = new Date(user.body.dateOfBirth);
+            setCalendarValue(birthDate);
+            setValue('birthDate', birthDate.toLocaleDateString('en-CA'), { shouldValidate: true });
+          }
+        }
+      }
+    };
+    getUser();
+  }, [isAuthenticated, setValue]);
+
   const onSubmit: SubmitHandler<PersonalInfoFormData> = async (data) => {
     if (data.birthDate) {
       await updateUserInfo(data.firstName, data.lastName, data.email, data.birthDate);
-  
-      const updatedUser = await getUserInfo();
-      if (updatedUser) {
-        setUser(updatedUser);
-      }
+      onClose();
     }
   };
-
-
-  useEffect(() => {
-    if (user?.body) {
-      setValue('firstName', user?.body.firstName || '');
-      setValue('lastName', user?.body.lastName || '');
-      setValue('email', user.body.email);
-      if (user.body.dateOfBirth) {
-        const birthDate = new Date(user.body.dateOfBirth);
-        setCalendarValue(birthDate);
-        setValue('birthDate', birthDate.toLocaleDateString('en-CA'));
-      }
-    }
-  }, [user, setValue]);
 
   return(
     <>
@@ -151,11 +141,7 @@ export function PersonalInfoForm() {
         <Button
           type="submit"
           disabled={!isValid}
-          onClick={() => {
-            // stack.close('update-info')
-            // window.close();
-            setTimeout(() => window.location.reload(), 200)
-          }}
+          onClick={onClose}
           style={{marginTop: '24px'}}
           fullWidth
           >Save

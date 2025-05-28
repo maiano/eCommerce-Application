@@ -34,5 +34,5 @@ export async function updateUserInfo(firstName: string, lastName: string, email:
     } catch (error) {
       console.error('failed to update personal info', error);
     }
-    }
+  }
 }

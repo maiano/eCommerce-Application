@@ -14,7 +14,7 @@ import { AddressFormData, addressSchema } from "@/shared/validation/profile-vali
 
 export function ProfilePage() {
   const theme = useMantineTheme();
-
+  
   const stack = useModalsStack(['change-password', 'update-info', 'add-address', 'edit-address']);
 
   const [selectedAddress, setSelectedAddress] = useState<BaseAddress | null>(null);
@@ -209,7 +209,9 @@ export function ProfilePage() {
             </Title>
             <Button 
               className="button button--secondary"
-              onClick={() => stack.open('update-info')}
+              onClick={() => {
+                stack.open('update-info');
+              }}
               >Edit
             </Button>
             </Group>
@@ -316,7 +318,13 @@ export function ProfilePage() {
             </Modal>
             {/* Update user info */}
             <Modal {...stack.register('update-info')} centered>
-              <PersonalInfoForm/>
+              <PersonalInfoForm onClose={async() => {
+                stack.close('update-info');
+                const updatedUser = await getUserInfo();
+                if (updatedUser) {
+                  setUser(updatedUser);
+                }
+                }}/>
             </Modal>
             {/* Add address */}
             <Modal {...stack.register('add-address')} centered>
