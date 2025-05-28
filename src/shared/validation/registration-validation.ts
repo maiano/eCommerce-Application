@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { email, password } from './login-validation';
 
-const firstName = z
+export const firstName = z
   .string()
   .trim()
   .min(1, 'First name is required')
@@ -11,7 +11,7 @@ const firstName = z
     'First name must not contain any special characters',
   );
 
-const lastName = z
+export const lastName = z
   .string()
   .trim()
   .min(1, 'Last name is required')
@@ -21,7 +21,7 @@ const lastName = z
     'Last name must not contain any special characters',
   );
 
-const birthDate = z
+export const birthDate = z
   .string()
   .min(1, 'Date of birth is required')
   .refine(
@@ -37,13 +37,13 @@ const birthDate = z
   .optional()
   .refine((val) => val !== undefined, 'Date of birth is required');
 
-const country = z
+export const country = z
   .string()
   .min(1, 'Country is required')
   .optional()
   .refine((val) => val !== undefined, 'Country is required');
 
-const city = z
+export const city = z
   .string()
   .trim()
   .min(1, 'City is required')
@@ -53,9 +53,9 @@ const city = z
     'City must not contain any special characters',
   );
 
-const street = z.string().trim().min(1, 'Street is required');
+export const street = z.string().trim().min(1, 'Street is required');
 
-const postcode = z
+export const postcode = z
   .string()
   .trim()
   .refine(
@@ -68,7 +68,7 @@ const postcode = z
   )
   .refine((val) => /^\b\d{5}\b/g.test(val), 'Postcode must contain 5 digits');
 
-const isDefaultAddress = z
+export const isDefaultAddress = z
   .boolean();
 
 const deliveryAddress = z.object({
@@ -101,12 +101,3 @@ export const registrationSchema = z.object({
 });
 
 export type RegistrationFormData = z.infer<typeof registrationSchema>;
-
-export const addressSchema = z.object({
-  country,
-  city,
-  street,
-  postcode,
-})
-
-export type AddressFormData = z.infer<typeof addressSchema>;

@@ -6,12 +6,11 @@ import { JSX, useEffect, useState } from "react";
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import { useAuthStore } from "@/features/auth/auth-state";
 import { deleteAddress, updateAddress } from "@/features/profile/address";
+import { PersonalInfoForm } from "@/features/profile/personal-info";
 import { getUserInfo } from "@/features/profile/profile";
 import { countries } from "@/shared/constants/countries";
 import { getCountryCode } from "@/shared/utils/get-country-code";
-import { AddressFormData, addressSchema } from "@/shared/validation/registration-validation";
-// import { isValid } from "zod";
-
+import { AddressFormData, addressSchema } from "@/shared/validation/profile-validation";
 
 export function ProfilePage() {
   const theme = useMantineTheme();
@@ -204,7 +203,7 @@ export function ProfilePage() {
             </Title>
             <Button 
               className="button button--secondary"
-              onClick={() => stack.open('update-info')}
+              onClick={() => {stack.open('update-info')}}
               >Edit
             </Button>
             </Group>
@@ -311,7 +310,7 @@ export function ProfilePage() {
             </Modal>
             {/* Update user info */}
             <Modal {...stack.register('update-info')}>
-              Update info
+              <PersonalInfoForm/>
             </Modal>
             {/* Add address */}
             <Modal {...stack.register('add-address')}>
