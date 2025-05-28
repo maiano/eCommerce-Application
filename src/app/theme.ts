@@ -201,6 +201,14 @@ export const theme = createTheme({
         color: accentColors[4],
       },
     },
-  }
+   },
+  CloseButton: {
+    styles: {
+      root: {
+        color: darkColors[6],
+        transition: 'all 0.3s ease-in-out',
+      },
+    },
+    }
   },
 });
