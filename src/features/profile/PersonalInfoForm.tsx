@@ -72,7 +72,7 @@ export function PersonalInfoForm() {
 
   return(
     <>
-      <Title>Edit personal information</Title>
+      <Title size='24px' style={{marginBottom: '32px', textAlign: 'center'}}>Edit personal information</Title>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Grid gutter="lg">
           <Grid.Col span={{ base: 12, sm: 6 }}>
@@ -82,6 +82,7 @@ export function PersonalInfoForm() {
                 defaultValue={user?.body.firstName}
                 label='First Name'
                 placeholder="Enter first name"
+                classNames={{ input: 'form-input' }}
                 withAsterisk
               />
               <Text style={{ color: theme.colors.red[8] }} size="sm">
@@ -96,6 +97,7 @@ export function PersonalInfoForm() {
                 defaultValue={user?.body.lastName}
                 label='Last Name'
                 placeholder="Enter last name"
+                classNames={{ input: 'form-input' }}
                 withAsterisk
               />
               <Text style={{ color: theme.colors.red[8] }} size="sm">
@@ -110,6 +112,7 @@ export function PersonalInfoForm() {
                 defaultValue={user?.body.email}
                 label='Email'
                 placeholder="Enter email"
+                classNames={{ input: 'form-input' }}
                 withAsterisk
               />
               <Text style={{ color: theme.colors.red[8] }} size="sm">
@@ -126,11 +129,8 @@ export function PersonalInfoForm() {
                   <DateInput
                     value={calendarValue}
                     onChange={(date: Date | null) => {
-                      console.log(date);
                       setCalendarValue(date);
-                      console.log(calendarValue);
                       field.onChange(date?.toLocaleDateString('en-CA'));
-                      console.log(field.value);
                     }}
                     label="Date of Birth"
                     classNames={{ input: 'form-input' }}
@@ -150,12 +150,14 @@ export function PersonalInfoForm() {
         </ Grid>
         <Button
           type="submit"
-          // disabled={!isValid}
+          disabled={!isValid}
           onClick={() => {
             // stack.close('update-info')
             // window.close();
             setTimeout(() => window.location.reload(), 200)
           }}
+          style={{marginTop: '24px'}}
+          fullWidth
           >Save
         </Button>
       </form>

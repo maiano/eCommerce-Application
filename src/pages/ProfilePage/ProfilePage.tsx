@@ -124,6 +124,7 @@ export function ProfilePage() {
                 {...register('city')}
                 label='City'
                 placeholder="Enter city"
+                classNames={{ input: 'form-input' }}
                 withAsterisk
               />
               <Text style={{ color: theme.colors.red[8] }} size="sm">
@@ -137,6 +138,7 @@ export function ProfilePage() {
                 {...register('street')}
                 label='Street'
                 placeholder="Enter street"
+                classNames={{ input: 'form-input' }}
                 withAsterisk
               />
               <Text style={{ color: theme.colors.red[8] }} size="sm">
@@ -150,6 +152,7 @@ export function ProfilePage() {
                 {...register('postcode')}
                 label='Postcode'
                 placeholder="Enter postcode"
+                classNames={{ input: 'form-input' }}
                 withAsterisk
               />
               <Text style={{ color: theme.colors.red[8] }} size="sm">
@@ -165,6 +168,8 @@ export function ProfilePage() {
             stack.close('edit-address');
             stack.close('add-address');
           }}
+          style={{marginTop: '24px'}}
+          fullWidth
           >Save
           </Button>
       </form>
@@ -320,8 +325,8 @@ export function ProfilePage() {
             </Modal>
 
             {/* Edit address */}
-            <Modal {...stack.register('edit-address')}>
-              <Title>Edit address</Title>
+            <Modal {...stack.register('edit-address')} centered>
+              <Title size='24px' style={{marginBottom: '32px', textAlign: 'center'}}>Edit address</Title>
               {renderAddressForm('edit')}
             </Modal>
           </Container>
