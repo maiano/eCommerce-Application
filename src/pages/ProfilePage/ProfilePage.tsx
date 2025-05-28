@@ -6,7 +6,7 @@ import { JSX, useEffect, useState } from "react";
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import { useAuthStore } from "@/features/auth/auth-state";
 import { deleteAddress, updateAddress } from "@/features/profile/address";
-import { PersonalInfoForm } from "@/features/profile/personal-info";
+import { PersonalInfoForm } from "@/features/profile/PersonalInfoForm";
 import { getUserInfo } from "@/features/profile/profile";
 import { countries } from "@/shared/constants/countries";
 import { getCountryCode } from "@/shared/utils/get-country-code";
@@ -16,6 +16,7 @@ export function ProfilePage() {
   const theme = useMantineTheme();
 
   const stack = useModalsStack(['change-password', 'update-info', 'add-address', 'edit-address']);
+
   const [selectedAddress, setSelectedAddress] = useState<BaseAddress | null>(null);
 
   const {
@@ -203,7 +204,7 @@ export function ProfilePage() {
             </Title>
             <Button 
               className="button button--secondary"
-              onClick={() => {stack.open('update-info')}}
+              onClick={() => stack.open('update-info')}
               >Edit
             </Button>
             </Group>
@@ -309,11 +310,11 @@ export function ProfilePage() {
               Change password
             </Modal>
             {/* Update user info */}
-            <Modal {...stack.register('update-info')}>
+            <Modal {...stack.register('update-info')} centered>
               <PersonalInfoForm/>
             </Modal>
             {/* Add address */}
-            <Modal {...stack.register('add-address')}>
+            <Modal {...stack.register('add-address')} centered>
               <Title>Add new address</Title>
               {renderAddressForm('add')}
             </Modal>
