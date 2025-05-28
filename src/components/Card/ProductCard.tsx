@@ -1,15 +1,16 @@
 import { Card, Text, Group, Image, Box, Button } from '@mantine/core';
 import { WineCardProps } from '@/types/types';
 import { ROUTES } from '@/app/routes.tsx';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export function ProductCard({ wine }: WineCardProps) {
+  const navigate = useNavigate();
+
   return (
     <Card
       padding="lg"
       className={'product-card'}
-      component={Link}
-      to={ROUTES.CATALOG}
+      onClick={() => navigate(ROUTES.PRODUCT.replace(':id', wine.id.toString()))}
       style={{
         display: 'flex',
         width: '100%',
@@ -44,7 +45,7 @@ export function ProductCard({ wine }: WineCardProps) {
             <Button
               className="button button--secondary"
               component={Link}
-              to={ROUTES.CATALOG}
+              to={ROUTES.PRODUCT.replace(':id', wine.id.toString())}
               style={{
                 cursor: 'pointer',
                 width: 90,

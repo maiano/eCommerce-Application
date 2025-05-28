@@ -17,6 +17,7 @@ import { NotFoundPage } from '@/pages/NotFoundPage/NotFoundPage';
 import { RegistrationPage } from '@/pages/RegistrationPage';
 import { CatalogPage } from '@/pages/CatalogPage/CatalogPage.tsx';
 import { CenterLoader } from '@/shared/ui/CenterLoader';
+import { ProductPage } from '@/pages/ProductPage/ProductPage.tsx';
 
 const RedirectGuard = () => {
   const navigate = useNavigate();
@@ -94,7 +95,10 @@ export const router = createBrowserRouter([
             path: ROUTES.CATALOG,
             element: <CatalogPage />,
           },
-
+          {
+            path: ROUTES.PRODUCT,
+            element: <ProductPage />
+          },
         ],
       },
 
