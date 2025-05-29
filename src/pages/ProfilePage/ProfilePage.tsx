@@ -108,13 +108,16 @@ export function ProfilePage() {
               <Container className="address-item" style={{marginBottom:'16px'}} key={index}>
                 <Group justify="space-between">
                   <Box>
-                    <Badge style={{'--badge-color': theme.colors.primary[9], marginBottom: '12px'}} radius='sm'>
-                      {address.id === user.body.defaultShippingAddressId ? 'Default shipping address':
-                       address.id === user.body.defaultBillingAddressId ? 'Default billing address':
-                       user.body.shippingAddressIds?.includes(address.id ?? '') ? 'Shipping address': 
-                       user.body.billingAddressIds?.includes(address.id ?? '')? 'Billing address' : ''
-                      }
-                      </Badge>
+                      {(user.body.shippingAddressIds?.includes(address.id ?? '') ||
+                        user.body.billingAddressIds?.includes(address.id ?? '')) && (
+                        <Badge style={{'--badge-color': theme.colors.primary[9], marginBottom: '12px'}} radius='sm'>
+                          {address.id === user.body.defaultShippingAddressId ? 'Default shipping address' :
+                           address.id === user.body.defaultBillingAddressId ? 'Default billing address' :
+                           user.body.shippingAddressIds?.includes(address.id ?? '') ? 'Shipping address' :
+                           user.body.billingAddressIds?.includes(address.id ?? '') ? 'Billing address' : ''
+                          }
+                        </Badge>
+                      )}
                     <Text className="address-text">{address.streetName}</Text>
                     <Text className="address-text">{address.postalCode}</Text>
                     <Text className="address-text">{address.city}</Text>
