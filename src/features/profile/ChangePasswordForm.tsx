@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, PasswordInput, Text, Title, useMantineTheme } from "@mantine/core";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { changeUserPassword } from "./change-password";
+import { useChangePassword } from "./change-password";
 import { PasswordChangeFormData, passwordChangeSchema } from "@/shared/validation/profile-validation";
 
 export function ChangePasswordForm({ onClose }: { onClose: () => void }) {
@@ -16,8 +16,10 @@ export function ChangePasswordForm({ onClose }: { onClose: () => void }) {
     resolver: zodResolver(passwordChangeSchema)
   });
 
+  const { changePassword } = useChangePassword();
+
   const onSubmit: SubmitHandler<PasswordChangeFormData> = async (data) => {
-    await changeUserPassword(data.password, data.newPassword);
+    await changePassword(data.password, data.newPassword);
     onClose();
   };
 
