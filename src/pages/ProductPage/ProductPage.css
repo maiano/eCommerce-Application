@@ -30,6 +30,14 @@
 }
 
 
+body.mantine-Modal-body {
+  overflow: hidden;
+}
+
+.mantine-Modal-content {
+  overflow: hidden;
+}
+
 @media (max-width: 768px) {
   .product-page {
     flex-direction: column;

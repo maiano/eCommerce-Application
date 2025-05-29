@@ -27,16 +27,7 @@ export function ProductPage() {
   const [modalOpened, setModalOpened] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  if (!wine) {
-    return (
-      <Container>
-        <Text size="xl" mb="md">Product not found</Text>
-        <Button onClick={() => navigate(ROUTES.CATALOG)}>
-          Back to Catalog
-        </Button>
-      </Container>
-    );
-  }
+  if (!wine) return null;
 
   const ratingAttribute = wine.attributes.find(attr => attr.name === "Rating");
   const ratingValue = ratingAttribute ? parseFloat(ratingAttribute.value) : wine.rating;
@@ -187,7 +178,6 @@ export function ProductPage() {
         padding={0}
         withCloseButton={false}
         transitionProps={{ duration: 200 }}
-        style={{ overflow: 'hidden' }}
       >
         <CloseButton
           onClick={() => setModalOpened(false)}
@@ -195,41 +185,34 @@ export function ProductPage() {
             position: 'fixed',
             top: 20,
             right: 20,
-            zIndex: 1000,
+            zIndex: 100,
             backgroundColor: 'rgba(0,0,0,0.5)',
-            color: 'white'
+            color: 'primary.0'
           }}
           size="xl"
         />
 
         <Carousel
+          controlSize={50}
           initialSlide={currentImageIndex}
           withIndicators
           loop
           style={{
-            width: '100vw',
             backgroundColor: 'rgba(0,0,0,0.9)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
           }}
           onSlideChange={(index: number) => setCurrentImageIndex(index)}
         >
           {wine.image.map((img, index: number) => (
             <Carousel.Slide key={index} style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              height: '100%'
             }}>
               <Image
+                className='product-card__image'
                 src={img}
                 alt={`${wine.title} ${index + 1}`}
                 fit="contain"
                 style={{
-                  maxHeight: '100%',
-                  maxWidth: '100%',
-                  objectFit: 'contain',
+                  maxHeight: '80%',
+                  maxWidth: '80%',
                 }}
               />
             </Carousel.Slide>
