@@ -2,27 +2,41 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { wines } from '@/types/types.tsx';
 import { Box, Text, Group, Image, Button, Table, Title, Container, Badge, Divider } from '@mantine/core';
 import { ROUTES } from '@/app/routes';
+import { Carousel } from '@mantine/carousel';
 import './ProductPage.css'
-import '@/pages/CatalogPage/CatalogPage.css'
 
 export function ProductPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const wine = wines.find(w => w.id === parseInt(id || ''));
 
-  if (!wine) return;
+  if (!wine) return null;
+
+  const ratingAttribute = wine.attributes.find(attr => attr.name === "Rating");
+  const ratingValue = ratingAttribute ? parseFloat(ratingAttribute.value) : wine.rating;
 
   return (
     <Container className="page" style={{ marginTop: 20}}>
-      <Box w="65%" display="flex" style={{ justifyContent: 'space-between' }}>
+      <Box className='product-content'>
         <Group style={{ display: 'flex', justifyContent: 'center'}}>
-            <Image
-              src={wine.image || '../src/assets/fallback_1.png'}
-              alt={wine.title}
-              fit="contain"
-              height={500}
-              radius="md"
-            />
+          <Carousel
+            loop
+            withIndicators
+            height={500}
+            style={{ maxWidth: 500, width: '100%' }}
+          >
+            {wine.image.map((img, index) => (
+              <Carousel.Slide key={index}>
+                <Image
+                  src={img}
+                  alt={`${wine.title} ${index + 1}`}
+                  fit="contain"
+                  height={500}
+                  radius="md"
+                />
+              </Carousel.Slide>
+            ))}
+          </Carousel>
         </Group>
 
         <Box w="55%">
@@ -64,19 +78,25 @@ export function ProductPage() {
 
           <Title order={3} mb="md">Wine Details:</Title>
           <Table mb="xl" verticalSpacing="sm" variant="vertical" layout="fixed" withTableBorder withColumnBorders>
-            <Table.Tbody>
-              {wine.attributes.map((attr, index) => (
-                <Table.Tr key={index}>
-                  <Table.Th fw={700} style={{ width: '30%' }}>{attr.name}:</Table.Th>
-                  <Table.Td fw={700}>{attr.value}</Table.Td>
-                </Table.Tr>
-              ))}
+            <Table.Tbody ta='center'>
+              {wine.attributes
+                .filter(attr => attr.name !== "Rating")
+                .map((attr, index) => (
+                  <Table.Tr key={index}>
+                    <Table.Th fw={700} className='product-attribute' style={{ width: '30%' }}>
+                      {attr.name}:
+                    </Table.Th>
+                    <Table.Td fw={700}>{attr.value}</Table.Td>
+                  </Table.Tr>
+                ))}
               <Table.Tr>
-                <Table.Th fw={700}>Rating:</Table.Th>
+                <Table.Th className='product-attribute' fw={700}>
+                  Rating:
+                </Table.Th>
                 <Table.Td>
-                  <Group gap={4} ml="xs">
+                  <Group gap={4} ml="xs" style={{ justifyContent: 'center' }}>
                     <Text fw={500} c="yellow.7">
-                      ★ {wine.rating}
+                      ★ {ratingValue}
                     </Text>
                     <Text c="dimmed" size="md">
                       /5

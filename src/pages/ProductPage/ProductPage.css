@@ -10,21 +10,28 @@
   flex: 1;
 }
 
+.product-content {
+  display: flex;
+  justify-content: space-between;
+  width: 70%;
+  height: 100%;
+  padding: 2rem;
+  background: #1d2a36;
+  border: 1px solid #32415d;
+  border-radius: 0.75rem;
+}
 
 .product-attribute {
-  background: rgba(138, 157, 192, 0.15);
+  background: rgba(138, 157, 192, 0.12);
   padding: 0.5rem 1rem;
   border-radius: 4px;
-  color: #a1b1c8;
+  text-align: center;
+  /*color: #a1b1c8;*/
 }
 
 
 @media (max-width: 768px) {
   .product-page {
     flex-direction: column;
-  }
-
-  .product-image {
-    height: 300px !important;
   }
 }

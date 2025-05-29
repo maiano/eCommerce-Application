@@ -15,7 +15,7 @@ export type Wine = {
   year: string;
   discountedPrice?: number;
   attributes: WineAttribute[];
-  image?: string;
+  image: string[];
 };
 
 export interface WineCardProps {
@@ -43,8 +43,14 @@ export const wines: Wine[] = [
     attributes: [
       { name: "Year", value: "2015" },
       { name: "Country", value: "France" },
+      { name: "Rating", value: '4.8' }
     ],
-    image: 'https://cdn.usegalileo.ai/sdxl10/544838f2-4393-4780-ab1e-7bbef36024f9.png'
+    image: [
+      'https://cdn.usegalileo.ai/sdxl10/544838f2-4393-4780-ab1e-7bbef36024f9.png',
+      'https://cdn.usegalileo.ai/sdxl10/59a49d75-b7ce-48f0-96d7-d620aefc4e49.png',
+      'https://cdn.usegalileo.ai/sdxl10/b25779ab-c1bf-42c0-8245-bc5f7d576365.png',
+      'https://cdn.usegalileo.ai/sdxl10/0eea6aee-9921-49ac-bbaa-7def81318f98.png'
+    ]
   },
   {
     id: 2,
@@ -57,8 +63,14 @@ export const wines: Wine[] = [
     attributes: [
       { name: "Year", value: "2024" },
       { name: "Country", value: "Italy" },
+      { name: "Rating", value: '4.5' }
     ],
-    image: 'https://cdn.usegalileo.ai/sdxl10/59a49d75-b7ce-48f0-96d7-d620aefc4e49.png'
+    image: [
+      'https://cdn.usegalileo.ai/sdxl10/59a49d75-b7ce-48f0-96d7-d620aefc4e49.png',
+      'https://cdn.usegalileo.ai/sdxl10/544838f2-4393-4780-ab1e-7bbef36024f9.png',
+      'https://cdn.usegalileo.ai/sdxl10/b25779ab-c1bf-42c0-8245-bc5f7d576365.png',
+      'https://cdn.usegalileo.ai/sdxl10/0eea6aee-9921-49ac-bbaa-7def81318f98.png'
+    ]
   },
   {
     id: 3,
@@ -71,8 +83,14 @@ export const wines: Wine[] = [
     attributes: [
       { name: "Year", value: "2017" },
       { name: "Country", value: "New Zealand" },
+      { name: "Rating", value: '4.7' }
     ],
-    image: 'https://cdn.usegalileo.ai/sdxl10/b25779ab-c1bf-42c0-8245-bc5f7d576365.png'
+    image: [
+      'https://cdn.usegalileo.ai/sdxl10/b25779ab-c1bf-42c0-8245-bc5f7d576365.png',
+      'https://cdn.usegalileo.ai/sdxl10/544838f2-4393-4780-ab1e-7bbef36024f9.png',
+      'https://cdn.usegalileo.ai/sdxl10/59a49d75-b7ce-48f0-96d7-d620aefc4e49.png',
+      'https://cdn.usegalileo.ai/sdxl10/0eea6aee-9921-49ac-bbaa-7def81318f98.png'
+    ]
   },
   {
     id: 4,
@@ -84,8 +102,14 @@ export const wines: Wine[] = [
     attributes: [
       { name: "Year", value: "2009" },
       { name: "Country", value: "Spain" },
+      { name: "Rating", value: '5' }
     ],
-    image: 'https://cdn.usegalileo.ai/sdxl10/0eea6aee-9921-49ac-bbaa-7def81318f98.png'
+    image: [
+      'https://cdn.usegalileo.ai/sdxl10/0eea6aee-9921-49ac-bbaa-7def81318f98.png',
+      'https://cdn.usegalileo.ai/sdxl10/544838f2-4393-4780-ab1e-7bbef36024f9.png',
+      'https://cdn.usegalileo.ai/sdxl10/59a49d75-b7ce-48f0-96d7-d620aefc4e49.png',
+      'https://cdn.usegalileo.ai/sdxl10/b25779ab-c1bf-42c0-8245-bc5f7d576365.png',
+    ]
   },
   {
     id: 5,
@@ -97,8 +121,14 @@ export const wines: Wine[] = [
     attributes: [
       { name: "Year", value: "2022" },
       { name: "Country", value: "France" },
+      { name: "Rating", value: '3.9' }
     ],
-    image: 'https://cdn.usegalileo.ai/sdxl10/c6ab2f06-0ec1-4d34-bd49-6520fdd63180.png'
+    image: [
+      'https://cdn.usegalileo.ai/sdxl10/c6ab2f06-0ec1-4d34-bd49-6520fdd63180.png',
+      'https://cdn.usegalileo.ai/sdxl10/d90f77b3-fdd9-4c18-aac8-5a54b27fe7de.png',
+      'https://cdn.usegalileo.ai/sdxl10/0f7256d8-8e72-4104-b428-cea3b42e76d9.png',
+      'https://cdn.usegalileo.ai/sdxl10/9204a299-2794-4f6b-af2a-2fa313afab9c.png'
+    ]
   },
   {
     id: 6,
@@ -110,8 +140,14 @@ export const wines: Wine[] = [
     attributes: [
       { name: "Year", value: "2007" },
       { name: "Country", value: "Germany" },
+      { name: "Rating", value: '4.2' }
     ],
-    image: 'https://cdn.usegalileo.ai/sdxl10/d90f77b3-fdd9-4c18-aac8-5a54b27fe7de.png'
+    image: [
+      'https://cdn.usegalileo.ai/sdxl10/d90f77b3-fdd9-4c18-aac8-5a54b27fe7de.png',
+      'https://cdn.usegalileo.ai/sdxl10/c6ab2f06-0ec1-4d34-bd49-6520fdd63180.png',
+      'https://cdn.usegalileo.ai/sdxl10/0f7256d8-8e72-4104-b428-cea3b42e76d9.png',
+      'https://cdn.usegalileo.ai/sdxl10/9204a299-2794-4f6b-af2a-2fa313afab9c.png'
+    ]
   },
   {
     id: 7,
@@ -124,8 +160,14 @@ export const wines: Wine[] = [
     attributes: [
       { name: "Year", value: "2000" },
       { name: "Country", value: "Italy" },
+      { name: "Rating", value: '4.4' }
     ],
-    image: 'https://cdn.usegalileo.ai/sdxl10/0f7256d8-8e72-4104-b428-cea3b42e76d9.png'
+    image: [
+      'https://cdn.usegalileo.ai/sdxl10/0f7256d8-8e72-4104-b428-cea3b42e76d9.png',
+      'https://cdn.usegalileo.ai/sdxl10/c6ab2f06-0ec1-4d34-bd49-6520fdd63180.png',
+      'https://cdn.usegalileo.ai/sdxl10/d90f77b3-fdd9-4c18-aac8-5a54b27fe7de.png',
+      'https://cdn.usegalileo.ai/sdxl10/9204a299-2794-4f6b-af2a-2fa313afab9c.png'
+    ]
   },
   {
     id: 8,
@@ -137,7 +179,13 @@ export const wines: Wine[] = [
     attributes: [
       { name: "Year", value: "2010" },
       { name: "Country", value: "France" },
+      { name: "Rating", value: '5' }
     ],
-    image: 'https://cdn.usegalileo.ai/sdxl10/9204a299-2794-4f6b-af2a-2fa313afab9c.png'
+    image: [
+      'https://cdn.usegalileo.ai/sdxl10/9204a299-2794-4f6b-af2a-2fa313afab9c.png',
+      'https://cdn.usegalileo.ai/sdxl10/c6ab2f06-0ec1-4d34-bd49-6520fdd63180.png',
+      'https://cdn.usegalileo.ai/sdxl10/d90f77b3-fdd9-4c18-aac8-5a54b27fe7de.png',
+      'https://cdn.usegalileo.ai/sdxl10/0f7256d8-8e72-4104-b428-cea3b42e76d9.png',
+    ]
   }
 ];
