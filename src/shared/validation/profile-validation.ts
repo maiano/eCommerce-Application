@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { email } from './login-validation';
+import { email, password } from './login-validation';
 import { birthDate, city, country, firstName, lastName, postcode, street } from './registration-validation';
 
 export const addressSchema = z.object({
@@ -19,3 +19,12 @@ export const personalInfoSchema = z.object({
 })
 
 export type PersonalInfoFormData = z.infer<typeof personalInfoSchema>;
+
+const newPassword = password;
+
+export const passwordChangeSchema = z.object({
+  password,
+  newPassword,
+})
+
+export type PasswordChangeFormData = z.infer<typeof passwordChangeSchema>;

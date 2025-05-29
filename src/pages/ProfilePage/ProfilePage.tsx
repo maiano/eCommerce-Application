@@ -6,6 +6,7 @@ import { JSX, useEffect, useState } from "react";
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import { useAuthStore } from "@/features/auth/auth-state";
 import { deleteAddress, updateAddress } from "@/features/profile/address";
+import { ChangePasswordForm } from "@/features/profile/ChangePasswordForm";
 import { PersonalInfoForm } from "@/features/profile/PersonalInfoForm";
 import { getUserInfo } from "@/features/profile/profile";
 import { countries } from "@/shared/constants/countries";
@@ -313,8 +314,14 @@ export function ProfilePage() {
             </Button>
             
             {/* Change password */}
-            <Modal {...stack.register('change-password')}>
-              Change password
+            <Modal {...stack.register('change-password')} centered>
+              <ChangePasswordForm onClose={async() => {
+                stack.close('change-password');
+                const updatedUser = await getUserInfo();
+                if (updatedUser) {
+                  setUser(updatedUser);
+                }
+                }}/>
             </Modal>
             {/* Update user info */}
             <Modal {...stack.register('update-info')} centered>
@@ -328,7 +335,7 @@ export function ProfilePage() {
             </Modal>
             {/* Add address */}
             <Modal {...stack.register('add-address')} centered>
-              <Title>Add new address</Title>
+              <Title size='24px' style={{marginBottom: '32px', textAlign: 'center'}}>Add new address</Title>
               {renderAddressForm('add')}
             </Modal>
 
