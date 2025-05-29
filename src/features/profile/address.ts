@@ -52,5 +52,5 @@ export async function updateAddress (id: string | undefined, country: string, ci
     } catch (error) {
       console.error('failed to update address', error);
     }
-    }
+  }
 }

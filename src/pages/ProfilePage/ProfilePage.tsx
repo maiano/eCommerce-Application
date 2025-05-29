@@ -1,64 +1,26 @@
 import { BaseAddress, ClientResponse, Customer } from "@commercetools/platform-sdk";
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Avatar, Badge, Box, Button, Container, Grid, Group, Stack, Text, TextInput, Title, Modal, useMantineTheme, useModalsStack, Combobox, InputBase, Input, useCombobox } from "@mantine/core";
+import { Avatar, Badge, Box, Button, Container, Grid, Group, Stack, Text, Title, Modal, useMantineTheme, useModalsStack } from "@mantine/core";
 import '@/pages/ProfilePage/ProfilePage.css';
-import { JSX, useEffect, useState } from "react";
-import { useForm, SubmitHandler, Controller } from 'react-hook-form';
+import { useEffect, useState } from "react";
 import { useAuthStore } from "@/features/auth/auth-state";
-import { deleteAddress, updateAddress } from "@/features/profile/address";
+import { deleteAddress } from "@/features/profile/address";
+import { AddressForm } from "@/features/profile/AddressForm";
 import { ChangePasswordForm } from "@/features/profile/ChangePasswordForm";
 import { PersonalInfoForm } from "@/features/profile/PersonalInfoForm";
 import { getUserInfo } from "@/features/profile/profile";
 import { countries } from "@/shared/constants/countries";
-import { getCountryCode } from "@/shared/utils/get-country-code";
-import { AddressFormData, addressSchema } from "@/shared/validation/profile-validation";
 
 export function ProfilePage() {
   const theme = useMantineTheme();
   
   const stack = useModalsStack(['change-password', 'update-info', 'add-address', 'edit-address']);
 
-  const [selectedAddress, setSelectedAddress] = useState<BaseAddress | null>(null);
-
-  const {
-    register,
-    handleSubmit,
-    control,
-    setValue,
-    formState: { errors, isValid },
-  } = useForm<AddressFormData>({
-    mode: 'onBlur',
-    resolver: zodResolver(addressSchema),
-  });
-  
-  const onNewAddressSubmit: SubmitHandler<AddressFormData> = async (data) => {
-    // await addAddress(data);
-  };
-  const onUpdatedAddressSubmit: SubmitHandler<AddressFormData> = async (data) => {
-    const country = getCountryCode(data.country);
-    await updateAddress(selectedAddress?.id, country, data.city, data.street, data.postcode);
-
-    const updatedUser = await getUserInfo();
-    if (updatedUser) {
-      setUser(updatedUser);
-    }
-  };
-
-  const countrySelect = useCombobox({
-    onDropdownClose: () => countrySelect.resetSelectedOption(),
-  });
-  const [countryValue, setCountryValue] = useState<string | null>(null);
-
-  const options = Object.values(countries).map((item) => (
-    <Combobox.Option value={item} key={item}>
-      {item}
-    </Combobox.Option>
-  ));
-
   const status = useAuthStore((state) => state.status);
   const isAuthenticated = status === 'AUTHENTICATED';
 
   const [user, setUser] = useState<ClientResponse<Customer> | null>(null);
+
+  const [selectedAddress, setSelectedAddress] = useState<BaseAddress | null>(null);
 
   useEffect(() => {
     const getUser = async () => {
@@ -71,111 +33,6 @@ export function ProfilePage() {
     };
     getUser();
   }, [isAuthenticated]);
-
-  const renderAddressForm = (type: 'add' | 'edit') => {
-    const submit = type === 'add' ? onNewAddressSubmit : onUpdatedAddressSubmit;
-
-    return (
-      <form onSubmit={handleSubmit(submit)}>
-        <Grid gutter="md">
-          <Grid.Col span={{ base: 12, sm: 6 }}>
-            <Stack style={{ gap: 5 }}>
-            <Controller<AddressFormData>
-              name='country'
-              control={control}
-              render={({ field }): JSX.Element => (
-                <Combobox
-                store={countrySelect}
-                withinPortal={false}
-                onOptionSubmit={(val) => {
-                  field.onChange(val);
-                  setCountryValue(val);
-                  countrySelect.closeDropdown();
-                }}
-                >
-                <Combobox.Target>
-                  <InputBase
-                    label="Country"
-                    withAsterisk
-                    component="button"
-                    type="button"
-                    pointer
-                    rightSection={<Combobox.Chevron />}
-                    onClick={() => countrySelect.toggleDropdown()}
-                    rightSectionPointerEvents="none"
-                    classNames={{ input: 'form-input' }}
-                    >
-                    { type === 'add' ? countryValue ||<Input.Placeholder>Select country</Input.Placeholder> : countryValue || countries[selectedAddress?.country as keyof typeof countries] ||<Input.Placeholder>Select country</Input.Placeholder>}
-                  </InputBase>
-                </Combobox.Target>
-                <Combobox.Dropdown>
-                  <Combobox.Options>{options}</Combobox.Options>
-                </Combobox.Dropdown>
-              </Combobox>
-              )}
-            />
-              <Text style={{ color: theme.colors.red[8] }} size="sm">
-                {errors.country?.message}
-              </Text>
-            </Stack>
-          </Grid.Col>
-          <Grid.Col span={{ base: 12, sm: 6 }}>
-            <Stack style={{ gap: 7 }}>
-              <TextInput
-                {...register('city')}
-                label='City'
-                placeholder="Enter city"
-                classNames={{ input: 'form-input' }}
-                withAsterisk
-              />
-              <Text style={{ color: theme.colors.red[8] }} size="sm">
-                {errors.city?.message}
-              </Text>
-            </Stack>
-          </Grid.Col>
-          <Grid.Col span={{ base: 12, sm: 6 }}>
-            <Stack style={{ gap: 7 }}>
-              <TextInput
-                {...register('street')}
-                label='Street'
-                placeholder="Enter street"
-                classNames={{ input: 'form-input' }}
-                withAsterisk
-              />
-              <Text style={{ color: theme.colors.red[8] }} size="sm">
-                {errors.street?.message}
-              </Text>
-            </Stack>
-          </Grid.Col>
-          <Grid.Col span={{ base: 12, sm: 6 }}>
-            <Stack style={{ gap: 7 }}>
-              <TextInput
-                {...register('postcode')}
-                label='Postcode'
-                placeholder="Enter postcode"
-                classNames={{ input: 'form-input' }}
-                withAsterisk
-              />
-              <Text style={{ color: theme.colors.red[8] }} size="sm">
-                {errors.postcode?.message}
-              </Text>
-            </Stack>
-          </Grid.Col>
-        </Grid>
-        <Button
-          type="submit"
-          disabled={!isValid}
-          onClick={() => {
-            stack.close('edit-address');
-            stack.close('add-address');
-          }}
-          style={{marginTop: '24px'}}
-          fullWidth
-          >Save
-          </Button>
-      </form>
-    )
-  }
 
   return (
     <Container className="page">
@@ -269,16 +126,6 @@ export function ProfilePage() {
                       onClick={() => {
                         setSelectedAddress(address);
                         stack.open('edit-address');
-                        setValue('country', countries[address.country as keyof typeof countries]);
-                        if (address.city) {
-                          setValue('city', address.city);
-                        }
-                        if (address.streetName) {
-                          setValue('street', address.streetName);
-                        }
-                        if (address.postalCode) {
-                          setValue('postcode', address.postalCode);
-                        }
                       }}
                       >
                         Edit
@@ -303,11 +150,6 @@ export function ProfilePage() {
             <Button
               className="button button--primary button--medium"
               onClick={() => {
-                setCountryValue(null);
-                setValue('country', '');
-                setValue('city', '');
-                setValue('street', '');
-                setValue('postcode', '');
                 stack.open('add-address');
               }}
               >Add new address
@@ -323,6 +165,7 @@ export function ProfilePage() {
                 }
                 }}/>
             </Modal>
+
             {/* Update user info */}
             <Modal {...stack.register('update-info')} centered>
               <PersonalInfoForm onClose={async() => {
@@ -333,16 +176,33 @@ export function ProfilePage() {
                 }
                 }}/>
             </Modal>
+
             {/* Add address */}
             <Modal {...stack.register('add-address')} centered>
-              <Title size='24px' style={{marginBottom: '32px', textAlign: 'center'}}>Add new address</Title>
-              {renderAddressForm('add')}
+              <AddressForm
+                onClose={async() => stack.close('add-address')}
+                type={'add'}
+                address={null}
+                onUpdate={async() => {
+                  const updatedUser = await getUserInfo();
+                  if (updatedUser) {
+                    setUser(updatedUser);
+                  }
+                }}/>
             </Modal>
 
             {/* Edit address */}
             <Modal {...stack.register('edit-address')} centered>
-              <Title size='24px' style={{marginBottom: '32px', textAlign: 'center'}}>Edit address</Title>
-              {renderAddressForm('edit')}
+              <AddressForm
+                onClose={async() => stack.close('edit-address')}
+                type={'edit'}
+                address={selectedAddress}
+                onUpdate={async() => {
+                  const updatedUser = await getUserInfo();
+                  if (updatedUser) {
+                    setUser(updatedUser);
+                  }
+                }}/>
             </Modal>
           </Container>
         </Box>
