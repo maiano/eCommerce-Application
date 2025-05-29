@@ -21,10 +21,14 @@ export const personalInfoSchema = z.object({
 export type PersonalInfoFormData = z.infer<typeof personalInfoSchema>;
 
 const newPassword = password;
+const confirmNewPassword = password
 
 export const passwordChangeSchema = z.object({
   password,
   newPassword,
+  confirmNewPassword,
 })
+.refine((data) => data.newPassword === data.confirmNewPassword, { message: 'Passwords do not match', path: ['confirmNewPassword']})
+.refine((data) => data.newPassword !== data.password, { message: 'New password must be different from current password', path: ['newPassword']});
 
 export type PasswordChangeFormData = z.infer<typeof passwordChangeSchema>;

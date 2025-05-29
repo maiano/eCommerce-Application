@@ -10,9 +10,10 @@ export function ChangePasswordForm({ onClose }: { onClose: () => void }) {
   const {
     register,
     handleSubmit,
+    trigger,
     formState: { errors, isValid },
   } = useForm<PasswordChangeFormData>({
-    mode: 'onBlur',
+    mode: 'onChange',
     resolver: zodResolver(passwordChangeSchema)
   });
 
@@ -42,11 +43,37 @@ export function ChangePasswordForm({ onClose }: { onClose: () => void }) {
           {...register('newPassword')}
           label='New Password'
           placeholder="Enter new password"
+          onChange={(e) => {
+            register('newPassword').onChange(e);
+            const form = e.target.form;
+            const input = form?.confirmNewPassword as HTMLInputElement;
+            if (input.value) {
+              trigger('confirmNewPassword');
+            }
+          }}
           classNames={{ input: 'form-input' }}
           withAsterisk
         />
         <Text style={{ color: theme.colors.red[8] }} size="sm">
           {errors.newPassword?.message}
+        </Text>
+        <PasswordInput
+          {...register('confirmNewPassword')}
+          label='Confirm New Password'
+          placeholder="Enter new password"
+          onChange={(e) => {
+            register('confirmNewPassword').onChange(e);
+            const form = e.target.form;
+            const input = form?.confirmNewPassword as HTMLInputElement;
+            if (input.value) {
+              trigger('newPassword');
+            }
+          }}
+          classNames={{ input: 'form-input' }}
+          withAsterisk
+        />
+        <Text style={{ color: theme.colors.red[8] }} size="sm">
+          {errors.confirmNewPassword?.message}
         </Text>
         <Button
           type="submit"
