@@ -4,7 +4,7 @@ import { Button, Combobox, Grid, Input, InputBase, Stack, Text, TextInput, Title
 import { JSX, useEffect, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useAuthStore } from "../auth/auth-state";
-import { updateAddress } from "./address";
+import { addAddress, updateAddress } from "./address";
 import { getUserInfo } from "./profile";
 import { countries } from "@/shared/constants/countries";
 import { getCountryCode } from "@/shared/utils/get-country-code";
@@ -66,11 +66,11 @@ export function AddressForm({ onClose, type, address, onUpdate }: { onClose: () 
 
   const onNewAddressSubmit: SubmitHandler<AddressFormData> = async (data) => {
     const country = getCountryCode(data.country);
-    // await addAddress(country, data.city, data.street, data.postcode);
-    // if (onUpdate) {
-    //   onUpdate();
-    // }
-    // onClose();
+    await addAddress(country, data.city, data.street, data.postcode);
+    if (onUpdate) {
+      onUpdate();
+    }
+    onClose();
   };
 
   const onUpdatedAddressSubmit: SubmitHandler<AddressFormData> = async (data) => {
