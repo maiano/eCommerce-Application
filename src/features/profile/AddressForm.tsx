@@ -17,6 +17,7 @@ export function AddressForm({ onClose, type, address, onUpdate }: { onClose: () 
     register,
     handleSubmit,
     control,
+    trigger,
     setValue,
     formState: { errors, isValid },
   } = useForm<AddressFormData>({
@@ -36,7 +37,9 @@ export function AddressForm({ onClose, type, address, onUpdate }: { onClose: () 
         if (user) {
           setUser(user);
           if (address?.country) {
-            setValue('country', address.country);
+            setValue('country', countries[address.country as keyof typeof countries]);
+            setCountryValue(countries[address.country as keyof typeof countries]);
+            trigger('country');
           }
           if (address?.city) {
             setValue('city', address.city);
@@ -51,7 +54,7 @@ export function AddressForm({ onClose, type, address, onUpdate }: { onClose: () 
       }
     };
     getUser();
-  }, [isAuthenticated, setValue, address]);
+  }, [isAuthenticated, setValue, address, trigger]);
 
   const countrySelect = useCombobox({
     onDropdownClose: () => countrySelect.resetSelectedOption(),
@@ -102,7 +105,6 @@ export function AddressForm({ onClose, type, address, onUpdate }: { onClose: () 
                 onOptionSubmit={(val) => {
                   field.onChange(val);
                   setCountryValue(val);
-                  console.log(val)
                   countrySelect.closeDropdown();
                 }}
                 >
@@ -181,7 +183,14 @@ export function AddressForm({ onClose, type, address, onUpdate }: { onClose: () 
           style={{marginTop: '24px'}}
           fullWidth
           >Save
-          </Button>
+        </Button>
+        <Button
+          onClick={onClose}
+          style={{marginTop: '16px'}}
+          className="button button--secondary"
+          fullWidth
+          >Cancel
+        </Button>
       </form>
     </>
   )
