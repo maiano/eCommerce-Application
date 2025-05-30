@@ -10,16 +10,20 @@ import {
   InputBase,
   Group,
   TextInput,
-  Grid, ComboboxStore,
+  Grid,
+  ComboboxStore,
 } from '@mantine/core';
+import { CloseButton } from '@mantine/core';
 import { useState } from 'react';
+import { ProductCard } from '@/components/Card/ProductCard.tsx';
+import { useCategories } from '@/features/catalog/useCategories';
+import { useWineSorting } from '@/features/sorting/useWineSorting.tsx';
 import type { Wine } from '@/types/types.tsx';
 import { wines } from '@/types/types.tsx';
-import { ProductCard } from '@/components/Card/ProductCard.tsx';
-import { CloseButton } from '@mantine/core';
-import { useWineSorting } from '@/features/sorting/useWineSorting.tsx';
 
 export function CatalogPage() {
+  // const { data: categories, isLoading: categoriesLoading } = useCategories();
+
   const combobox: ComboboxStore = useCombobox({
     onDropdownClose: (): void => combobox.resetSelectedOption(),
   });
@@ -28,9 +32,11 @@ export function CatalogPage() {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const categories = ['Red', 'White', 'Sparkling', 'Rose', 'Dessert'];
 
-  const toggleCategory: (category: string) => void = (category: string): void => {
+  const toggleCategory: (category: string) => void = (
+    category: string,
+  ): void => {
     if (selectedCategories.includes(category)) {
-      setSelectedCategories(selectedCategories.filter(c => c !== category));
+      setSelectedCategories(selectedCategories.filter((c) => c !== category));
     } else {
       setSelectedCategories([...selectedCategories, category]);
     }
@@ -67,7 +73,11 @@ export function CatalogPage() {
         />
       </Box>
 
-      <Group className="filters" mb="xl" style={{ display: 'flex', justifyContent: 'center' }}>
+      <Group
+        className="filters"
+        mb="xl"
+        style={{ display: 'flex', justifyContent: 'center' }}
+      >
         <Grid
           className="filter-group"
           gutter="md"
@@ -76,11 +86,16 @@ export function CatalogPage() {
           style={{ width: 'fit-content' }}
         >
           {categories.map((category: string) => (
-            <Grid.Col key={category} span={{ base: 'auto', sm: 'auto', md: 'auto' }}>
+            <Grid.Col
+              key={category}
+              span={{ base: 'auto', sm: 'auto', md: 'auto' }}
+            >
               <Button
                 fullWidth
                 className={`filter-button ${selectedCategories.includes(category) ? 'button--primary' : ''}`}
-                variant={selectedCategories.includes(category) ? 'filled' : 'default'}
+                variant={
+                  selectedCategories.includes(category) ? 'filled' : 'default'
+                }
                 onClick={() => toggleCategory(category)}
                 styles={{
                   ...(selectedCategories.includes(category) && {
@@ -103,7 +118,7 @@ export function CatalogPage() {
                           fill="none"
                           stroke="currentColor"
                         >
-                          <path d="M1 1L13 13M13 1L1 13" strokeWidth="2"/>
+                          <path d="M1 1L13 13M13 1L1 13" strokeWidth="2" />
                         </svg>
                       }
                       onClick={(e) => {
@@ -130,7 +145,7 @@ export function CatalogPage() {
           </Grid.Col>
         </Grid>
 
-        <Stack className="filter-group" style={{ minWidth: 212 }} >
+        <Stack className="filter-group" style={{ minWidth: 212 }}>
           <Combobox
             store={combobox}
             onOptionSubmit={(val) => {
@@ -170,7 +185,7 @@ export function CatalogPage() {
         </Stack>
       </Group>
 
-      <Grid justify="center" style={{ width: '100%' }} >
+      <Grid justify="center" style={{ width: '100%' }}>
         {sortedWines.map((wine: Wine) => (
           <Grid.Col
             key={wine.id}
@@ -180,7 +195,12 @@ export function CatalogPage() {
               md: 3,
               lg: 3,
             }}
-            style={{ display: 'flex', justifyContent: 'center', minWidth: 350, maxWidth: 400 }}
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              minWidth: 350,
+              maxWidth: 400,
+            }}
           >
             <ProductCard wine={wine} />
           </Grid.Col>
