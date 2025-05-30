@@ -26,6 +26,7 @@ export function PersonalInfoForm({ onClose }: { onClose: () => void }) {
     register,
     handleSubmit,
     control,
+    trigger,
     setValue,
     formState: { errors, isValid },
   } = useForm<PersonalInfoFormData>({
@@ -121,6 +122,7 @@ export function PersonalInfoForm({ onClose }: { onClose: () => void }) {
                     onChange={(date: Date | null) => {
                       setCalendarValue(date);
                       field.onChange(date?.toLocaleDateString('en-CA'));
+                      trigger('birthDate');
                     }}
                     label="Date of Birth"
                     classNames={{ input: 'form-input' }}
@@ -145,6 +147,13 @@ export function PersonalInfoForm({ onClose }: { onClose: () => void }) {
           style={{marginTop: '24px'}}
           fullWidth
           >Save
+        </Button>
+        <Button
+          onClick={onClose}
+          style={{marginTop: '16px'}}
+          className="button button--secondary"
+          fullWidth
+          >Cancel
         </Button>
       </form>
     </>
