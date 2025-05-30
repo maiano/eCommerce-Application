@@ -1,6 +1,6 @@
 import { BaseAddress, ClientResponse, Customer } from "@commercetools/platform-sdk";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, Combobox, Grid, Input, InputBase, Stack, Text, TextInput, Title, useCombobox, useMantineTheme } from "@mantine/core";
+import { Button, Checkbox, Combobox, Grid, Input, InputBase, Stack, Switch, Text, TextInput, Title, useCombobox, useMantineTheme } from "@mantine/core";
 import { JSX, useEffect, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useAuthStore } from "../auth/auth-state";
@@ -17,6 +17,7 @@ export function AddressForm({ onClose, type, address, onUpdate }: { onClose: () 
     register,
     handleSubmit,
     control,
+    watch,
     trigger,
     setValue,
     formState: { errors, isValid },
@@ -50,6 +51,20 @@ export function AddressForm({ onClose, type, address, onUpdate }: { onClose: () 
           if (address?.postalCode) {
             setValue('postcode', address.postalCode);
           }
+          if (address?.id) {
+            if (user.body.shippingAddressIds) {
+              setValue('isDeliveryAddress', user.body.shippingAddressIds?.includes(address.id ?? ''))
+            }
+            if (user.body.billingAddressIds) {
+              setValue('isBillingAddress', user.body.billingAddressIds?.includes(address.id ?? ''))
+            }
+            if (user.body.defaultShippingAddressId) {
+              setValue('isDefaultDeliveryAddress', user.body.defaultShippingAddressId === address.id)
+            }
+            if (user.body.defaultBillingAddressId) {
+              setValue('isDefaultBillingAddress', user.body.defaultBillingAddressId === address.id)
+            }
+          }
         }
       }
     };
@@ -69,7 +84,7 @@ export function AddressForm({ onClose, type, address, onUpdate }: { onClose: () 
 
   const onNewAddressSubmit: SubmitHandler<AddressFormData> = async (data) => {
     const country = getCountryCode(data.country);
-    await addAddress(country, data.city, data.street, data.postcode);
+    await addAddress(country, data.city, data.street, data.postcode, data.isDeliveryAddress, data.isBillingAddress, data.isDefaultDeliveryAddress, data.isDefaultBillingAddress);
     if (onUpdate) {
       onUpdate();
     }
@@ -78,7 +93,7 @@ export function AddressForm({ onClose, type, address, onUpdate }: { onClose: () 
 
   const onUpdatedAddressSubmit: SubmitHandler<AddressFormData> = async (data) => {
     const country = getCountryCode(data.country);
-    await updateAddress(address?.id, country, data.city, data.street, data.postcode);
+    await updateAddress(address?.id, country, data.city, data.street, data.postcode, data.isDeliveryAddress, data.isBillingAddress, data.isDefaultDeliveryAddress, data.isDefaultBillingAddress);
     if (onUpdate) {
       onUpdate();
     }
@@ -175,6 +190,42 @@ export function AddressForm({ onClose, type, address, onUpdate }: { onClose: () 
                 {errors.postcode?.message}
               </Text>
             </Stack>
+          </Grid.Col>
+          <Grid.Col span={{ base: 12, xs: 6 }}>
+            <Checkbox
+              styles={{
+                input: { borderRadius: '5px' },
+                root: { marginBottom: '1rem', marginRight:'2rem' },
+              }}
+              {...register('isDeliveryAddress')}
+              label="Delivery address"
+            />
+          </Grid.Col>
+          <Grid.Col span={{ base: 12, xs: 6 }}>
+            <Switch
+              {...register('isDefaultDeliveryAddress')}
+              label='Set as default'
+              disabled={!watch('isDeliveryAddress')}
+              checked={watch('isDeliveryAddress') ? watch('isDefaultDeliveryAddress') : false}
+            />
+          </Grid.Col>
+          <Grid.Col span={{ base: 12, xs: 6 }}>
+            <Checkbox
+              styles={{
+                input: { borderRadius: '5px' },
+                root: { marginBottom: '1rem', marginRight:'2rem' },
+              }}
+              {...register('isBillingAddress')}
+              label="Billing address"
+            />
+            </Grid.Col>
+            <Grid.Col span={{ base: 12, xs: 6 }}>
+          <Switch
+            {...register('isDefaultBillingAddress')}
+            label='Set as default'
+            disabled={!watch('isBillingAddress')}
+            checked={watch('isBillingAddress') ? watch('isDefaultBillingAddress') : false}
+          />
           </Grid.Col>
         </Grid>
         <Button
