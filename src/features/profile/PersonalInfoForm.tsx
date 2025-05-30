@@ -30,7 +30,7 @@ export function PersonalInfoForm({ onClose }: { onClose: () => void }) {
     setValue,
     formState: { errors, isValid },
   } = useForm<PersonalInfoFormData>({
-    mode: 'onBlur',
+    mode: 'onChange',
     resolver: zodResolver(personalInfoSchema)
   });
 

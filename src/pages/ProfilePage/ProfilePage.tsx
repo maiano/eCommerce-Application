@@ -13,7 +13,7 @@ import { countries } from "@/shared/constants/countries";
 export function ProfilePage() {
   const theme = useMantineTheme();
   
-  const stack = useModalsStack(['change-password', 'update-info', 'add-address', 'edit-address']);
+  const stack = useModalsStack(['change-password', 'update-info', 'add-address', 'edit-address', 'delete-address']);
 
   const status = useAuthStore((state) => state.status);
   const isAuthenticated = status === 'AUTHENTICATED';
@@ -141,12 +141,9 @@ export function ProfilePage() {
                     </Button>
                     <Button
                       className="button button--secondary"
-                      onClick={async() => {
-                        deleteAddress(address.id);
-                        const updatedUser = await getUserInfo();
-                        if (updatedUser) {
-                          setUser(updatedUser);
-                        }
+                      onClick={() => {
+                        setSelectedAddress(address);
+                        stack.open('delete-address');
                       }}
                       >
                         Remove
@@ -212,6 +209,42 @@ export function ProfilePage() {
                     setUser(updatedUser);
                   }
                 }}/>
+            </Modal>
+
+            {/* Delete address */}
+            <Modal
+              {...stack.register('delete-address')}
+              centered 
+              onClose={async() => {
+                const updatedUser = await getUserInfo();
+                if (updatedUser) {
+                  setUser(updatedUser);
+                }}
+              }>
+              <Title size='20px' style={{marginBottom: '32px', textAlign: 'center'}}>Are you sure you want to remove this address?</Title>
+              <Text ta="center">{selectedAddress?.streetName}, {selectedAddress?.city}, {countries[selectedAddress?.country as keyof typeof countries]}, {selectedAddress?.postalCode}</Text>
+              <Button
+                style={{marginTop: '16px'}}
+                className="button button--primary"
+                fullWidth
+                onClick={async() => {
+                  await deleteAddress(selectedAddress?.id);
+                  const updatedUser = await getUserInfo();
+                  if (updatedUser) {
+                    setUser(updatedUser);
+                  }
+                  stack.close('delete-address');
+                  }
+                }
+                >Remove
+              </Button>
+              <Button
+                style={{marginTop: '16px'}}
+                className="button button--secondary"
+                fullWidth
+                onClick={() => stack.close('delete-address')}
+                >Cancel
+              </Button>
             </Modal>
           </Container>
         </Box>
