@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useState, useRef, useEffect, RefObject } from 'react';
+import { useParams, useNavigate, NavigateFunction } from 'react-router-dom';
 import { wines } from '@/types/types';
 import {
   Box,
@@ -17,26 +17,25 @@ import {
 } from '@mantine/core';
 import { ROUTES } from '@/app/routes';
 import { Carousel } from '@mantine/carousel';
-import type { ModalEmbla } from '@/types/types.tsx'
+import type { ModalEmbla, Wine } from '@/types/types.tsx'
 import './ProductPage.css';
 
-const TRANSITION_DURATION = 500;
+const TRANSITION_DURATION = 300;
 
 export function ProductPage() {
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
-  const wine = wines.find(w => w.id === parseInt(id || ''));
+  const navigate: NavigateFunction = useNavigate();
+  const wine: Wine | undefined = wines.find(w => w.id === parseInt(id || ''));
 
-  const mainCarouselRef = useRef<ModalEmbla | null>(null);
-  const modalCarouselRef = useRef<ModalEmbla | null>(null);
+  const mainCarouselRef: RefObject<ModalEmbla | null> = useRef<ModalEmbla | null>(null);
+  const modalCarouselRef: RefObject<ModalEmbla | null> = useRef<ModalEmbla | null>(null);
   const [modalOpened, setModalOpened] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
 
   useEffect(() => {
     if (modalOpened && modalCarouselRef.current) {
       let raf: number;
-      const initCarousel = () => {
+      const initCarousel:() => void = (): void => {
         modalCarouselRef.current?.reInit();
         modalCarouselRef.current?.scrollTo(currentImageIndex);
       };
@@ -50,89 +49,79 @@ export function ProductPage() {
   if (!wine) return null;
 
   const ratingAttribute = wine.attributes.find(attr => attr.name === "Rating");
-  const ratingValue = ratingAttribute ? parseFloat(ratingAttribute.value) : wine.rating;
+  const ratingValue: number = ratingAttribute ? parseFloat(ratingAttribute.value) : wine.rating;
 
-  const handleThumbnailClick = (index: number) => {
+  const handleThumbnailClick = (index: number): void => {
     setCurrentImageIndex(index);
-
     mainCarouselRef.current?.scrollTo(index);
     modalCarouselRef.current?.scrollTo(index);
   };
 
-  const openModal = (index: number) => {
+  const openModal = (index: number): void => {
     setCurrentImageIndex(index);
     setModalOpened(true);
   };
 
   return (
     <Container className="page" style={{ marginTop: 20 }}>
-      <Box className='product-content'>
-        <Box style={{ maxWidth: 500, width: '100%' }}>
+      <Box className="product-content">
+        <Box className="image-section">
           <Carousel
+            className='carousel'
             controlSize={40}
+            controlsOffset="xs"
             withIndicators
             loop
-            onSlideChange={(index) => setCurrentImageIndex(index)}
-            getEmblaApi={(embla: ModalEmbla) => mainCarouselRef.current = embla}
-            style={{ width: '100%' }}
+            slideGap="md"
+            onSlideChange={(index: number): void => setCurrentImageIndex(index)}
+            getEmblaApi={(embla: ModalEmbla): ModalEmbla => mainCarouselRef.current = embla}
           >
-            {wine.image.map((img, index) => (
+            {wine.image.map((img: string, index: number) => (
               <Carousel.Slide key={index}>
                 <Image
                   src={img}
                   alt={`${wine.title} ${index + 1}`}
                   fit="contain"
-                  height={500}
-                  radius="md"
+                  className="main-product-image"
                   onClick={() => openModal(index)}
-                  style={{ cursor: 'pointer' }}
                 />
               </Carousel.Slide>
             ))}
           </Carousel>
 
           <Group justify="center" mt="md">
-            {wine.image.map((_, index) => (
-              <Group
+            {wine.image.map((_:string, index: number) => (
+              <Box
                 key={index}
-                onClick={() => handleThumbnailClick(index)}
-                style={{
-                  width: 60,
-                  height: 60,
-                  borderRadius: 4,
-                  overflow: 'hidden',
-                  cursor: 'pointer',
-                  transition: 'opacity 0.4s ease-in-out'
-                }}
+                className={`thumbnail-item ${currentImageIndex === index ? 'active-thumbnail' : ''}`}
+                onClick={(): void => handleThumbnailClick(index)}
               >
                 <Image
                   src={wine.image[index]}
                   alt={`Thumbnail ${index + 1}`}
-                  height={60}
-                  width={60}
-                  fit="cover"
+                  className="thumbnail-image"
                 />
-              </Group>
+              </Box>
             ))}
           </Group>
         </Box>
 
-        <Box style={{ flex: 1, maxWidth: 600 }}>
-          <Title order={1} mb="sm" c="yellow.7">
+        <Box className="details-section">
+          <Title order={1} c="yellow.7" className='title'>
             {wine.title}
           </Title>
 
-          <Divider my="xl" />
+          <Divider className='divider'/>
 
-          <Title order={3} mb="md">Description:</Title>
-          <Text mb="md" size="lg" c="dimmed" style={{ lineHeight: 1.6 }}>
+          <Title className='subtitle' order={3} mb="md">Description:</Title>
+          <Text mb="md" c="dimmed" className='description'>
             {wine.description}
           </Text>
 
-          <Divider my="xl" />
+          <Divider className='divider' />
 
           <Title order={3} mb="md">Price:</Title>
-          <Group mb="xl" align="center">
+          <Group className='price-content' mb="xl" align="center">
             {wine.discountedPrice ? (
               <>
                 <Text fw={700} size="xl" c="yellow.7">
@@ -146,20 +135,20 @@ export function ProductPage() {
                 </Badge>
               </>
             ) : (
-              <Text fw={700} size="xl">
+              <Text className="price">
                 ${wine.price}
               </Text>
             )}
           </Group>
 
-          <Divider my="xl" />
+          <Divider className='divider' />
 
           <Title order={3} mb="md">Wine Details:</Title>
           <Table mb="xl" verticalSpacing="sm" withTableBorder withColumnBorders>
             <Table.Tbody>
               {wine.attributes
                 .filter(attr => attr.name !== "Rating")
-                .map((attr, index) => (
+                .map((attr, index: number) => (
                   <Table.Tr key={index}>
                     <Table.Th className='attribute' fw={700} style={{ width: '30%' }}>{attr.name}:</Table.Th>
                     <Table.Td ta='center' fw={700}>{attr.value}</Table.Td>
@@ -182,17 +171,14 @@ export function ProductPage() {
             </Table.Tbody>
           </Table>
 
-          <Group mt="xl" grow justify="center">
-            <Button
-              className="button button--primary button--large"
-              maw='200'
-            >
+          <Group justify='center' wrap="nowrap">
+            <Button className="button button--primary button--large" w='50%'>
               Add to Cart
             </Button>
             <Button
               className="button button--secondary button--large"
-              onClick={() => navigate(ROUTES.CATALOG)}
-              maw='200'
+              w='50%'
+              onClick={(): void | Promise<void> => navigate(ROUTES.CATALOG)}
             >
               Continue Shopping
             </Button>
@@ -202,14 +188,14 @@ export function ProductPage() {
 
       <Modal
         opened={modalOpened}
-        onClose={() => setModalOpened(false)}
+        onClose={(): void => setModalOpened(false)}
         fullScreen
         padding={0}
         withCloseButton={false}
         transitionProps={{ duration: TRANSITION_DURATION }}
       >
         <CloseButton
-          onClick={() => setModalOpened(false)}
+          onClick={(): void => setModalOpened(false)}
           style={{
             position: 'fixed',
             top: 20,
@@ -222,6 +208,7 @@ export function ProductPage() {
         />
 
         <Carousel
+          className='modal-carousel'
           controlSize={50}
           initialSlide={currentImageIndex}
           withIndicators
