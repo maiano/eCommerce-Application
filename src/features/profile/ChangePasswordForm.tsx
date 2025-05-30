@@ -35,11 +35,12 @@ export function ChangePasswordForm({ onClose }: { onClose: () => void }) {
           classNames={{ input: 'form-input' }}
           withAsterisk
         />
-        <Text style={{ color: theme.colors.red[8] }} size="sm">
+        <Text style={{ color: theme.colors.red[8], marginBottom: '1rem' }} size="sm">
           {errors.password?.message}
         </Text>
 
         <PasswordInput
+        
           {...register('newPassword')}
           label='New Password'
           placeholder="Enter new password"
@@ -54,7 +55,7 @@ export function ChangePasswordForm({ onClose }: { onClose: () => void }) {
           classNames={{ input: 'form-input' }}
           withAsterisk
         />
-        <Text style={{ color: theme.colors.red[8] }} size="sm">
+        <Text style={{ color: theme.colors.red[8], marginBottom: '1rem' }} size="sm">
           {errors.newPassword?.message}
         </Text>
         <PasswordInput

@@ -40,7 +40,7 @@ export function ProfilePage() {
         <Title order={1} className="profile-title" style={{marginBottom:'24px'}}>
           My Profile
         </Title>
-        <Box className="profile-container">
+        <Box className="profile-section-container">
           <Box className="container-dark" style={{marginBottom:'24px'}}>
             <Group className="profile-section" justify="space-between">
               <Group>
@@ -106,50 +106,52 @@ export function ProfilePage() {
             </Title>
             {user?.body.addresses.map((address, index) => (
               <Container className="address-item" style={{marginBottom:'16px'}} key={index}>
-                <Group justify="space-between">
-                  <Box>
-                    <Group>
-                      {user.body.shippingAddressIds?.includes(address.id ?? '') && (
-                        <Badge style={{'--badge-color': theme.colors.primary[9], marginBottom: '12px'}} radius='sm'>
-                          {address.id === user.body.defaultShippingAddressId ? 'Default shipping address' :
-                           user.body.shippingAddressIds?.includes(address.id ?? '') ? 'Shipping address' : ''
-                          }
-                        </Badge>
-                      )}
-                      {user.body.billingAddressIds?.includes(address.id ?? '') && (
-                        <Badge style={{'--badge-color': theme.colors.primary[9], marginBottom: '12px'}} radius='sm'>
-                          {address.id === user.body.defaultBillingAddressId ? 'Default billing address' :
-                           user.body.billingAddressIds?.includes(address.id ?? '') ? 'Billing address' : ''
-                          }
-                        </Badge>
-                      )}
-                    </Group>
-                    <Text className="address-text">{address.streetName}</Text>
-                    <Text className="address-text">{address.postalCode}</Text>
-                    <Text className="address-text">{address.city}</Text>
-                    <Text className="address-text">{countries[address.country as keyof typeof countries]}</Text>
-                  </Box>
-                  <Group>
-                    <Button 
-                      className="button button--secondary"
-                      onClick={() => {
-                        setSelectedAddress(address);
-                        stack.open('edit-address');
-                      }}
-                      >
-                        Edit
-                    </Button>
-                    <Button
-                      className="button button--secondary"
-                      onClick={() => {
-                        setSelectedAddress(address);
-                        stack.open('delete-address');
-                      }}
-                      >
-                        Remove
-                    </Button>
+                <Stack gap={0}>
+                  <Group style={{marginBottom: '8px'}}>
+                    {user.body.shippingAddressIds?.includes(address.id ?? '') && (
+                      <Badge style={{'--badge-color': theme.colors.primary[9]}} radius='sm'>
+                        {address.id === user.body.defaultShippingAddressId ? 'Default shipping address' :
+                         user.body.shippingAddressIds?.includes(address.id ?? '') ? 'Shipping address' : ''
+                        }
+                      </Badge>
+                    )}
+                    {user.body.billingAddressIds?.includes(address.id ?? '') && (
+                      <Badge style={{'--badge-color': theme.colors.primary[9]}} radius='sm'>
+                        {address.id === user.body.defaultBillingAddressId ? 'Default billing address' :
+                         user.body.billingAddressIds?.includes(address.id ?? '') ? 'Billing address' : ''
+                        }
+                      </Badge>
+                    )}
                   </Group>
-                </Group>
+                  <Group justify="space-between">
+                    <Box>
+                      <Text className="address-text">{address.streetName}</Text>
+                      <Text className="address-text">{address.postalCode}</Text>
+                      <Text className="address-text">{address.city}</Text>
+                      <Text className="address-text">{countries[address.country as keyof typeof countries]}</Text>
+                    </Box>
+                    <Group>
+                      <Button 
+                        className="button button--secondary"
+                        onClick={() => {
+                          setSelectedAddress(address);
+                          stack.open('edit-address');
+                        }}
+                        >
+                          Edit
+                      </Button>
+                      <Button
+                        className="button button--secondary"
+                        onClick={() => {
+                          setSelectedAddress(address);
+                          stack.open('delete-address');
+                        }}
+                        >
+                          Remove
+                      </Button>
+                    </Group>
+                  </Group>
+                </Stack>
               </Container>
             ))}
 
@@ -216,13 +218,14 @@ export function ProfilePage() {
               {...stack.register('delete-address')}
               centered 
               onClose={async() => {
+                stack.close('delete-address');
                 const updatedUser = await getUserInfo();
                 if (updatedUser) {
                   setUser(updatedUser);
                 }}
               }>
               <Title size='20px' style={{marginBottom: '32px', textAlign: 'center'}}>Are you sure you want to remove this address?</Title>
-              <Text ta="center">{selectedAddress?.streetName}, {selectedAddress?.city}, {countries[selectedAddress?.country as keyof typeof countries]}, {selectedAddress?.postalCode}</Text>
+              <Text size="lg" ta="center">{selectedAddress?.streetName}, {selectedAddress?.city}, {countries[selectedAddress?.country as keyof typeof countries]}, {selectedAddress?.postalCode}</Text>
               <Button
                 style={{marginTop: '16px'}}
                 className="button button--primary"

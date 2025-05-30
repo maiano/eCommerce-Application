@@ -195,7 +195,7 @@ export function AddressForm({ onClose, type, address, onUpdate }: { onClose: () 
             <Checkbox
               styles={{
                 input: { borderRadius: '5px' },
-                root: { marginBottom: '1rem', marginRight:'2rem' },
+                root: { marginRight:'2rem' },
               }}
               {...register('isDeliveryAddress')}
               label="Delivery address"
@@ -203,6 +203,7 @@ export function AddressForm({ onClose, type, address, onUpdate }: { onClose: () 
           </Grid.Col>
           <Grid.Col span={{ base: 12, xs: 6 }}>
             <Switch
+              style={{marginBottom: '1rem'}}
               {...register('isDefaultDeliveryAddress')}
               label='Set as default'
               disabled={!watch('isDeliveryAddress')}
@@ -213,7 +214,7 @@ export function AddressForm({ onClose, type, address, onUpdate }: { onClose: () 
             <Checkbox
               styles={{
                 input: { borderRadius: '5px' },
-                root: { marginBottom: '1rem', marginRight:'2rem' },
+                root: { marginRight:'2rem' },
               }}
               {...register('isBillingAddress')}
               label="Billing address"
@@ -221,6 +222,7 @@ export function AddressForm({ onClose, type, address, onUpdate }: { onClose: () 
             </Grid.Col>
             <Grid.Col span={{ base: 12, xs: 6 }}>
           <Switch
+            style={{marginBottom: '1rem'}}
             {...register('isDefaultBillingAddress')}
             label='Set as default'
             disabled={!watch('isBillingAddress')}
