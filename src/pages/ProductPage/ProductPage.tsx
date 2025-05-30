@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { wines } from '@/types/types';
 import {
@@ -17,29 +17,63 @@ import {
 } from '@mantine/core';
 import { ROUTES } from '@/app/routes';
 import { Carousel } from '@mantine/carousel';
+import type { ModalEmbla } from '@/types/types.tsx'
 import './ProductPage.css';
+
+const TRANSITION_DURATION = 500;
 
 export function ProductPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const wine = wines.find(w => w.id === parseInt(id || ''));
 
+  const mainCarouselRef = useRef<ModalEmbla | null>(null);
+  const modalCarouselRef = useRef<ModalEmbla | null>(null);
   const [modalOpened, setModalOpened] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+
+  useEffect(() => {
+    if (modalOpened && modalCarouselRef.current) {
+      let raf: number;
+      const initCarousel = () => {
+        modalCarouselRef.current?.reInit();
+        modalCarouselRef.current?.scrollTo(currentImageIndex);
+      };
+
+      raf = requestAnimationFrame((initCarousel));
+
+      return () => cancelAnimationFrame(raf);
+    }
+  }, [modalOpened, currentImageIndex]);
 
   if (!wine) return null;
 
   const ratingAttribute = wine.attributes.find(attr => attr.name === "Rating");
   const ratingValue = ratingAttribute ? parseFloat(ratingAttribute.value) : wine.rating;
 
+  const handleThumbnailClick = (index: number) => {
+    setCurrentImageIndex(index);
+
+    mainCarouselRef.current?.scrollTo(index);
+    modalCarouselRef.current?.scrollTo(index);
+  };
+
+  const openModal = (index: number) => {
+    setCurrentImageIndex(index);
+    setModalOpened(true);
+  };
+
   return (
     <Container className="page" style={{ marginTop: 20 }}>
       <Box className='product-content'>
         <Box style={{ maxWidth: 500, width: '100%' }}>
           <Carousel
+            controlSize={40}
             withIndicators
             loop
             onSlideChange={(index) => setCurrentImageIndex(index)}
+            getEmblaApi={(embla: ModalEmbla) => mainCarouselRef.current = embla}
             style={{ width: '100%' }}
           >
             {wine.image.map((img, index) => (
@@ -50,10 +84,7 @@ export function ProductPage() {
                   fit="contain"
                   height={500}
                   radius="md"
-                  onClick={() => {
-                    setCurrentImageIndex(index);
-                    setModalOpened(true);
-                  }}
+                  onClick={() => openModal(index)}
                   style={{ cursor: 'pointer' }}
                 />
               </Carousel.Slide>
@@ -62,18 +93,16 @@ export function ProductPage() {
 
           <Group justify="center" mt="md">
             {wine.image.map((_, index) => (
-              <div
+              <Group
                 key={index}
-                onClick={() => setCurrentImageIndex(index)}
+                onClick={() => handleThumbnailClick(index)}
                 style={{
                   width: 60,
                   height: 60,
                   borderRadius: 4,
                   overflow: 'hidden',
                   cursor: 'pointer',
-                  opacity: index === currentImageIndex ? 1 : 0.6,
-                  border: index === currentImageIndex ? '2px solid #F59F00' : 'none',
-                  transition: 'opacity 0.3s ease'
+                  transition: 'opacity 0.4s ease-in-out'
                 }}
               >
                 <Image
@@ -83,7 +112,7 @@ export function ProductPage() {
                   width={60}
                   fit="cover"
                 />
-              </div>
+              </Group>
             ))}
           </Group>
         </Box>
@@ -132,15 +161,15 @@ export function ProductPage() {
                 .filter(attr => attr.name !== "Rating")
                 .map((attr, index) => (
                   <Table.Tr key={index}>
-                    <Table.Th fw={700} style={{ width: '30%' }}>{attr.name}:</Table.Th>
-                    <Table.Td fw={700}>{attr.value}</Table.Td>
+                    <Table.Th className='attribute' fw={700} style={{ width: '30%' }}>{attr.name}:</Table.Th>
+                    <Table.Td ta='center' fw={700}>{attr.value}</Table.Td>
                   </Table.Tr>
                 ))}
 
               <Table.Tr>
-                <Table.Th fw={700}>Rating:</Table.Th>
+                <Table.Th className='attribute' fw={700}>Rating:</Table.Th>
                 <Table.Td>
-                  <Group gap={4} ml="xs">
+                  <Group justify='center' gap={4} ml="xs">
                     <Text fw={500} c="yellow.7">
                       ★ {ratingValue}
                     </Text>
@@ -177,7 +206,7 @@ export function ProductPage() {
         fullScreen
         padding={0}
         withCloseButton={false}
-        transitionProps={{ duration: 200 }}
+        transitionProps={{ duration: TRANSITION_DURATION }}
       >
         <CloseButton
           onClick={() => setModalOpened(false)}
@@ -197,14 +226,24 @@ export function ProductPage() {
           initialSlide={currentImageIndex}
           withIndicators
           loop
+          onSlideChange={(index: number) => setCurrentImageIndex(index)}
+          getEmblaApi={(embla: ModalEmbla) => modalCarouselRef.current = embla}
           style={{
             backgroundColor: 'rgba(0,0,0,0.9)',
+            height: '100vh',
+            display: 'flex',
+            alignItems: 'center'
           }}
-          onSlideChange={(index: number) => setCurrentImageIndex(index)}
+          classNames={{
+            viewport: 'modal-carousel-viewport',
+            container: 'modal-carousel-container',
+            slide: 'modal-carousel-slide',
+          }}
         >
           {wine.image.map((img, index: number) => (
-            <Carousel.Slide key={index} style={{
-            }}>
+            <Carousel.Slide
+              key={index}
+            >
               <Image
                 className='product-card__image'
                 src={img}
@@ -213,6 +252,7 @@ export function ProductPage() {
                 style={{
                   maxHeight: '80%',
                   maxWidth: '80%',
+                  cursor: 'pointer',
                 }}
               />
             </Carousel.Slide>

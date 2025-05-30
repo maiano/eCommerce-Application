@@ -21,12 +21,16 @@
   border-radius: 0.75rem;
 }
 
-.product-attribute {
+.attribute {
   background: rgba(138, 157, 192, 0.12);
   padding: 0.5rem 1rem;
   border-radius: 4px;
   text-align: center;
   /*color: #a1b1c8;*/
+}
+
+.value {
+  text-align: center;
 }
 
 
@@ -37,6 +41,19 @@ body.mantine-Modal-body {
 .mantine-Modal-content {
   overflow: hidden;
 }
+
+.carousel-slide {
+  transition: transform 0.3s ease-in-out;
+}
+.modal-carousel-container {
+  transition: transform 0.3s ease-in-out;
+  will-change: transform;
+}
+.mantine-Carousel-viewport {
+  perspective: 1000px;
+  will-change: transform;
+}
+
 
 @media (max-width: 768px) {
   .product-page {

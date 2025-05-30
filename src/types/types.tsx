@@ -189,3 +189,8 @@ export const wines: Wine[] = [
     ]
   }
 ];
+
+export interface ModalEmbla {
+  scrollTo: (index: number) => void;
+  reInit: () => void;
+}
