@@ -13,16 +13,16 @@ import {
   Grid,
   ComboboxStore,
 } from '@mantine/core';
-import { CloseButton } from '@mantine/core';
 import { useState } from 'react';
 import { ProductCard } from '@/components/Card/ProductCard.tsx';
 import { useCategories } from '@/features/catalog/useCategories';
 import { useWineSorting } from '@/features/sorting/useWineSorting.tsx';
+import { CategoryButton } from '@/shared/ui/CategoryButton';
 import type { Wine } from '@/types/types.tsx';
 import { wines } from '@/types/types.tsx';
 
 export function CatalogPage() {
-  // const { data: categories, isLoading: categoriesLoading } = useCategories();
+  const { data: categories } = useCategories();
 
   const combobox: ComboboxStore = useCombobox({
     onDropdownClose: (): void => combobox.resetSelectedOption(),
@@ -30,16 +30,12 @@ export function CatalogPage() {
 
   const { sortedWines, sortBy, setSortBy, sortOptions } = useWineSorting(wines);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const categories = ['Red', 'White', 'Sparkling', 'Rose', 'Dessert'];
+  // const categories = ['Red', 'White', 'Sparkling', 'Rose', 'Dessert'];
 
-  const toggleCategory: (category: string) => void = (
-    category: string,
-  ): void => {
-    if (selectedCategories.includes(category)) {
-      setSelectedCategories(selectedCategories.filter((c) => c !== category));
-    } else {
-      setSelectedCategories([...selectedCategories, category]);
-    }
+  const toggleCategory = (slug: string) => {
+    setSelectedCategories((prev) =>
+      prev.includes(slug) ? prev.filter((s) => s !== slug) : [...prev, slug],
+    );
   };
 
   const resetCategories: () => void = (): void => {
@@ -85,54 +81,27 @@ export function CatalogPage() {
           justify="center"
           style={{ width: 'fit-content' }}
         >
-          {categories.map((category: string) => (
-            <Grid.Col
-              key={category}
-              span={{ base: 'auto', sm: 'auto', md: 'auto' }}
-            >
-              <Button
-                fullWidth
-                className={`filter-button ${selectedCategories.includes(category) ? 'button--primary' : ''}`}
-                variant={
-                  selectedCategories.includes(category) ? 'filled' : 'default'
-                }
-                onClick={() => toggleCategory(category)}
-                styles={{
-                  ...(selectedCategories.includes(category) && {
-                    root: {
-                      padding: '4px 4px 4px 10px',
-                    },
-                  }),
-                }}
-                rightSection={
-                  selectedCategories.includes(category) ? (
-                    <CloseButton
-                      className={'button--primary'}
-                      size="sm"
-                      variant="subtle"
-                      icon={
-                        <svg
-                          width="14"
-                          height="14"
-                          viewBox="0 0 14 14"
-                          fill="none"
-                          stroke="currentColor"
-                        >
-                          <path d="M1 1L13 13M13 1L1 13" strokeWidth="2" />
-                        </svg>
-                      }
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        toggleCategory(category);
-                      }}
-                    />
-                  ) : null
-                }
+          {categories?.map((category) => {
+            const slug = category.slug['en-US'];
+            const label = category.name['en-US'].split(' ')[0];
+
+            if (!slug || !label) return null;
+            const selected = selectedCategories.includes(slug);
+
+            return (
+              <Grid.Col
+                key={slug}
+                span={{ base: 'auto', sm: 'auto', md: 'auto' }}
               >
-                {category}
-              </Button>
-            </Grid.Col>
-          ))}
+                <CategoryButton
+                  label={label}
+                  selected={selected}
+                  onToggle={() => toggleCategory(slug)}
+                />
+              </Grid.Col>
+            );
+          })}
+
           <Grid.Col span={{ base: 'auto', sm: 'auto', md: 'auto' }}>
             <Button
               fullWidth
