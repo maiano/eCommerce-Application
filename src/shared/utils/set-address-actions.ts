@@ -44,7 +44,7 @@ export const setAddressActions = (id: string | undefined, currentUser: ClientRes
   }
   
 
-  if (id !== currentUser?.body.defaultShippingAddressId && isDefaultDelivery) {
+  if (id !== currentUser?.body.defaultShippingAddressId && isDefaultDelivery && isDelivery) {
     actions.push(setDefaultShippingAddress);
   }
   if (id === currentUser?.body.defaultShippingAddressId && !isDefaultDelivery) {
@@ -58,7 +58,7 @@ export const setAddressActions = (id: string | undefined, currentUser: ClientRes
   }
 
 
-  if (id !== currentUser?.body.defaultBillingAddressId && isDefaultBilling) {
+  if (id !== currentUser?.body.defaultBillingAddressId && isDefaultBilling && isBilling) {
     actions.push(setDefaultBillingAddress);
   } 
   if (id === currentUser?.body.defaultBillingAddressId && !isDefaultBilling) {
