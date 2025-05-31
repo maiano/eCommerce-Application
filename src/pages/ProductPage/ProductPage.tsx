@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, RefObject, SyntheticEvent } from 'react';
 import { useParams, useNavigate, NavigateFunction } from 'react-router-dom';
-import { wines } from '@/types/types';
+import { WineAttribute, wines } from '@/types/types';
 import {
   Box,
   Text,
@@ -48,7 +48,7 @@ export function ProductPage() {
 
   if (!wine) return null;
 
-  const ratingAttribute = wine.attributes.find(attr => attr.name === "Rating");
+  const ratingAttribute: WineAttribute | undefined = wine.attributes.find((attr: WineAttribute): boolean => attr.name === "Rating");
   const ratingValue: number = ratingAttribute ? parseFloat(ratingAttribute.value) : wine.rating;
 
   const handleThumbnailClick = (index: number): void => {
@@ -62,6 +62,19 @@ export function ProductPage() {
     setModalOpened(true);
   };
 
+  const createImageHandler = () => {
+    return (e: SyntheticEvent<HTMLImageElement, Event>): void => {
+      if (e.target instanceof HTMLImageElement) {
+        const img: HTMLImageElement = e.target;
+        if (img.naturalHeight > img.naturalWidth * 1.5) {
+          img.style.objectFit = "contain";
+        }
+      }
+    };
+  };
+
+  const handleImageLoad = createImageHandler();
+
   return (
     <Container className="page" style={{ marginTop: 20 }}>
       <Box className="product-content">
@@ -71,25 +84,19 @@ export function ProductPage() {
             controlSize={40}
             controlsOffset="xs"
             loop
-            slideGap="md"
+            slideSize="100%"
+            align="start"
             onSlideChange={(index: number): void => setCurrentImageIndex(index)}
             getEmblaApi={(embla: ModalEmbla): ModalEmbla => mainCarouselRef.current = embla}
           >
             {wine.image.map((img: string, index: number) => (
-              <Carousel.Slide key={index}>
+              <Carousel.Slide key={index} >
                 <Image
                   src={img}
                   alt={`${wine.title} ${index + 1}`}
                   className="main-product-image"
                   onClick={(): void => openModal(index)}
-                  onLoad={(e: SyntheticEvent<HTMLImageElement, Event> ): void => {
-                    if (e.target instanceof HTMLImageElement) {
-                      const img: HTMLImageElement = e.target;
-                      if (img.naturalHeight > img.naturalWidth * 1.2) {
-                        img.style.objectFit = "contain";
-                      }
-                    }
-                  }}
+                  onLoad={handleImageLoad}
                 />
               </Carousel.Slide>
             ))}
@@ -106,14 +113,7 @@ export function ProductPage() {
                   src={wine.image[index]}
                   alt={`Thumbnail ${index + 1}`}
                   className="thumbnail-image"
-                  onLoad={(e: SyntheticEvent<HTMLImageElement, Event> ): void => {
-                    if (e.target instanceof HTMLImageElement) {
-                      const img: HTMLImageElement = e.target;
-                      if (img.naturalHeight > img.naturalWidth * 1.5) {
-                        img.style.objectFit = "contain";
-                      }
-                    }
-                  }}
+                  onLoad={handleImageLoad}
                 />
               </Box>
             ))}
@@ -161,8 +161,8 @@ export function ProductPage() {
           <Table mb="xl" verticalSpacing="sm" withTableBorder withColumnBorders>
             <Table.Tbody>
               {wine.attributes
-                .filter(attr => attr.name !== "Rating")
-                .map((attr, index: number) => (
+                .filter((attr: WineAttribute): boolean => attr.name !== "Rating")
+                .map((attr: WineAttribute, index: number) => (
                   <Table.Tr key={index}>
                     <Table.Th className='attribute' fw={700} style={{ width: '30%' }}>{attr.name}:</Table.Th>
                     <Table.Td ta='center' fw={700}>{attr.value}</Table.Td>
@@ -227,8 +227,8 @@ export function ProductPage() {
           initialSlide={currentImageIndex}
           withIndicators
           loop
-          onSlideChange={(index: number) => setCurrentImageIndex(index)}
-          getEmblaApi={(embla: ModalEmbla) => modalCarouselRef.current = embla}
+          onSlideChange={(index: number): void => setCurrentImageIndex(index)}
+          getEmblaApi={(embla: ModalEmbla): ModalEmbla => modalCarouselRef.current = embla}
           style={{
             backgroundColor: '#131c24',
             height: '100vh',
@@ -249,14 +249,7 @@ export function ProductPage() {
                 className='product-card__image'
                 src={img}
                 alt={`${wine.title} ${index + 1}`}
-                onLoad={(e: SyntheticEvent<HTMLImageElement, Event>): void => {
-                  if (e.target instanceof HTMLImageElement) {
-                    const img: HTMLImageElement = e.target;
-                    if (img.naturalHeight > img.naturalWidth * 1.5) {
-                      img.style.objectFit = "contain";
-                    }
-                  }
-                }}
+                onLoad={handleImageLoad}
               />
             </Carousel.Slide>
           ))}
