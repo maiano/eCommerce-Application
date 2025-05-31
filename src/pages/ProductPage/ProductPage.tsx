@@ -76,18 +76,16 @@ export function ProductPage() {
             getEmblaApi={(embla: ModalEmbla): ModalEmbla => mainCarouselRef.current = embla}
           >
             {wine.image.map((img: string, index: number) => (
-              <Carousel.Slide
-                key={index}
-              >
+              <Carousel.Slide key={index}>
                 <Image
                   src={img}
                   alt={`${wine.title} ${index + 1}`}
-                  className="main-image"
+                  className="main-product-image"
                   onClick={(): void => openModal(index)}
                   onLoad={(e: SyntheticEvent<HTMLImageElement, Event> ): void => {
                     if (e.target instanceof HTMLImageElement) {
                       const img: HTMLImageElement = e.target;
-                      if (img.naturalHeight > img.naturalWidth * 1.5) {
+                      if (img.naturalHeight > img.naturalWidth * 1.2) {
                         img.style.objectFit = "contain";
                       }
                     }
