@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, RefObject } from 'react';
+import { useState, useRef, useEffect, RefObject, SyntheticEvent } from 'react';
 import { useParams, useNavigate, NavigateFunction } from 'react-router-dom';
 import { wines } from '@/types/types';
 import {
@@ -42,7 +42,7 @@ export function ProductPage() {
 
       raf = requestAnimationFrame((initCarousel));
 
-      return () => cancelAnimationFrame(raf);
+      return (): void => cancelAnimationFrame(raf);
     }
   }, [modalOpened, currentImageIndex]);
 
@@ -70,20 +70,28 @@ export function ProductPage() {
             className='carousel'
             controlSize={40}
             controlsOffset="xs"
-            withIndicators
             loop
             slideGap="md"
             onSlideChange={(index: number): void => setCurrentImageIndex(index)}
             getEmblaApi={(embla: ModalEmbla): ModalEmbla => mainCarouselRef.current = embla}
           >
             {wine.image.map((img: string, index: number) => (
-              <Carousel.Slide key={index}>
+              <Carousel.Slide
+                key={index}
+              >
                 <Image
                   src={img}
                   alt={`${wine.title} ${index + 1}`}
-                  fit="contain"
-                  className="main-product-image"
-                  onClick={() => openModal(index)}
+                  className="main-image"
+                  onClick={(): void => openModal(index)}
+                  onLoad={(e: SyntheticEvent<HTMLImageElement, Event> ): void => {
+                    if (e.target instanceof HTMLImageElement) {
+                      const img: HTMLImageElement = e.target;
+                      if (img.naturalHeight > img.naturalWidth * 1.5) {
+                        img.style.objectFit = "contain";
+                      }
+                    }
+                  }}
                 />
               </Carousel.Slide>
             ))}
@@ -100,6 +108,14 @@ export function ProductPage() {
                   src={wine.image[index]}
                   alt={`Thumbnail ${index + 1}`}
                   className="thumbnail-image"
+                  onLoad={(e: SyntheticEvent<HTMLImageElement, Event> ): void => {
+                    if (e.target instanceof HTMLImageElement) {
+                      const img: HTMLImageElement = e.target;
+                      if (img.naturalHeight > img.naturalWidth * 1.5) {
+                        img.style.objectFit = "contain";
+                      }
+                    }
+                  }}
                 />
               </Box>
             ))}
@@ -201,7 +217,7 @@ export function ProductPage() {
             top: 20,
             right: 20,
             zIndex: 100,
-            backgroundColor: 'rgba(0,0,0,0.5)',
+            backgroundColor: 'dark.7',
             color: 'primary.0'
           }}
           size="xl"
@@ -216,7 +232,7 @@ export function ProductPage() {
           onSlideChange={(index: number) => setCurrentImageIndex(index)}
           getEmblaApi={(embla: ModalEmbla) => modalCarouselRef.current = embla}
           style={{
-            backgroundColor: 'rgba(0,0,0,0.9)',
+            backgroundColor: '#131c24',
             height: '100vh',
             display: 'flex',
             alignItems: 'center'
@@ -227,7 +243,7 @@ export function ProductPage() {
             slide: 'modal-carousel-slide',
           }}
         >
-          {wine.image.map((img, index: number) => (
+          {wine.image.map((img: string, index: number) => (
             <Carousel.Slide
               key={index}
             >
@@ -235,11 +251,13 @@ export function ProductPage() {
                 className='product-card__image'
                 src={img}
                 alt={`${wine.title} ${index + 1}`}
-                fit="contain"
-                style={{
-                  maxHeight: '80%',
-                  maxWidth: '80%',
-                  cursor: 'pointer',
+                onLoad={(e: SyntheticEvent<HTMLImageElement, Event>): void => {
+                  if (e.target instanceof HTMLImageElement) {
+                    const img: HTMLImageElement = e.target;
+                    if (img.naturalHeight > img.naturalWidth * 1.5) {
+                      img.style.objectFit = "contain";
+                    }
+                  }
                 }}
               />
             </Carousel.Slide>

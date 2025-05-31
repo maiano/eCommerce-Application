@@ -46,10 +46,10 @@ export const wines: Wine[] = [
       { name: "Rating", value: '4.8' }
     ],
     image: [
-      'https://cdn.usegalileo.ai/sdxl10/544838f2-4393-4780-ab1e-7bbef36024f9.png',
-      'https://cdn.usegalileo.ai/sdxl10/59a49d75-b7ce-48f0-96d7-d620aefc4e49.png',
-      'https://cdn.usegalileo.ai/sdxl10/b25779ab-c1bf-42c0-8245-bc5f7d576365.png',
-      'https://cdn.usegalileo.ai/sdxl10/0eea6aee-9921-49ac-bbaa-7def81318f98.png'
+      '../src/assets/Montrachet Grand Cru 2010-2.jpg',
+      '../src/assets/Ellen Lane Estate Chardonnay 2015-1.jpg',
+      '../src/assets/Corton-Charlemagne Grand Cru N.V-2..jpg',
+      'https://images.vivino.com/thumbs/G3MU5UwBQ1eCX5A6CiPivg_pb_x600.png'
     ]
   },
   {
