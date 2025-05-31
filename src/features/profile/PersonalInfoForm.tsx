@@ -6,9 +6,9 @@ import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { JSX, useEffect, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { getUserInfo } from "../../shared/utils/get-user-info";
 import { useAuthStore } from "../auth/auth-state";
 import { updateUserInfo } from "./personal-info";
-import { getUserInfo } from "./profile";
 import { PersonalInfoFormData, personalInfoSchema } from "@/shared/validation/profile-validation";
 
 export function PersonalInfoForm({ onClose }: { onClose: () => void }) {

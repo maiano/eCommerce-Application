@@ -7,8 +7,8 @@ import { deleteAddress } from "@/features/profile/address";
 import { AddressForm } from "@/features/profile/AddressForm";
 import { ChangePasswordForm } from "@/features/profile/ChangePasswordForm";
 import { PersonalInfoForm } from "@/features/profile/PersonalInfoForm";
-import { getUserInfo } from "@/features/profile/profile";
 import { countries } from "@/shared/constants/countries";
+import { getUserInfo } from "@/shared/utils/get-user-info";
 
 export function ProfilePage() {
   const theme = useMantineTheme();

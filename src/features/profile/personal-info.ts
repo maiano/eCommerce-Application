@@ -1,5 +1,5 @@
 import { ClientResponse, Customer } from "@commercetools/platform-sdk";
-import { getUserInfo } from "./profile";
+import { getUserInfo } from "../../shared/utils/get-user-info";
 import { apiClientManager } from "@/shared/lib/commercetools";
 import { notifyError, notifySuccess } from "@/shared/utils/custom-notifications";
 
