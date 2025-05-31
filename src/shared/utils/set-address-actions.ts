@@ -1,74 +1,45 @@
-import { ClientResponse, Customer, MyCustomerAddBillingAddressIdAction, MyCustomerAddShippingAddressIdAction, MyCustomerRemoveBillingAddressIdAction, MyCustomerRemoveShippingAddressIdAction, MyCustomerSetDefaultBillingAddressAction, MyCustomerSetDefaultShippingAddressAction, MyCustomerUpdateAction } from "@commercetools/platform-sdk";
+import { ClientResponse, Customer, MyCustomerUpdateAction } from "@commercetools/platform-sdk";
+
+type Action = 'setDefaultShippingAddress' | 'addShippingAddressId' | 'removeShippingAddressId' | 'setDefaultShippingAddress' | 'setDefaultBillingAddress' | 'addBillingAddressId' | 'removeBillingAddressId' | 'setDefaultBillingAddress';
 
 export const setAddressActions = (id: string | undefined, currentUser: ClientResponse<Customer> | undefined, isDelivery: boolean, isBilling: boolean, isDefaultDelivery: boolean, isDefaultBilling: boolean) => {
   let actions: MyCustomerUpdateAction[] = [];
 
-  const setDefaultShippingAddress: MyCustomerSetDefaultShippingAddressAction = {
-    action: 'setDefaultShippingAddress',
-    addressId: id,
+  const createAddressAction = (action: Action, addressId: string | undefined): MyCustomerUpdateAction => ({
+    action,
+    addressId
+  });
+
+  if (isDelivery) {
+    if (isDefaultDelivery && id !== currentUser?.body.defaultShippingAddressId) {
+      actions.push(createAddressAction('setDefaultShippingAddress', id));
+    }
+    if (!currentUser?.body.shippingAddressIds?.includes(id ?? '')) {
+      actions.push(createAddressAction('addShippingAddressId', id));
+    }
+  } else {
+    if (currentUser?.body.shippingAddressIds?.includes(id ?? '')) {
+      actions.push(createAddressAction('removeShippingAddressId', id));
+    }
+    if (id === currentUser?.body.defaultShippingAddressId) {
+      actions.push(createAddressAction('setDefaultShippingAddress', undefined));
+    }
   }
   
-  const setDefaultBillingAddress: MyCustomerSetDefaultBillingAddressAction = {
-    action: 'setDefaultBillingAddress',
-    addressId: id,
-  }
-
-  const removeDefaultShippingAddress: MyCustomerSetDefaultShippingAddressAction = {
-    action: 'setDefaultShippingAddress',
-    addressId: undefined,
-  }
-  
-  const removeDefaultBillingAddress: MyCustomerSetDefaultBillingAddressAction = {
-    action: 'setDefaultBillingAddress',
-    addressId: undefined,
-  }
-
-  const addShippingAddressId: MyCustomerAddShippingAddressIdAction = {
-    action: 'addShippingAddressId',
-    addressId: id,
-  }
-  
-  const addBillingAddressId: MyCustomerAddBillingAddressIdAction = {
-    action: 'addBillingAddressId',
-    addressId: id,
-  }
-
-  const removeShippingAddressId: MyCustomerRemoveShippingAddressIdAction = {
-    action: 'removeShippingAddressId',
-    addressId: id,
-  }
-
-  const removeBillingAddressId: MyCustomerRemoveBillingAddressIdAction = {
-    action: 'removeBillingAddressId',
-    addressId: id,
-  }
-  
-
-  if (id !== currentUser?.body.defaultShippingAddressId && isDefaultDelivery && isDelivery) {
-    actions.push(setDefaultShippingAddress);
-  }
-  if (id === currentUser?.body.defaultShippingAddressId && !isDefaultDelivery) {
-    actions.push(removeDefaultShippingAddress);
-  }
-  if (!currentUser?.body.shippingAddressIds?.includes(id ?? '') && isDelivery && !actions.includes(setDefaultShippingAddress)) {
-    actions.push(addShippingAddressId);
-  }
-  if (currentUser?.body.shippingAddressIds?.includes(id ?? '') && !isDelivery) {
-    actions.push(removeShippingAddressId);
-  }
-
-
-  if (id !== currentUser?.body.defaultBillingAddressId && isDefaultBilling && isBilling) {
-    actions.push(setDefaultBillingAddress);
-  } 
-  if (id === currentUser?.body.defaultBillingAddressId && !isDefaultBilling) {
-    actions.push(removeDefaultBillingAddress);
-  }
-  if (!currentUser?.body.billingAddressIds?.includes(id ?? '') && isBilling && !actions.includes(setDefaultBillingAddress)) {
-    actions.push(addBillingAddressId);
-  }
-  if (currentUser?.body.billingAddressIds?.includes(id ?? '') && !isBilling) {
-    actions.push(removeBillingAddressId);
+  if (isBilling) {
+    if (isDefaultBilling && id !== currentUser?.body.defaultBillingAddressId) {
+      actions.push(createAddressAction('setDefaultBillingAddress', id));
+    }
+    if (!currentUser?.body.billingAddressIds?.includes(id ?? '')) {
+      actions.push(createAddressAction('addBillingAddressId', id));
+    }
+  } else {
+    if (currentUser?.body.billingAddressIds?.includes(id ?? '')) {
+      actions.push(createAddressAction('removeBillingAddressId', id));
+    }
+    if (id === currentUser?.body.defaultBillingAddressId) {
+      actions.push(createAddressAction('setDefaultBillingAddress', undefined));
+    }
   }
   return actions;
 }
