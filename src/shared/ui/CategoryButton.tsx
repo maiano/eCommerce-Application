@@ -1,4 +1,4 @@
-import { Button, ActionIcon } from '@mantine/core';
+import { Button, Box } from '@mantine/core';
 
 export function CategoryButton({
   label,
@@ -24,14 +24,14 @@ export function CategoryButton({
       }}
       rightSection={
         selected ? (
-          <ActionIcon
-            size="sm"
-            variant="subtle"
+          <Box
+            component="span"
             className="button--primary"
             onClick={(e) => {
               e.stopPropagation();
               onToggle();
             }}
+            style={{ display: 'flex', alignItems: 'center' }}
           >
             <svg
               width="14"
@@ -43,7 +43,7 @@ export function CategoryButton({
             >
               <path d="M1 1L13 13M13 1L1 13" />
             </svg>
-          </ActionIcon>
+          </Box>
         ) : null
       }
     >

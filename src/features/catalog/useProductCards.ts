@@ -69,8 +69,8 @@ export function useProductCards({
     async (client) => {
       const filter =
         categoryIds.length > 0
-          ? categoryIds.map((id) => `categories.id:"${id}"`)
-          : [];
+          ? [`categories.id: ${categoryIds.map((id) => `"${id}"`).join(',')}`]
+          : undefined;
 
       const mappedSort = sortBy ? sortMap[sortBy] : undefined;
 
@@ -82,7 +82,7 @@ export function useProductCards({
             limit: 8,
             offset: (page - 1) * 8,
             ...(mappedSort ? { sort: [mappedSort] } : {}),
-            ...(filter.length > 0 ? { filter } : {}),
+            ...(filter ? { filter } : {}),
           },
         })
         .execute();
