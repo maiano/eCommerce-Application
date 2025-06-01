@@ -6,15 +6,12 @@ import {
   Group,
   Title,
   Text,
-  Menu, Anchor,
+  Menu,
+  Anchor,
 } from '@mantine/core';
-import {
-  useDisclosure,
-  useClickOutside,
-  useMediaQuery,
-  useDidUpdate,
-} from '@mantine/hooks';
-import { Link } from 'react-router-dom';
+import { useDisclosure, useClickOutside, useMediaQuery } from '@mantine/hooks';
+import { useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { ROUTES } from '@/app/routes';
 import { useAuthStore } from '@/features/auth/auth-state';
 import { apiClientManager } from '@/shared/lib/commercetools/api-client-manager';
@@ -22,6 +19,7 @@ import { apiClientManager } from '@/shared/lib/commercetools/api-client-manager'
 export function Header() {
   const status = useAuthStore((state) => state.status);
   const isAuthenticated = status === 'AUTHENTICATED';
+  const location = useLocation();
 
   const handleLogout = () => {
     apiClientManager.logout();
@@ -33,7 +31,7 @@ export function Header() {
   const [opened, { toggle, close }] = useDisclosure();
   const isLargeScreen = useMediaQuery('(min-width: 768px)');
 
-  useDidUpdate(() => {
+  useEffect(() => {
     const scrollbarWidth =
       window.innerWidth - document.documentElement.clientWidth;
 
@@ -44,11 +42,20 @@ export function Header() {
       document.body.classList.remove('no-scroll');
       document.body.style.paddingRight = '';
     }
+
+    return () => {
+      document.body.classList.remove('no-scroll');
+      document.body.style.paddingRight = '';
+    };
   }, [opened]);
 
-  useDidUpdate(() => {
+  useEffect(() => {
     if (isLargeScreen) close();
-  }, [isLargeScreen]);
+  }, [isLargeScreen, close]);
+
+  useEffect(() => {
+    close();
+  }, [location.pathname, close]);
 
   useClickOutside(
     () => opened && close(),
@@ -105,13 +112,21 @@ export function Header() {
         <Anchor className="header__nav-item" component={Link} to={ROUTES.HOME}>
           <Text>Main</Text>
         </Anchor>
-        <Anchor className="header__nav-item" component={Link} to={ROUTES.CATALOG}>
+        <Anchor
+          className="header__nav-item"
+          component={Link}
+          to={ROUTES.CATALOG}
+        >
           <Text>Catalog</Text>
         </Anchor>
         <Anchor className="header__nav-item" component={Link} to="/about">
           <Text>About us</Text>
         </Anchor>
-        <Anchor className="header__nav-item header__nav-item--cart" component={Link} to="/cart">
+        <Anchor
+          className="header__nav-item header__nav-item--cart"
+          component={Link}
+          to="/cart"
+        >
           <Text>Cart</Text>
         </Anchor>
 

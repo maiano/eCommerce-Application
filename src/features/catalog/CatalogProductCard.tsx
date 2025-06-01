@@ -28,7 +28,7 @@ export function CatalogProductCard({ wine }: ProductCardProps) {
         <Card.Section>
           <Image
             className={`product-card__image product-card__image--${wine.id}`}
-            style={{ height: 300 }}
+            style={{ height: 300, objectFit: 'contain' }}
             fit={'scale-down'}
             fallbackSrc="./src/assets/fallback_1.png"
             src={wine.image}
@@ -46,7 +46,7 @@ export function CatalogProductCard({ wine }: ProductCardProps) {
             fw={500}
             size="lg"
             style={{
-              height: 60,
+              // height: 60,
               display: 'flex',
               alignItems: 'center',
             }}
@@ -69,13 +69,8 @@ export function CatalogProductCard({ wine }: ProductCardProps) {
         </Group>
 
         <Group justify="space-between" wrap="nowrap">
-          <Text
-            c="dimmed"
-            size="sm"
-            lineClamp={2}
-            style={{ flex: 1, height: 60 }}
-          >
-            {wine.description}
+          <Text c="dimmed" size="sm" lineClamp={2} style={{ flex: 1 }}>
+            {wine.country}
           </Text>
           <Group gap={4} ml="xs">
             <Text fw={500} c="yellow.7">
