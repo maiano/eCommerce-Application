@@ -88,9 +88,14 @@ export function ProductPage() {
             align="start"
             onSlideChange={(index: number): void => setCurrentImageIndex(index)}
             getEmblaApi={(embla: ModalEmbla): ModalEmbla => mainCarouselRef.current = embla}
+            classNames={{
+              viewport: 'carousel-viewport',
+              container: 'carousel-container',
+              slide: 'carousel-slide',
+            }}
           >
             {wine.image.map((img: string, index: number) => (
-              <Carousel.Slide key={index} >
+              <Carousel.Slide key={index}>
                 <Image
                   src={img}
                   alt={`${wine.title} ${index + 1}`}
@@ -236,9 +241,9 @@ export function ProductPage() {
             alignItems: 'center'
           }}
           classNames={{
-            viewport: 'modal-carousel-viewport',
-            container: 'modal-carousel-container',
-            slide: 'modal-carousel-slide',
+            viewport: 'modal-viewport',
+            container: 'modal-container',
+            slide: 'modal-slide',
           }}
         >
           {wine.image.map((img: string, index: number) => (
@@ -246,7 +251,7 @@ export function ProductPage() {
               key={index}
             >
               <Image
-                className='product-card__image'
+                className='modal-image'
                 src={img}
                 alt={`${wine.title} ${index + 1}`}
                 onLoad={handleImageLoad}
