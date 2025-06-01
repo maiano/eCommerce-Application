@@ -1,5 +1,4 @@
 import {
-  Anchor,
   Box,
   Container,
   Group,
@@ -12,23 +11,25 @@ import { Link } from 'react-router-dom';
 import { ROUTES } from '@/app/routes';
 import { LoginForm } from '@/features/login/LoginForm';
 import { LogoWithTitle } from '@/shared/ui/LogoWithTitle';
+import '@/pages/RegistrationPage.css';
+
 export function LoginPage() {
   return (
-    <Container size={420} mx="auto">
-      <Box pt="sm">
-        <Stack align="center">
+    <Container className="page" pt="20vh">
+      <Box w="100%" display="flex" style={{ justifyContent: 'center' }} maw={450}>
+        <Stack w="100%" className="auth-form">
           <LogoWithTitle />
-          <Paper withBorder w="100%" radius="sm" p="md" styles={{}}>
-            <Title order={1} ta="center" styles={{}}>
+          <Paper w="100%" radius="sm">
+            <Title order={1} ta="center">
               Welcome Back
             </Title>
             <LoginForm />
-            <Group gap="xs">
-              <Text mt="md" ta="center" styles={{}}>
-                Don't have an account?
-                <Anchor ml="xs" component={Link} to={ROUTES.REGISTRATION}>
+            <Group gap="xs" className="auth-footer">
+              <Text mt="md" ta="center" style={{ margin: 'auto' }}>
+                Don't have an account?{' '}
+                <Link className="auth-link" to={ROUTES.REGISTRATION}>
                   Sign Up
-                </Anchor>
+                </Link>
               </Text>
             </Group>
           </Paper>

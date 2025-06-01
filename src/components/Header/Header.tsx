@@ -6,7 +6,7 @@ import {
   Group,
   Title,
   Text,
-  Menu,
+  Menu, Anchor,
 } from '@mantine/core';
 import {
   useDisclosure,
@@ -15,6 +15,7 @@ import {
   useDidUpdate,
 } from '@mantine/hooks';
 import { Link } from 'react-router-dom';
+import { ROUTES } from '@/app/routes';
 import { useAuthStore } from '@/features/auth/auth-state';
 import { apiClientManager } from '@/shared/lib/commercetools/api-client-manager';
 
@@ -61,8 +62,9 @@ export function Header() {
   return (
     <Box className="header" style={{ width: '100%', maxWidth: 1920 }}>
       <Group className="header__logo" style={{ justifyContent: 'start' }}>
-        <Link
-          to="/"
+        <Anchor
+          component={Link}
+          to={ROUTES.HOME}
           style={{
             color: theme.colors.red[9],
             display: 'flex',
@@ -88,7 +90,7 @@ export function Header() {
             />
           </svg>
           <Title className="header__logo-text">Wine not</Title>
-        </Link>
+        </Anchor>
       </Group>
 
       <Group className={`header__nav ${opened ? 'open' : ''}`}>
@@ -100,18 +102,18 @@ export function Header() {
           aria-label="Toggle navigation"
           onClick={toggle}
         />
-        <Link className="header__nav-item" to="/">
+        <Anchor className="header__nav-item" component={Link} to={ROUTES.HOME}>
           <Text>Main</Text>
-        </Link>
-        <Link className="header__nav-item" to="/catalog">
+        </Anchor>
+        <Anchor className="header__nav-item" component={Link} to={ROUTES.CATALOG}>
           <Text>Catalog</Text>
-        </Link>
-        <Link className="header__nav-item" to="/about">
+        </Anchor>
+        <Anchor className="header__nav-item" component={Link} to="/about">
           <Text>About us</Text>
-        </Link>
-        <Link className="header__nav-item header__nav-item--cart" to="/cart">
+        </Anchor>
+        <Anchor className="header__nav-item header__nav-item--cart" component={Link} to="/cart">
           <Text>Cart</Text>
-        </Link>
+        </Anchor>
 
         {opened ? (
           isAuthenticated ? (
@@ -213,10 +215,10 @@ export function Header() {
                   </>
                 ) : (
                   <>
-                    <Menu.Item component={Link} to="/login">
+                    <Menu.Item component={Link} to={ROUTES.LOGIN}>
                       <Text>Login</Text>
                     </Menu.Item>
-                    <Menu.Item component={Link} to="/registration">
+                    <Menu.Item component={Link} to={ROUTES.REGISTRATION}>
                       <Text>Register</Text>
                     </Menu.Item>
                   </>

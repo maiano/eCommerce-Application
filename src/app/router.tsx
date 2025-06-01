@@ -16,7 +16,9 @@ import { LoginPage } from '@/pages/LoginPage';
 import { NotFoundPage } from '@/pages/NotFoundPage/NotFoundPage';
 import { ProfilePage } from '@/pages/ProfilePage/ProfilePage';
 import { RegistrationPage } from '@/pages/RegistrationPage/RegistrationPage';
+import { CatalogPage } from '@/pages/CatalogPage/CatalogPage.tsx';
 import { CenterLoader } from '@/shared/ui/CenterLoader';
+import { ProductPage } from '@/pages/ProductPage/ProductPage.tsx';
 
 const RedirectGuard = () => {
   const navigate = useNavigate();
@@ -87,6 +89,20 @@ export const router = createBrowserRouter([
   {
     element: <RedirectGuard />,
     children: [
+      {
+        element: <MainLayout />,
+        children: [
+          {
+            path: ROUTES.CATALOG,
+            element: <CatalogPage />,
+          },
+          {
+            path: ROUTES.PRODUCT,
+            element: <ProductPage />
+          },
+        ],
+      },
+
       {
         element: <PrivateGuard />,
         children: [
