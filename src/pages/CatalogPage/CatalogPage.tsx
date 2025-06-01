@@ -18,9 +18,11 @@ import { useMemo, useState } from 'react';
 import { ProductCardList } from '@/features/catalog/ProductCardList';
 import { useCategories } from '@/features/catalog/useCategories';
 import { useProductCards } from '@/features/catalog/useProductCards';
-import { useWineSorting } from '@/features/sorting/useWineSorting.tsx';
+import {
+  productSortOptions,
+  ProductSortOption,
+} from '@/shared/constants/sorting';
 import { CategoryButton } from '@/shared/ui/CategoryButton';
-import { wines } from '@/types/types.tsx';
 
 export function CatalogPage() {
   const { data: categories = [] } = useCategories();
@@ -33,9 +35,7 @@ export function CatalogPage() {
     onDropdownClose: (): void => combobox.resetSelectedOption(),
   });
 
-  const { sortedWines, sortBy, setSortBy, sortOptions } = useWineSorting(wines);
-  // const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  // const categories = ['Red', 'White', 'Sparkling', 'Rose', 'Dessert'];
+  const [sortBy, setSortBy] = useState<ProductSortOption>('price_asc');
 
   const slugToIdMap = useMemo(() => {
     return categories.reduce(
@@ -149,7 +149,7 @@ export function CatalogPage() {
           <Combobox
             store={combobox}
             onOptionSubmit={(val) => {
-              setSortBy(val);
+              setSortBy(val as ProductSortOption);
               combobox.closeDropdown();
               setPage(1);
             }}
@@ -165,13 +165,13 @@ export function CatalogPage() {
                 classNames={{ input: 'form-input' }}
                 aria-label="Sort products by"
               >
-                {sortOptions.find((opt) => opt.value === sortBy)?.label}
+                {productSortOptions.find((opt) => opt.value === sortBy)?.label}
               </InputBase>
             </Combobox.Target>
 
             <Combobox.Dropdown>
               <Combobox.Options>
-                {sortOptions.map((option) => (
+                {productSortOptions.map((option) => (
                   <Combobox.Option
                     value={option.value}
                     key={option.value}
