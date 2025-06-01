@@ -1,27 +1,20 @@
 import { Card, Text, Group, Image, Box, Button } from '@mantine/core';
-import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/app/routes.tsx';
-import { useImageHandler } from '@/shared/hooks/useImageHandler.ts';
-import { WineCardProps } from '@/types/types';
+import { ProductCard as WineCard } from '@/shared/schemas/product-card-schema';
 
-export function ProductCard({ wine }: WineCardProps) {
+type ProductCardProps = {
+  wine: WineCard;
+};
+
+export function CatalogProductCard({ wine }: ProductCardProps) {
   const navigate = useNavigate();
-  const { handleImageLoad, imgRef, checkImage } = useImageHandler();
-
-  useEffect((): void => {
-    if (imgRef.current) {
-      checkImage(imgRef.current);
-    }
-  }, [wine.image, checkImage]);
 
   return (
     <Card
       padding="lg"
       className={'product-card'}
-      onClick={() =>
-        navigate(ROUTES.PRODUCT.replace(':id', wine.id.toString()))
-      }
+      onClick={() => navigate(ROUTES.CATALOG)}
       style={{
         display: 'flex',
         width: '100%',
@@ -35,10 +28,11 @@ export function ProductCard({ wine }: WineCardProps) {
         <Card.Section>
           <Image
             className={`product-card__image product-card__image--${wine.id}`}
-            style={{ height: 300 }}
+            style={{ height: 300, objectFit: 'contain' }}
             fit={'scale-down'}
-            // fallbackSrc="./src/assets/fallback_1.png"
-            onLoad={handleImageLoad}
+            fallbackSrc="./src/assets/fallback_1.png"
+            src={wine.image}
+            alt={wine.name}
           />
         </Card.Section>
 
@@ -52,17 +46,17 @@ export function ProductCard({ wine }: WineCardProps) {
             fw={500}
             size="lg"
             style={{
-              height: 60,
+              // height: 60,
               display: 'flex',
               alignItems: 'center',
             }}
           >
-            {wine.title}
+            {wine.name}
           </Text>
           <Button
             className="button button--secondary"
             component={Link}
-            to={ROUTES.PRODUCT.replace(':id', wine.id.toString())}
+            to={ROUTES.CATALOG}
             style={{
               cursor: 'pointer',
               width: 90,
@@ -75,13 +69,8 @@ export function ProductCard({ wine }: WineCardProps) {
         </Group>
 
         <Group justify="space-between" wrap="nowrap">
-          <Text
-            c="dimmed"
-            size="sm"
-            lineClamp={2}
-            style={{ flex: 1, height: 60 }}
-          >
-            {wine.description}
+          <Text c="dimmed" size="sm" lineClamp={2} style={{ flex: 1 }}>
+            {wine.country}
           </Text>
           <Group gap={4} ml="xs">
             <Text fw={500} c="yellow.7">
@@ -95,7 +84,7 @@ export function ProductCard({ wine }: WineCardProps) {
       </Box>
 
       <Group justify="space-between">
-        {wine.discountedPrice ? (
+        {typeof wine.discountedPrice === 'number' ? (
           <Group gap="xs">
             <Text fw={700} size="xl" c="yellow.4">
               ${wine.discountedPrice}

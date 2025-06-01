@@ -10,35 +10,68 @@ import {
   InputBase,
   Group,
   TextInput,
-  Grid, ComboboxStore,
+  Grid,
+  ComboboxStore,
+  Pagination,
 } from '@mantine/core';
-import { useState } from 'react';
-import type { Wine } from '@/types/types.tsx';
-import { wines } from '@/types/types.tsx';
-import { ProductCard } from '@/components/Card/ProductCard.tsx';
-import { CloseButton } from '@mantine/core';
-import { useWineSorting } from '@/features/sorting/useWineSorting.tsx';
+import { useMemo, useState } from 'react';
+import { ProductCardList } from '@/features/catalog/ProductCardList';
+import { useCategories } from '@/features/catalog/useCategories';
+import { useProductCards } from '@/features/catalog/useProductCards';
+import {
+  productSortOptions,
+  ProductSortOption,
+} from '@/shared/constants/sorting';
+import { CategoryButton } from '@/shared/ui/CategoryButton';
 
 export function CatalogPage() {
+  const { data: categories = [] } = useCategories();
+  const [selectedCategorySlugs, setSelectedCategorySlugs] = useState<string[]>(
+    [],
+  );
+
+  const [page, setPage] = useState(1);
   const combobox: ComboboxStore = useCombobox({
     onDropdownClose: (): void => combobox.resetSelectedOption(),
   });
 
-  const { sortedWines, sortBy, setSortBy, sortOptions } = useWineSorting(wines);
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const categories = ['Red', 'White', 'Sparkling', 'Rose', 'Dessert'];
+  const [sortBy, setSortBy] = useState<ProductSortOption>('price_asc');
 
-  const toggleCategory: (category: string) => void = (category: string): void => {
-    if (selectedCategories.includes(category)) {
-      setSelectedCategories(selectedCategories.filter(c => c !== category));
-    } else {
-      setSelectedCategories([...selectedCategories, category]);
-    }
+  const slugToIdMap = useMemo(() => {
+    return categories.reduce(
+      (acc, category) => {
+        const slug = category.slug['en-US'];
+        if (slug) acc[slug] = category.id;
+        return acc;
+      },
+      {} as Record<string, string>,
+    );
+  }, [categories]);
+
+  const selectedCategoryIds = selectedCategorySlugs
+    .map((slug) => slugToIdMap[slug])
+    .filter(Boolean);
+
+  const toggleCategory = (slug: string) => {
+    setSelectedCategorySlugs((prev) =>
+      prev.includes(slug) ? prev.filter((s) => s !== slug) : [...prev, slug],
+    );
+    setPage(1);
   };
 
-  const resetCategories: () => void = (): void => {
-    setSelectedCategories([]);
+  const resetCategories = () => {
+    setSelectedCategorySlugs([]);
+    setPage(1);
   };
+
+  const { data, isLoading } = useProductCards({
+    categoryIds: selectedCategoryIds,
+    sortBy,
+    page,
+  });
+
+  const total = data?.total ?? 0;
+  const products = data?.items ?? [];
 
   return (
     <Container fluid className="page">
@@ -67,7 +100,11 @@ export function CatalogPage() {
         />
       </Box>
 
-      <Group className="filters" mb="xl" style={{ display: 'flex', justifyContent: 'center' }}>
+      <Group
+        className="filters"
+        mb="xl"
+        style={{ display: 'flex', justifyContent: 'center' }}
+      >
         <Grid
           className="filter-group"
           gutter="md"
@@ -75,49 +112,27 @@ export function CatalogPage() {
           justify="center"
           style={{ width: 'fit-content' }}
         >
-          {categories.map((category: string) => (
-            <Grid.Col key={category} span={{ base: 'auto', sm: 'auto', md: 'auto' }}>
-              <Button
-                fullWidth
-                className={`filter-button ${selectedCategories.includes(category) ? 'button--primary' : ''}`}
-                variant={selectedCategories.includes(category) ? 'filled' : 'default'}
-                onClick={() => toggleCategory(category)}
-                styles={{
-                  ...(selectedCategories.includes(category) && {
-                    root: {
-                      padding: '4px 4px 4px 10px',
-                    },
-                  }),
-                }}
-                rightSection={
-                  selectedCategories.includes(category) ? (
-                    <CloseButton
-                      className={'button--primary'}
-                      size="sm"
-                      variant="subtle"
-                      icon={
-                        <svg
-                          width="14"
-                          height="14"
-                          viewBox="0 0 14 14"
-                          fill="none"
-                          stroke="currentColor"
-                        >
-                          <path d="M1 1L13 13M13 1L1 13" strokeWidth="2"/>
-                        </svg>
-                      }
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        toggleCategory(category);
-                      }}
-                    />
-                  ) : null
-                }
+          {categories?.map((category) => {
+            const slug = category.slug['en-US'];
+            const label = category.name['en-US'].split(' ')[0];
+
+            if (!slug || !label) return null;
+            const selected = selectedCategorySlugs.includes(slug);
+
+            return (
+              <Grid.Col
+                key={slug}
+                span={{ base: 'auto', sm: 'auto', md: 'auto' }}
               >
-                {category}
-              </Button>
-            </Grid.Col>
-          ))}
+                <CategoryButton
+                  label={label}
+                  selected={selected}
+                  onToggle={() => toggleCategory(slug)}
+                />
+              </Grid.Col>
+            );
+          })}
+
           <Grid.Col span={{ base: 'auto', sm: 'auto', md: 'auto' }}>
             <Button
               fullWidth
@@ -130,12 +145,13 @@ export function CatalogPage() {
           </Grid.Col>
         </Grid>
 
-        <Stack className="filter-group" style={{ minWidth: 212 }} >
+        <Stack className="filter-group" style={{ minWidth: 212 }}>
           <Combobox
             store={combobox}
             onOptionSubmit={(val) => {
-              setSortBy(val);
+              setSortBy(val as ProductSortOption);
               combobox.closeDropdown();
+              setPage(1);
             }}
           >
             <Combobox.Target>
@@ -149,13 +165,13 @@ export function CatalogPage() {
                 classNames={{ input: 'form-input' }}
                 aria-label="Sort products by"
               >
-                {sortOptions.find((opt) => opt.value === sortBy)?.label}
+                {productSortOptions.find((opt) => opt.value === sortBy)?.label}
               </InputBase>
             </Combobox.Target>
 
             <Combobox.Dropdown>
               <Combobox.Options>
-                {sortOptions.map((option) => (
+                {productSortOptions.map((option) => (
                   <Combobox.Option
                     value={option.value}
                     key={option.value}
@@ -170,64 +186,18 @@ export function CatalogPage() {
         </Stack>
       </Group>
 
-      <Grid justify="center" style={{ width: '100%' }} >
-        {sortedWines.map((wine: Wine) => (
-          <Grid.Col
-            key={wine.id}
-            span={{
-              base: 12,
-              sm: 6,
-              md: 3,
-              lg: 3,
-            }}
-            style={{ display: 'flex', justifyContent: 'center', minWidth: 350, maxWidth: 400 }}
-          >
-            <ProductCard wine={wine} />
-          </Grid.Col>
-        ))}
-      </Grid>
+      <ProductCardList products={products} />
 
       <Group justify="center" mt="xl" mb="xl">
-        <Button variant="default">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="icon icon-tabler icons-tabler-outline icon-tabler-chevron-left-pipe"
-          >
-            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <path d="M7 6v12" />
-            <path d="M18 6l-6 6l6 6" />
-          </svg>
-        </Button>
-        <Button variant="default">1</Button>
-        <Button variant="default">2</Button>
-        <Button variant="default">3</Button>
-        <Button variant="default">4</Button>
-        <Button variant="default">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right-pipe"
-          >
-            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <path d="M6 6l6 6l-6 6" />
-            <path d="M17 5v13" />
-          </svg>
-        </Button>
+        <Pagination
+          total={Math.ceil(total / 8)}
+          value={page}
+          onChange={setPage}
+          size="md"
+          radius="md"
+          withControls
+          withEdges
+        />
       </Group>
     </Container>
   );
