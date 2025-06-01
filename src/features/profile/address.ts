@@ -22,7 +22,7 @@ export async function deleteAddress(id: string | undefined) {
         }
       }).execute();
       if (response.statusCode === 200) {
-        notifySuccess({ message: 'Address has been deleted' });
+        notifySuccess({ message: 'Address has been removed' });
       }
       return response;
     } catch (error) {
@@ -33,7 +33,7 @@ export async function deleteAddress(id: string | undefined) {
   }
 }
 
-export async function updateAddress (id: string | undefined, country: string, city: string, street: string, postcode: string, isDelivery: boolean, isBilling: boolean, isDefaultDelivery: boolean, isDefaultBilling: boolean ) {
+export async function updateAddress (id: string | undefined, country: string, city: string, street: string, postcode: string, isShipping: boolean, isBilling: boolean, isDefaultShipping: boolean, isDefaultBilling: boolean ) {
   const client = apiClientManager.get();
   const currentUser = await getUserInfo();
 
@@ -48,7 +48,7 @@ export async function updateAddress (id: string | undefined, country: string, ci
     }
   }
 
-  const actions = setAddressActions(id, currentUser, isDelivery, isBilling, isDefaultDelivery, isDefaultBilling);
+  const actions = setAddressActions(id, currentUser, isShipping, isBilling, isDefaultShipping, isDefaultBilling);
   actions.push(changeAddress);
 
   if (currentUser && client) {
@@ -71,7 +71,7 @@ export async function updateAddress (id: string | undefined, country: string, ci
   }
 }
 
-export async function addAddress (country: string, city: string, street: string, postcode: string, isDelivery: boolean, isBilling: boolean, isDefaultDelivery: boolean, isDefaultBilling: boolean) {
+export async function addAddress (country: string, city: string, street: string, postcode: string, isShipping: boolean, isBilling: boolean, isDefaultShipping: boolean, isDefaultBilling: boolean) {
   const client = apiClientManager.get();
   const currentUser = await getUserInfo();
 
@@ -96,7 +96,7 @@ export async function addAddress (country: string, city: string, street: string,
       if (response.statusCode === 200) {
         const currentUser = await getUserInfo();
         if (currentUser) {
-          const actions = setAddressActions(response.body.addresses.pop()?.id, currentUser, isDelivery, isBilling, isDefaultDelivery, isDefaultBilling);
+          const actions = setAddressActions(response.body.addresses.pop()?.id, currentUser, isShipping, isBilling, isDefaultShipping, isDefaultBilling);
           const res = await client.me().post({
             body: {
               version: currentUser.body.version,

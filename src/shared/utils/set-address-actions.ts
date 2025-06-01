@@ -2,7 +2,7 @@ import { ClientResponse, Customer, MyCustomerUpdateAction } from "@commercetools
 
 type Action = 'setDefaultShippingAddress' | 'addShippingAddressId' | 'removeShippingAddressId' | 'setDefaultShippingAddress' | 'setDefaultBillingAddress' | 'addBillingAddressId' | 'removeBillingAddressId' | 'setDefaultBillingAddress';
 
-export const setAddressActions = (id: string | undefined, currentUser: ClientResponse<Customer> | undefined, isDelivery: boolean, isBilling: boolean, isDefaultDelivery: boolean, isDefaultBilling: boolean) => {
+export const setAddressActions = (id: string | undefined, currentUser: ClientResponse<Customer> | undefined, isShipping: boolean, isBilling: boolean, isDefaultShipping: boolean, isDefaultBilling: boolean) => {
   let actions: MyCustomerUpdateAction[] = [];
 
   const createAddressAction = (action: Action, addressId: string | undefined): MyCustomerUpdateAction => ({
@@ -10,8 +10,8 @@ export const setAddressActions = (id: string | undefined, currentUser: ClientRes
     addressId
   });
 
-  if (isDelivery) {
-    if (isDefaultDelivery && id !== currentUser?.body.defaultShippingAddressId) {
+  if (isShipping) {
+    if (isDefaultShipping && id !== currentUser?.body.defaultShippingAddressId) {
       actions.push(createAddressAction('setDefaultShippingAddress', id));
     }
     if (!currentUser?.body.shippingAddressIds?.includes(id ?? '')) {

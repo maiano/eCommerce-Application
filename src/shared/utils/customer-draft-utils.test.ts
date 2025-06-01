@@ -8,7 +8,7 @@ const mockData: RegistrationFormData = {
   firstName: 'John',
   lastName: 'Doe',
   birthDate: '1990-01-01',
-  deliveryAddress: {
+  shippingAddress: {
     country: 'United States',
     street: 'Main St',
     city: 'New York',
@@ -21,7 +21,7 @@ const mockData: RegistrationFormData = {
     city: 'Berlin',
     postcode: '10115',
     isDefaultAddress: false,
-    sameAsDelivery: false,
+    sameAsShipping: false,
   },
 };
 
@@ -46,7 +46,7 @@ describe('createCustomerDraft', () => {
         billingAddress: {
           ...mockData.billingAddress,
           isDefaultAddress: true,
-          sameAsDelivery: true,
+          sameAsShipping: true,
         },
       },
       true,

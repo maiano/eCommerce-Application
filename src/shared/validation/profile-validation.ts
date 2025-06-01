@@ -24,9 +24,9 @@ export const passwordChangeSchema = z.object({
 
 export type PasswordChangeFormData = z.infer<typeof passwordChangeSchema>;
 
-const isDeliveryAddress = z.boolean();
+const isShippingAddress = z.boolean();
 const isBillingAddress = z.boolean();
-const isDefaultDeliveryAddress = z.boolean();
+const isDefaultShippingAddress = z.boolean();
 const isDefaultBillingAddress = z.boolean();
 
 export const addressSchema = z.object({
@@ -34,8 +34,8 @@ export const addressSchema = z.object({
   city,
   street,
   postcode,
-  isDeliveryAddress,
-  isDefaultDeliveryAddress,
+  isShippingAddress,
+  isDefaultShippingAddress,
   isBillingAddress,
   isDefaultBillingAddress,
 })

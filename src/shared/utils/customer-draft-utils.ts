@@ -8,10 +8,10 @@ export const createCustomerDraft = (
 ): MyCustomerDraft => {
   const addresses = [
     {
-      country: getCountryCode(data.deliveryAddress.country),
-      streetName: data.deliveryAddress.street,
-      postalCode: data.deliveryAddress.postcode,
-      city: data.deliveryAddress.city,
+      country: getCountryCode(data.shippingAddress.country),
+      streetName: data.shippingAddress.street,
+      postalCode: data.shippingAddress.postcode,
+      city: data.shippingAddress.city,
     },
     ...(sameAddress
       ? []
@@ -32,7 +32,7 @@ export const createCustomerDraft = (
     lastName: data.lastName,
     dateOfBirth: data.birthDate,
     addresses,
-    defaultShippingAddress: data.deliveryAddress.isDefaultAddress
+    defaultShippingAddress: data.shippingAddress.isDefaultAddress
       ? 0
       : undefined,
     defaultBillingAddress: data.billingAddress.isDefaultAddress

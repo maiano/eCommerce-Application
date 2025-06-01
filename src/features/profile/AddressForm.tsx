@@ -53,13 +53,13 @@ export function AddressForm({ onClose, type, address, onUpdate }: { onClose: () 
           }
           if (address?.id) {
             if (user.body.shippingAddressIds) {
-              setValue('isDeliveryAddress', user.body.shippingAddressIds?.includes(address.id ?? ''))
+              setValue('isShippingAddress', user.body.shippingAddressIds?.includes(address.id ?? ''))
             }
             if (user.body.billingAddressIds) {
               setValue('isBillingAddress', user.body.billingAddressIds?.includes(address.id ?? ''))
             }
             if (user.body.defaultShippingAddressId) {
-              setValue('isDefaultDeliveryAddress', user.body.defaultShippingAddressId === address.id)
+              setValue('isDefaultShippingAddress', user.body.defaultShippingAddressId === address.id)
             }
             if (user.body.defaultBillingAddressId) {
               setValue('isDefaultBillingAddress', user.body.defaultBillingAddressId === address.id)
@@ -84,7 +84,7 @@ export function AddressForm({ onClose, type, address, onUpdate }: { onClose: () 
 
   const onNewAddressSubmit: SubmitHandler<AddressFormData> = async (data) => {
     const country = getCountryCode(data.country);
-    await addAddress(country, data.city, data.street, data.postcode, data.isDeliveryAddress, data.isBillingAddress, data.isDefaultDeliveryAddress, data.isDefaultBillingAddress);
+    await addAddress(country, data.city, data.street, data.postcode, data.isShippingAddress, data.isBillingAddress, data.isDefaultShippingAddress, data.isDefaultBillingAddress);
     if (onUpdate) {
       onUpdate();
     }
@@ -93,7 +93,7 @@ export function AddressForm({ onClose, type, address, onUpdate }: { onClose: () 
 
   const onUpdatedAddressSubmit: SubmitHandler<AddressFormData> = async (data) => {
     const country = getCountryCode(data.country);
-    await updateAddress(address?.id, country, data.city, data.street, data.postcode, data.isDeliveryAddress, data.isBillingAddress, data.isDefaultDeliveryAddress, data.isDefaultBillingAddress);
+    await updateAddress(address?.id, country, data.city, data.street, data.postcode, data.isShippingAddress, data.isBillingAddress, data.isDefaultShippingAddress, data.isDefaultBillingAddress);
     if (onUpdate) {
       onUpdate();
     }
@@ -197,17 +197,17 @@ export function AddressForm({ onClose, type, address, onUpdate }: { onClose: () 
                 input: { borderRadius: '5px' },
                 root: { marginRight:'2rem' },
               }}
-              {...register('isDeliveryAddress')}
-              label="Delivery address"
+              {...register('isShippingAddress')}
+              label="Shipping address"
             />
           </Grid.Col>
           <Grid.Col span={{ base: 12, xs: 6 }}>
             <Switch
               style={{marginBottom: '1rem'}}
-              {...register('isDefaultDeliveryAddress')}
+              {...register('isDefaultShippingAddress')}
               label='Set as default'
-              disabled={!watch('isDeliveryAddress')}
-              checked={watch('isDeliveryAddress') ? watch('isDefaultDeliveryAddress') : false}
+              disabled={!watch('isShippingAddress')}
+              checked={watch('isShippingAddress') ? watch('isDefaultShippingAddress') : false}
             />
           </Grid.Col>
           <Grid.Col span={{ base: 12, xs: 6 }}>

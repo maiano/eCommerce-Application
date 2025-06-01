@@ -71,7 +71,7 @@ export const postcode = z
 export const isDefaultAddress = z
   .boolean();
 
-const deliveryAddress = z.object({
+const shippingAddress = z.object({
   country,
   city,
   street,
@@ -79,7 +79,7 @@ const deliveryAddress = z.object({
   isDefaultAddress,
 });
 
-const sameAsDelivery = z.boolean();
+const sameAsShipping = z.boolean();
 
 const billingAddress = z.object({
   country,
@@ -87,7 +87,7 @@ const billingAddress = z.object({
   street,
   postcode,
   isDefaultAddress,
-  sameAsDelivery,
+  sameAsShipping,
 });
 
 export const registrationSchema = z.object({
@@ -96,7 +96,7 @@ export const registrationSchema = z.object({
   firstName,
   lastName,
   birthDate,
-  deliveryAddress,
+  shippingAddress,
   billingAddress,
 });
 
