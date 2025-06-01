@@ -1,22 +1,11 @@
 import { Grid } from '@mantine/core';
 import { ProductCard as Card } from '@/components/Card/ProductCard';
-import { useProductCards } from '@/features/catalog/useProductCards';
+import { ProductCard } from '@/shared/schemas/product-card-schema';
 
-export function ProductCardList({
-  categoryIds = [],
-  sortBy,
-}: {
-  categoryIds?: string[];
-  sortBy?: string;
-}) {
-  const { data: products = [], isLoading } = useProductCards({
-    categoryIds,
-    sortBy,
-    page: 1,
-  });
+export function ProductCardList({ products }: { products: ProductCard[] }) {
   return (
     <Grid justify="center" style={{ width: '100%' }}>
-      {products?.map((product) => (
+      {products.map((product) => (
         <Grid.Col
           key={product.id}
           span={{ base: 12, sm: 6, md: 3, lg: 3 }}

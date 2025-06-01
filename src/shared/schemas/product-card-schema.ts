@@ -17,3 +17,8 @@ const ProductCardSchema = z.object({
 export type ProductCard = z.infer<typeof ProductCardSchema>;
 
 export const ProductCardsSchema = z.array(ProductCardSchema);
+
+export const ProductCardsResponseSchema = z.object({
+  items: z.array(ProductCardSchema),
+  total: z.number(),
+});

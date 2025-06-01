@@ -1,7 +1,7 @@
 import { mapProductToCard } from '@/features/catalog/map-product-to-card-util';
 import { sortMap } from '@/features/catalog/sort-map-util';
 import { useValidatedSWR } from '@/shared/hooks/custom-use-swr';
-import { ProductCardsSchema } from '@/shared/schemas/product-card-schema';
+import { ProductCardsResponseSchema } from '@/shared/schemas/product-card-schema';
 
 export function useProductCards({
   categoryIds = [],
@@ -34,8 +34,11 @@ export function useProductCards({
           },
         })
         .execute();
-      return response.body.results.map(mapProductToCard);
+      return {
+        items: response.body.results.map(mapProductToCard),
+        total: response.body.total,
+      };
     },
-    ProductCardsSchema,
+    ProductCardsResponseSchema,
   );
 }

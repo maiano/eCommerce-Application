@@ -1,7 +1,7 @@
 import { ReactElement } from 'react';
 
 export interface Feature {
-  name: string;
+  title: string;
   description: string;
   icon: ReactElement;
 }

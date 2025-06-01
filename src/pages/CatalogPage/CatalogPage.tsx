@@ -12,10 +12,12 @@ import {
   TextInput,
   Grid,
   ComboboxStore,
+  Pagination,
 } from '@mantine/core';
 import { useMemo, useState } from 'react';
 import { ProductCardList } from '@/features/catalog/ProductCardList';
 import { useCategories } from '@/features/catalog/useCategories';
+import { useProductCards } from '@/features/catalog/useProductCards';
 import { useWineSorting } from '@/features/sorting/useWineSorting.tsx';
 import { CategoryButton } from '@/shared/ui/CategoryButton';
 import { wines } from '@/types/types.tsx';
@@ -25,6 +27,8 @@ export function CatalogPage() {
   const [selectedCategorySlugs, setSelectedCategorySlugs] = useState<string[]>(
     [],
   );
+
+  const [page, setPage] = useState(1);
   const combobox: ComboboxStore = useCombobox({
     onDropdownClose: (): void => combobox.resetSelectedOption(),
   });
@@ -52,11 +56,22 @@ export function CatalogPage() {
     setSelectedCategorySlugs((prev) =>
       prev.includes(slug) ? prev.filter((s) => s !== slug) : [...prev, slug],
     );
+    setPage(1);
   };
 
   const resetCategories = () => {
     setSelectedCategorySlugs([]);
+    setPage(1);
   };
+
+  const { data, isLoading } = useProductCards({
+    categoryIds: selectedCategoryIds,
+    sortBy,
+    page,
+  });
+
+  const total = data?.total ?? 0;
+  const products = data?.items ?? [];
 
   return (
     <Container fluid className="page">
@@ -136,6 +151,7 @@ export function CatalogPage() {
             onOptionSubmit={(val) => {
               setSortBy(val);
               combobox.closeDropdown();
+              setPage(1);
             }}
           >
             <Combobox.Target>
@@ -170,49 +186,18 @@ export function CatalogPage() {
         </Stack>
       </Group>
 
-      <ProductCardList categoryIds={selectedCategoryIds} sortBy={sortBy} />
+      <ProductCardList products={products} />
 
       <Group justify="center" mt="xl" mb="xl">
-        <Button variant="default">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="icon icon-tabler icons-tabler-outline icon-tabler-chevron-left-pipe"
-          >
-            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <path d="M7 6v12" />
-            <path d="M18 6l-6 6l6 6" />
-          </svg>
-        </Button>
-        <Button variant="default">1</Button>
-        <Button variant="default">2</Button>
-        <Button variant="default">3</Button>
-        <Button variant="default">4</Button>
-        <Button variant="default">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right-pipe"
-          >
-            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <path d="M6 6l6 6l-6 6" />
-            <path d="M17 5v13" />
-          </svg>
-        </Button>
+        <Pagination
+          total={Math.ceil(total / 8)}
+          value={page}
+          onChange={setPage}
+          size="md"
+          radius="md"
+          withControls
+          withEdges
+        />
       </Group>
     </Container>
   );
