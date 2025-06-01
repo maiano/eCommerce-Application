@@ -225,7 +225,7 @@ export function ProfilePage() {
                 }}
               }>
               <Title size='20px' style={{marginBottom: '32px', textAlign: 'center'}}>Are you sure you want to remove this address?</Title>
-              <Text size="lg" ta="center">{selectedAddress?.streetName}, {selectedAddress?.city}, {countries[selectedAddress?.country as keyof typeof countries]}, {selectedAddress?.postalCode}</Text>
+              <Text size="md" ta="center">{selectedAddress?.streetName}, {selectedAddress?.city}, {countries[selectedAddress?.country as keyof typeof countries]}, {selectedAddress?.postalCode}</Text>
               <Button
                 style={{marginTop: '16px'}}
                 className="button button--primary"
