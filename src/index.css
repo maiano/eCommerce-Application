@@ -380,7 +380,11 @@ body {
     max-width: 400px !important;
   }
 }
-
+@media (max-width: 1100px) {
+  .button--large {
+    font-size: 0.870rem;
+  }
+}
 @media (max-width: 1024px) {
   .feature-card {
     width: 100% !important;

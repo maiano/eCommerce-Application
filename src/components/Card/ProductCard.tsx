@@ -2,15 +2,24 @@ import { Card, Text, Group, Image, Box, Button } from '@mantine/core';
 import { WineCardProps } from '@/types/types';
 import { ROUTES } from '@/app/routes.tsx';
 import { Link, useNavigate } from 'react-router-dom';
+import { useImageHandler } from '@/shared/hooks/useImageHandler.ts';
+import { useEffect } from 'react';
 
 export function ProductCard({ wine }: WineCardProps) {
   const navigate = useNavigate();
+  const { handleImageLoad, imgRef, checkImage } = useImageHandler();
+
+  useEffect((): void => {
+    if (imgRef.current) {
+      checkImage(imgRef.current);
+    }
+  }, [wine.image, checkImage]);
 
   return (
     <Card
       padding="lg"
       className={'product-card'}
-      onClick={() => navigate(ROUTES.CATALOG)}
+      onClick={() => navigate(ROUTES.PRODUCT.replace(':id', wine.id.toString()))}
       style={{
         display: 'flex',
         width: '100%',
@@ -27,6 +36,7 @@ export function ProductCard({ wine }: WineCardProps) {
             style={{ height: 300 }}
             fit={'scale-down'}
             // fallbackSrc="./src/assets/fallback_1.png"
+            onLoad={handleImageLoad}
           />
         </Card.Section>
 
@@ -45,7 +55,7 @@ export function ProductCard({ wine }: WineCardProps) {
             <Button
               className="button button--secondary"
               component={Link}
-              to={ROUTES.CATALOG}
+              to={ROUTES.PRODUCT.replace(':id', wine.id.toString())}
               style={{
                 cursor: 'pointer',
                 width: 90,
