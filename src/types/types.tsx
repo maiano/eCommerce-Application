@@ -16,6 +16,7 @@ export type Wine = {
   discountedPrice?: number;
   attributes: WineAttribute[];
   image: string[];
+  name?: string;
 };
 
 export interface WineCardProps {
