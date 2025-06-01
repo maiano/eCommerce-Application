@@ -1,9 +1,13 @@
 import { Card, Text, Group, Image, Box, Button } from '@mantine/core';
-import { WineCardProps } from '@/types/types';
-import { ROUTES } from '@/app/routes.tsx';
 import { Link, useNavigate } from 'react-router-dom';
+import { ROUTES } from '@/app/routes.tsx';
+import { ProductCard as WineCard } from '@/shared/schemas/product-card-schema';
 
-export function ProductCard({ wine }: WineCardProps) {
+type ProductCardProps = {
+  wine: WineCard;
+};
+
+export function ProductCard({ wine }: ProductCardProps) {
   const navigate = useNavigate();
 
   return (
@@ -26,35 +30,42 @@ export function ProductCard({ wine }: WineCardProps) {
             className={`product-card__image product-card__image--${wine.id}`}
             style={{ height: 300 }}
             fit={'scale-down'}
-            // fallbackSrc="./src/assets/fallback_1.png"
+            fallbackSrc="./src/assets/fallback_1.png"
+            src={wine.image}
+            alt={wine.name}
           />
         </Card.Section>
 
-        <Group justify="space-between" align="center" wrap="nowrap"  style={{ alignItems: "center" }}>
+        <Group
+          justify="space-between"
+          align="center"
+          wrap="nowrap"
+          style={{ alignItems: 'center' }}
+        >
           <Text
             fw={500}
             size="lg"
             style={{
               height: 60,
-              display: "flex",
-              alignItems: "center"
-          }}
-          >
-            {wine.title}
-          </Text>
-            <Button
-              className="button button--secondary"
-              component={Link}
-              to={ROUTES.CATALOG}
-              style={{
-                cursor: 'pointer',
-                width: 90,
-                height: 35,
-                alignSelf: "center"
+              display: 'flex',
+              alignItems: 'center',
             }}
-            >
-              More info
-            </Button>
+          >
+            {wine.name}
+          </Text>
+          <Button
+            className="button button--secondary"
+            component={Link}
+            to={ROUTES.CATALOG}
+            style={{
+              cursor: 'pointer',
+              width: 90,
+              height: 35,
+              alignSelf: 'center',
+            }}
+          >
+            More info
+          </Button>
         </Group>
 
         <Group justify="space-between" wrap="nowrap">
@@ -78,12 +89,17 @@ export function ProductCard({ wine }: WineCardProps) {
       </Box>
 
       <Group justify="space-between">
-        {wine.discountedPrice ? (
+        {typeof wine.discountedPrice === 'number' ? (
           <Group gap="xs">
             <Text fw={700} size="xl" c="yellow.4">
               ${wine.discountedPrice}
             </Text>
-            <Text fw={700} size="sm" c="dimmed" style={{ textDecoration: 'line-through' }}>
+            <Text
+              fw={700}
+              size="sm"
+              c="dimmed"
+              style={{ textDecoration: 'line-through' }}
+            >
               ${wine.price}
             </Text>
           </Group>

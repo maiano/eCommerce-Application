@@ -14,11 +14,10 @@ import {
   ComboboxStore,
 } from '@mantine/core';
 import { useState } from 'react';
-import { ProductCard } from '@/components/Card/ProductCard.tsx';
+import { ProductCardList } from '@/features/catalog/ProductCardList';
 import { useCategories } from '@/features/catalog/useCategories';
 import { useWineSorting } from '@/features/sorting/useWineSorting.tsx';
 import { CategoryButton } from '@/shared/ui/CategoryButton';
-import type { Wine } from '@/types/types.tsx';
 import { wines } from '@/types/types.tsx';
 
 export function CatalogPage() {
@@ -154,27 +153,7 @@ export function CatalogPage() {
         </Stack>
       </Group>
 
-      <Grid justify="center" style={{ width: '100%' }}>
-        {sortedWines.map((wine: Wine) => (
-          <Grid.Col
-            key={wine.id}
-            span={{
-              base: 12,
-              sm: 6,
-              md: 3,
-              lg: 3,
-            }}
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              minWidth: 350,
-              maxWidth: 400,
-            }}
-          >
-            <ProductCard wine={wine} />
-          </Grid.Col>
-        ))}
-      </Grid>
+      <ProductCardList />
 
       <Group justify="center" mt="xl" mb="xl">
         <Button variant="default">
