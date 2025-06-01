@@ -2,8 +2,18 @@ import { Grid } from '@mantine/core';
 import { ProductCard as Card } from '@/components/Card/ProductCard';
 import { useProductCards } from '@/features/catalog/useProductCards';
 
-export function ProductCardList() {
-  const { data: products = [], isLoading } = useProductCards();
+export function ProductCardList({
+  categoryIds = [],
+  sortBy,
+}: {
+  categoryIds?: string[];
+  sortBy?: string;
+}) {
+  const { data: products = [], isLoading } = useProductCards({
+    categoryIds,
+    sortBy,
+    page: 1,
+  });
   return (
     <Grid justify="center" style={{ width: '100%' }}>
       {products?.map((product) => (

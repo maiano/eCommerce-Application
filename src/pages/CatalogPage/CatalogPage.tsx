@@ -13,7 +13,7 @@ import {
   Grid,
   ComboboxStore,
 } from '@mantine/core';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { ProductCardList } from '@/features/catalog/ProductCardList';
 import { useCategories } from '@/features/catalog/useCategories';
 import { useWineSorting } from '@/features/sorting/useWineSorting.tsx';
@@ -21,24 +21,41 @@ import { CategoryButton } from '@/shared/ui/CategoryButton';
 import { wines } from '@/types/types.tsx';
 
 export function CatalogPage() {
-  const { data: categories } = useCategories();
-
+  const { data: categories = [] } = useCategories();
+  const [selectedCategorySlugs, setSelectedCategorySlugs] = useState<string[]>(
+    [],
+  );
   const combobox: ComboboxStore = useCombobox({
     onDropdownClose: (): void => combobox.resetSelectedOption(),
   });
 
   const { sortedWines, sortBy, setSortBy, sortOptions } = useWineSorting(wines);
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  // const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   // const categories = ['Red', 'White', 'Sparkling', 'Rose', 'Dessert'];
 
+  const slugToIdMap = useMemo(() => {
+    return categories.reduce(
+      (acc, category) => {
+        const slug = category.slug['en-US'];
+        if (slug) acc[slug] = category.id;
+        return acc;
+      },
+      {} as Record<string, string>,
+    );
+  }, [categories]);
+
+  const selectedCategoryIds = selectedCategorySlugs
+    .map((slug) => slugToIdMap[slug])
+    .filter(Boolean);
+
   const toggleCategory = (slug: string) => {
-    setSelectedCategories((prev) =>
+    setSelectedCategorySlugs((prev) =>
       prev.includes(slug) ? prev.filter((s) => s !== slug) : [...prev, slug],
     );
   };
 
-  const resetCategories: () => void = (): void => {
-    setSelectedCategories([]);
+  const resetCategories = () => {
+    setSelectedCategorySlugs([]);
   };
 
   return (
@@ -85,7 +102,7 @@ export function CatalogPage() {
             const label = category.name['en-US'].split(' ')[0];
 
             if (!slug || !label) return null;
-            const selected = selectedCategories.includes(slug);
+            const selected = selectedCategorySlugs.includes(slug);
 
             return (
               <Grid.Col
@@ -153,7 +170,7 @@ export function CatalogPage() {
         </Stack>
       </Group>
 
-      <ProductCardList />
+      <ProductCardList categoryIds={selectedCategoryIds} sortBy={sortBy} />
 
       <Group justify="center" mt="xl" mb="xl">
         <Button variant="default">
