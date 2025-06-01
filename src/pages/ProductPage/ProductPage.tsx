@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, RefObject, SyntheticEvent } from 'react';
+import { useState, useRef, useEffect, RefObject } from 'react';
 import { useParams, useNavigate, NavigateFunction } from 'react-router-dom';
 import { WineAttribute, wines } from '@/types/types';
 import {
@@ -19,6 +19,7 @@ import { ROUTES } from '@/app/routes';
 import { Carousel } from '@mantine/carousel';
 import type { ModalEmbla, Wine } from '@/types/types.tsx'
 import './ProductPage.css';
+import { useImageHandler } from '@/shared/hooks/useImageHandler.ts';
 
 const TRANSITION_DURATION = 300;
 
@@ -31,6 +32,8 @@ export function ProductPage() {
   const modalCarouselRef: RefObject<ModalEmbla | null> = useRef<ModalEmbla | null>(null);
   const [modalOpened, setModalOpened] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const { handleImageLoad } = useImageHandler();
 
   useEffect(() => {
     if (modalOpened && modalCarouselRef.current) {
@@ -62,18 +65,6 @@ export function ProductPage() {
     setModalOpened(true);
   };
 
-  const createImageHandler = () => {
-    return (e: SyntheticEvent<HTMLImageElement, Event>): void => {
-      if (e.target instanceof HTMLImageElement) {
-        const img: HTMLImageElement = e.target;
-        if (img.naturalHeight > img.naturalWidth * 1.5) {
-          img.style.objectFit = "contain";
-        }
-      }
-    };
-  };
-
-  const handleImageLoad = createImageHandler();
 
   return (
     <Container className="page" style={{ marginTop: 20 }}>

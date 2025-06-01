@@ -128,12 +128,15 @@
 }
 
 .product-card__image {
-  width: 100%;
-  aspect-ratio: 1/1;
+  max-height: 100vh;
+  max-width: 100vw;
+  object-fit: cover;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   border-radius: 0.75rem;
+  background-color: #f8f9fb;
+  cursor: pointer;
 }
 
 /*@media (max-width: 769px) {*/

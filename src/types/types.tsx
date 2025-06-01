@@ -1,4 +1,4 @@
-import { ReactElement } from 'react';
+import { MutableRefObject, ReactElement, SyntheticEvent } from 'react';
 
 export interface Feature {
   title: string;
@@ -30,6 +30,18 @@ export type WineAttribute = {
   name: string;
   value: string;
 };
+
+export type ApplyStylesFunction = (img: HTMLImageElement) => void;
+
+export type ImageLoadHandler = (e: SyntheticEvent<HTMLImageElement, Event>) => void;
+
+export type CheckImageFunction = (img: HTMLImageElement) => void;
+
+export interface UseImageHandler {
+  handleImageLoad: ImageLoadHandler;
+  imgRef: MutableRefObject<HTMLImageElement | null>;
+  checkImage: CheckImageFunction;
+}
 
 export const wines: Wine[] = [
   {
