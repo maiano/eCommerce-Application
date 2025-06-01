@@ -1,5 +1,5 @@
 import { Grid } from '@mantine/core';
-import { ProductCard as Card } from '@/components/Card/ProductCard';
+import { CatalogProductCard } from '@/features/catalog/CatalogProductCard';
 import { ProductCard } from '@/shared/schemas/product-card-schema';
 
 export function ProductCardList({ products }: { products: ProductCard[] }) {
@@ -16,7 +16,7 @@ export function ProductCardList({ products }: { products: ProductCard[] }) {
             maxWidth: 400,
           }}
         >
-          <Card wine={product} />
+          <CatalogProductCard wine={product} />
         </Grid.Col>
       ))}
     </Grid>
