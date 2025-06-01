@@ -198,7 +198,8 @@ export const theme = createTheme({
   Anchor: {
     styles: {
       root: {
-        color: accentColors[4],
+        color: darkColors[2],
+        transition: 'all 0.3s ease-in-out',
       },
     },
    },

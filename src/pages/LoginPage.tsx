@@ -1,5 +1,4 @@
 import {
-  Anchor,
   Box,
   Container,
   Group,
@@ -27,10 +26,10 @@ export function LoginPage() {
             <LoginForm />
             <Group gap="xs" className="auth-footer">
               <Text mt="md" ta="center" style={{ margin: 'auto' }}>
-                Don't have an account?
-                <Anchor ml="xs" component={Link} to={ROUTES.REGISTRATION}>
+                Don't have an account?{' '}
+                <Link className="auth-link" to={ROUTES.REGISTRATION}>
                   Sign Up
-                </Anchor>
+                </Link>
               </Text>
             </Group>
           </Paper>

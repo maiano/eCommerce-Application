@@ -1,20 +1,27 @@
 import { Card, Text, Group, Image, Box, Button } from '@mantine/core';
+import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/app/routes.tsx';
-import { ProductCard as WineCard } from '@/shared/schemas/product-card-schema';
+import { useImageHandler } from '@/shared/hooks/useImageHandler.ts';
+import { WineCardProps } from '@/types/types';
 
-type ProductCardProps = {
-  wine: WineCard;
-};
-
-export function ProductCard({ wine }: ProductCardProps) {
+export function ProductCard({ wine }: WineCardProps) {
   const navigate = useNavigate();
+  const { handleImageLoad, imgRef, checkImage } = useImageHandler();
+
+  useEffect((): void => {
+    if (imgRef.current) {
+      checkImage(imgRef.current);
+    }
+  }, [wine.image, checkImage]);
 
   return (
     <Card
       padding="lg"
       className={'product-card'}
-      onClick={() => navigate(ROUTES.CATALOG)}
+      onClick={() =>
+        navigate(ROUTES.PRODUCT.replace(':id', wine.id.toString()))
+      }
       style={{
         display: 'flex',
         width: '100%',
@@ -30,9 +37,8 @@ export function ProductCard({ wine }: ProductCardProps) {
             className={`product-card__image product-card__image--${wine.id}`}
             style={{ height: 300 }}
             fit={'scale-down'}
-            fallbackSrc="./src/assets/fallback_1.png"
-            src={wine.image}
-            alt={wine.name}
+            // fallbackSrc="./src/assets/fallback_1.png"
+            onLoad={handleImageLoad}
           />
         </Card.Section>
 
@@ -51,12 +57,12 @@ export function ProductCard({ wine }: ProductCardProps) {
               alignItems: 'center',
             }}
           >
-            {wine.name}
+            {wine.title}
           </Text>
           <Button
             className="button button--secondary"
             component={Link}
-            to={ROUTES.CATALOG}
+            to={ROUTES.PRODUCT.replace(':id', wine.id.toString())}
             style={{
               cursor: 'pointer',
               width: 90,
@@ -89,7 +95,7 @@ export function ProductCard({ wine }: ProductCardProps) {
       </Box>
 
       <Group justify="space-between">
-        {typeof wine.discountedPrice === 'number' ? (
+        {wine.discountedPrice ? (
           <Group gap="xs">
             <Text fw={700} size="xl" c="yellow.4">
               ${wine.discountedPrice}
