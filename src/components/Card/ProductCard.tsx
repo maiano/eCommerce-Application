@@ -65,7 +65,7 @@ export function ProductCard({ wine }: WineCardProps) {
             to={ROUTES.PRODUCT.replace(':id', wine.id.toString())}
             style={{
               cursor: 'pointer',
-              width: 90,
+              minWidth: 90,
               height: 35,
               alignSelf: 'center',
             }}

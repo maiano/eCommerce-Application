@@ -46,7 +46,7 @@ export function CatalogProductCard({ wine }: ProductCardProps) {
             fw={500}
             size="lg"
             style={{
-              // height: 60,
+              height: 60,
               display: 'flex',
               alignItems: 'center',
             }}
@@ -59,7 +59,7 @@ export function CatalogProductCard({ wine }: ProductCardProps) {
             to={generatePath(ROUTES.PRODUCT, { id: wine.id })}
             style={{
               cursor: 'pointer',
-              width: 90,
+              minWidth: 90,
               height: 35,
               alignSelf: 'center',
             }}

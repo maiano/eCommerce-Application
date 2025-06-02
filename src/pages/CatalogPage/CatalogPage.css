@@ -137,6 +137,7 @@
   border-radius: 0.75rem;
   background-color: #f8f9fb;
   cursor: pointer;
+  margin-bottom: 5px;
 }
 
 /*@media (max-width: 769px) {*/
