@@ -1,7 +1,7 @@
 import { Title, Text, Container, Group, Box } from '@mantine/core';
 import { Link } from 'react-router-dom';
 import { RegistrationForm } from '@/features/registration/RegistrationForm';
-import '@/pages/RegistrationPage.css';
+import '@/pages/RegistrationPage/RegistrationPage.css';
 import { LogoWithTitle } from '@/shared/ui/LogoWithTitle';
 
 export function RegistrationPage() {

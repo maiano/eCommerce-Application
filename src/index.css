@@ -161,6 +161,9 @@ body {
   color: #f8f9fb !important;
 }
 
+.button:hover:disabled {
+  cursor: not-allowed;
+}
 
 .button--secondary {
   /*background-color: #29374c;*/

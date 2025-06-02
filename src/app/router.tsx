@@ -14,7 +14,8 @@ import { useAuthStore } from '@/features/auth/auth-state';
 import { HomePage } from '@/pages/HomePage/HomePage';
 import { LoginPage } from '@/pages/LoginPage';
 import { NotFoundPage } from '@/pages/NotFoundPage/NotFoundPage';
-import { RegistrationPage } from '@/pages/RegistrationPage';
+import { ProfilePage } from '@/pages/ProfilePage/ProfilePage';
+import { RegistrationPage } from '@/pages/RegistrationPage/RegistrationPage';
 import { CatalogPage } from '@/pages/CatalogPage/CatalogPage.tsx';
 import { CenterLoader } from '@/shared/ui/CenterLoader';
 import { ProductPage } from '@/pages/ProductPage/ProductPage.tsx';
@@ -109,8 +110,8 @@ export const router = createBrowserRouter([
             element: <MainLayout />,
             children: [
               {
-                path: '/profile',
-                element: <div>ProfilePage</div>,
+                path: ROUTES.PROFILE,
+                element: <ProfilePage />,
               },
             ],
           },
