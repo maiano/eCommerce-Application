@@ -161,6 +161,11 @@ body {
   color: #f8f9fb !important;
 }
 
+.button:disabled {
+  background-color: #32415D !important;
+  color: #f8f9fb !important;
+}
+
 .button:hover:disabled {
   cursor: not-allowed;
 }

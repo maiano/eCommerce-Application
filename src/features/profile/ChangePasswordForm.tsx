@@ -81,7 +81,7 @@ export function ChangePasswordForm({ onClose }: { onClose: () => void }) {
           disabled={!isValid}
           onClick={onClose}
           style={{marginTop: '24px'}}
-          className="button"
+          className="button button--primary"
           fullWidth
           >Save
         </Button>

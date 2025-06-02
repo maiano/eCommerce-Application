@@ -210,6 +210,26 @@ export const theme = createTheme({
         transition: 'all 0.3s ease-in-out',
       },
     },
+    },
+  Modal: {
+    styles: {
+      root: {
+        backgroundColor: darkColors[6],
+      },
+      header: {
+        backgroundColor: darkColors[6],
+      },
+      close: {
+        color: darkColors[4],
+      }
+    },
+  },
+  Notification: {
+    styles: {
+      closeButton: {
+        color: darkColors[4],
+      }
     }
+  }
   },
 });
