@@ -281,6 +281,11 @@ body {
   border: 0;
 }
 
+.wine-title {
+  font-size: clamp(1rem, 0.5795rem + 0.4545vw, 1.125rem);
+  font-weight: 700;
+}
+
 @media (min-width: 380px) and (max-width: 768px) {
   .header__nav-item {
     display: none;

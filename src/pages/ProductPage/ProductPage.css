@@ -16,6 +16,7 @@ body.mantine-Modal-body {
   border-radius: 4px;
   text-align: center;
   font-size: 0.875rem;
+  text-transform: capitalize;
 }
 
 .value {
@@ -46,9 +47,10 @@ body.mantine-Modal-body {
 }
 
 .main-product-image {
-  max-height: 100vh;
-  max-width: 100vw;
-  border-radius: 0.875rem;
+  flex: 1;
+  /*max-height: 100vh;*/
+  /*max-width: 100vw;*/
+  border-radius: 0.75rem;
   cursor: pointer;
   object-fit: cover;
   background-color: #f8f9fb;
@@ -104,8 +106,8 @@ body.mantine-Modal-body {
   }
 
   .carousel-slide {
-    max-height: 55vh;
-    border-radius: 0.875rem;
+    max-height: 53vh;
+    border-radius: 0.75rem;
     overflow: hidden;
     background-color: #f8f9fb;
   }
@@ -274,13 +276,13 @@ body.mantine-Modal-body {
 
 @media (max-width: 480px) {
   .carousel .carousel-slide {
-    max-height: 42vh;
+    max-height: 40vh;
   }
 }
 
 @media (max-width: 400px) {
   .carousel .carousel-slide {
-    max-height: 39vh;
+    max-height: 35vh;
   }
 
   .thumbnail-item {

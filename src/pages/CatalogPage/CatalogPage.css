@@ -105,9 +105,10 @@
   border-radius: 0.75rem;
   overflow: hidden;
   cursor: pointer;
-  height: 470px !important;
+  height: 500px !important;
   justify-content: space-between;
   transition: all 0.3s ease-in-out;
+  margin: 7px;
 }
 
 .product-card:hover {
@@ -137,6 +138,7 @@
   border-radius: 0.75rem;
   background-color: #f8f9fb;
   cursor: pointer;
+  margin-bottom: 5px;
 }
 
 /*@media (max-width: 769px) {*/

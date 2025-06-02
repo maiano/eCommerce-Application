@@ -43,10 +43,11 @@ export function CatalogProductCard({ wine }: ProductCardProps) {
           style={{ alignItems: 'center' }}
         >
           <Text
+            className='wine-title'
             fw={500}
             size="lg"
             style={{
-              // height: 60,
+              height: 80,
               display: 'flex',
               alignItems: 'center',
             }}
@@ -59,7 +60,7 @@ export function CatalogProductCard({ wine }: ProductCardProps) {
             to={generatePath(ROUTES.PRODUCT, { id: wine.id })}
             style={{
               cursor: 'pointer',
-              width: 90,
+              minWidth: 80,
               height: 35,
               alignSelf: 'center',
             }}

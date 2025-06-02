@@ -9,6 +9,9 @@ export const useImageHandler: () => UseImageHandler = (): UseImageHandler => {
   ): void => {
     if (img.naturalHeight > img.naturalWidth * 1.5) {
       img.style.objectFit = "contain";
+      if (!img.classList.contains('modal-image')) {
+        img.style.maxHeight = '50vh';
+      }
     }
   };
 

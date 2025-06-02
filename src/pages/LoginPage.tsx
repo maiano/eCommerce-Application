@@ -11,7 +11,7 @@ import { Link } from 'react-router-dom';
 import { ROUTES } from '@/app/routes';
 import { LoginForm } from '@/features/login/LoginForm';
 import { LogoWithTitle } from '@/shared/ui/LogoWithTitle';
-import '@/pages/RegistrationPage.css';
+import '@/pages/RegistrationPage/RegistrationPage.css';
 
 export function LoginPage() {
   return (
