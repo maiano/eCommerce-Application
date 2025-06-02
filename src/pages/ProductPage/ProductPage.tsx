@@ -130,7 +130,7 @@ export function ProductPage() {
 
           <Divider className='divider' />
 
-          <Title order={3} mb="md">Price:</Title>
+          <Title className='subtitle' order={3} mb="md">Price:</Title>
           <Group className='price-content' mb="xl" align="center">
             {wine.discountedPrice ? (
               <>
@@ -145,7 +145,7 @@ export function ProductPage() {
                 </Badge>
               </>
             ) : (
-              <Text className="price">
+              <Text fw={700} size="xl" className="price"  c="dark.2">
                 ${wine.price}
               </Text>
             )}
@@ -153,7 +153,7 @@ export function ProductPage() {
 
           <Divider className='divider' />
 
-          <Title order={3} mb="md">Wine Details:</Title>
+          <Title className='subtitle' order={3} mb="md">Wine Details:</Title>
           <Table mb="xl" verticalSpacing="sm" withTableBorder withColumnBorders>
             <Table.Tbody>
               {wine.attributes
