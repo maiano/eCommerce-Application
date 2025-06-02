@@ -11,7 +11,7 @@ export function Slider() {
     <Box className="carousel" style={{ maxWidth: 1920, width: '100%'}}>
       <Title className="section-title">Featured Selections</Title>
       <Carousel
-        height={500}
+        height={520}
         slideSize={{
           base: '100%',
           sm: '50%',
@@ -28,7 +28,7 @@ export function Slider() {
         style={{ overflowY: 'visible'}}
       >
         {wines.map((wine: Wine, index: number ) => (
-          <Carousel.Slide key={index}>
+          <Carousel.Slide key={index} style={{ overflow: 'hidden'}}>
             <ProductCard
               wine={wine}
             />

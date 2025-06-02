@@ -49,10 +49,11 @@ export function ProductCard({ wine }: WineCardProps) {
           style={{ alignItems: 'center' }}
         >
           <Text
+            className='wine-title'
             fw={500}
             size="lg"
             style={{
-              height: 60,
+              height: 80,
               display: 'flex',
               alignItems: 'center',
             }}
@@ -65,7 +66,7 @@ export function ProductCard({ wine }: WineCardProps) {
             to={ROUTES.PRODUCT.replace(':id', wine.id.toString())}
             style={{
               cursor: 'pointer',
-              minWidth: 90,
+              minWidth: 80,
               height: 35,
               alignSelf: 'center',
             }}
