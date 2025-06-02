@@ -97,7 +97,7 @@ export function ProductPage() {
           <Carousel
             className="carousel"
             controlSize={40}
-            controlsOffset="xs"
+            controlsOffset="xxs"
             loop
             slideSize="100%"
             align="start"
@@ -171,17 +171,19 @@ export function ProductPage() {
                   ${wine.price}
                 </Text>
                 <Badge color="red" size="lg">
-                  Save ${wine.price - wine.discountedPrice}
+                  Save ${(wine.price - wine.discountedPrice).toFixed(2)}
                 </Badge>
               </>
             ) : (
-              <Text className="price">${wine.price}</Text>
+              <Text fw={700} size="xl" className="price"  c="dark.2">
+                ${wine.price}
+              </Text>
             )}
           </Group>
 
           <Divider className="divider" />
 
-          <Title order={3} mb="md">
+          <Title className='subtitle' order={3} mb="md">
             Wine Details:
           </Title>
           <Table mb="xl" verticalSpacing="sm" withTableBorder withColumnBorders>
