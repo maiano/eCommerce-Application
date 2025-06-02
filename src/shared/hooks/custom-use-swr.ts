@@ -1,5 +1,6 @@
 import useSWR, { SWRConfiguration } from 'swr';
 import { ZodError, type ZodSchema } from 'zod';
+import { useAuthStore } from '@/features/auth/auth-state';
 import { apiClientManager } from '@/shared/lib/commercetools/api-client-manager';
 import { debug } from '@/shared/utils/debug-log';
 
@@ -11,8 +12,10 @@ export function useValidatedSWR<T>(
   schema: ZodSchema<T>,
   options?: SWRConfiguration<T>,
 ) {
+  const clientReady = useAuthStore((s) => s.clientReady);
+
   return useSWR<T>(
-    key,
+    clientReady ? key : null,
     async () => {
       try {
         debug(`fetching data for key: ${JSON.stringify(key)}`);

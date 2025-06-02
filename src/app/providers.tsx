@@ -10,12 +10,14 @@ import { apiClientManager } from '@/shared/lib/commercetools';
 import { notifyError } from '@/shared/utils/custom-notifications';
 
 export const AppProvider = () => {
-  const { setPending, setUnauthenticated, setAuthenticated } = useAuthStore();
+  const { setPending, setUnauthenticated, setAuthenticated, setClientReady } =
+    useAuthStore();
   useEffect(() => {
     const initializeApp = async () => {
       setPending();
       try {
         const { authType } = await apiClientManager.init();
+        setClientReady(true);
         if (authType === 'password') {
           setAuthenticated();
         } else {
@@ -24,6 +26,7 @@ export const AppProvider = () => {
       } catch (err) {
         notifyError(err, { message: 'Failed to connect to commercetools' });
         setUnauthenticated();
+        setClientReady(true);
       }
     };
 
