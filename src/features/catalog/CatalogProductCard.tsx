@@ -1,5 +1,5 @@
 import { Card, Text, Group, Image, Box, Button } from '@mantine/core';
-import { Link, useNavigate } from 'react-router-dom';
+import { generatePath, Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/app/routes.tsx';
 import { ProductCard as WineCard } from '@/shared/schemas/product-card-schema';
 
@@ -14,7 +14,7 @@ export function CatalogProductCard({ wine }: ProductCardProps) {
     <Card
       padding="lg"
       className={'product-card'}
-      onClick={() => navigate(ROUTES.CATALOG)}
+      onClick={() => navigate(generatePath(ROUTES.PRODUCT, { id: wine.id }))}
       style={{
         display: 'flex',
         width: '100%',
@@ -56,7 +56,7 @@ export function CatalogProductCard({ wine }: ProductCardProps) {
           <Button
             className="button button--secondary"
             component={Link}
-            to={ROUTES.CATALOG}
+            to={generatePath(ROUTES.PRODUCT, { id: wine.id })}
             style={{
               cursor: 'pointer',
               width: 90,
@@ -109,6 +109,9 @@ export function CatalogProductCard({ wine }: ProductCardProps) {
           radius="md"
           size="sm"
           style={{ flexShrink: 0 }}
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
         >
           Add to Cart
         </Button>
