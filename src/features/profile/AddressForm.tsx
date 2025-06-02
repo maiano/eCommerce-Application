@@ -234,6 +234,7 @@ export function AddressForm({ onClose, type, address, onUpdate }: { onClose: () 
           type="submit"
           disabled={!isValid}
           style={{marginTop: '24px'}}
+          className="button button--primary"
           fullWidth
           >Save
         </Button>

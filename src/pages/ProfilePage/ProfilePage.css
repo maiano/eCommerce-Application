@@ -1,5 +1,7 @@
 .profile-container {
-  margin-top: 6rem;
+  margin-top: 1rem;
+  max-width: 860px;
+  width: 100%;
 }
 
 .container-dark {

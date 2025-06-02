@@ -36,7 +36,7 @@ export function ProfilePage() {
 
   return (
     <Container className="page">
-      <Container className="profile-container">
+      <Box className="profile-container">
         <Title order={1} className="profile-title" style={{marginBottom:'24px'}}>
           My Profile
         </Title>
@@ -216,6 +216,7 @@ export function ProfilePage() {
             {/* Delete address */}
             <Modal
               {...stack.register('delete-address')}
+              closeButtonProps={{color: theme.colors.dark[4]}}
               centered 
               onClose={async() => {
                 stack.close('delete-address');
@@ -251,7 +252,7 @@ export function ProfilePage() {
             </Modal>
           </Container>
         </Box>
-      </Container>
+      </Box>
     </Container>
   )
 }
