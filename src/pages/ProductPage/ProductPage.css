@@ -16,6 +16,7 @@ body.mantine-Modal-body {
   border-radius: 4px;
   text-align: center;
   font-size: 0.875rem;
+  text-transform: capitalize;
 }
 
 .value {
@@ -104,7 +105,7 @@ body.mantine-Modal-body {
   }
 
   .carousel-slide {
-    max-height: 55vh;
+    max-height: 50vh;
     border-radius: 0.875rem;
     overflow: hidden;
     background-color: #f8f9fb;

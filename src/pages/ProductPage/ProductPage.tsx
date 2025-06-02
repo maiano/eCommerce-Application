@@ -188,7 +188,7 @@ export function ProductPage() {
             <Table.Tbody>
               {wine.attributes
                 .filter(
-                  (attr: WineAttribute): boolean => attr.name !== 'Rating',
+                  (attr: WineAttribute): boolean => attr.name !== 'rating',
                 )
                 .map((attr: WineAttribute, index: number) => (
                   <Table.Tr key={index}>
