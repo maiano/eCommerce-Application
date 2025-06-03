@@ -8,14 +8,16 @@ export function useProductCards({
   countries = [],
   sortBy,
   page = 1,
+  searchTerm = '',
 }: {
   categoryIds?: string[];
   countries?: string[];
   sortBy?: string;
   page?: number;
+  searchTerm?: string;
 }) {
   return useValidatedSWR(
-    ['products', categoryIds, countries, sortBy, page],
+    ['products', categoryIds, countries, sortBy, page, searchTerm],
     async (client) => {
       const filters: string[] = [];
 
@@ -42,6 +44,7 @@ export function useProductCards({
             offset: (page - 1) * 8,
             ...(mappedSort ? { sort: [mappedSort] } : {}),
             ...(filters.length ? { filter: filters } : {}),
+            ...(searchTerm.trim() ? { 'text.en-US': searchTerm.trim() } : {}),
           },
         })
         .execute();

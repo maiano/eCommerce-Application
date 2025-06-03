@@ -33,6 +33,8 @@ export function CatalogPage() {
   const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
 
   const [page, setPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState('');
+
   const combobox: ComboboxStore = useCombobox({
     onDropdownClose: (): void => combobox.resetSelectedOption(),
   });
@@ -85,6 +87,7 @@ export function CatalogPage() {
     countries: selectedCountries,
     sortBy,
     page,
+    searchTerm,
   });
 
   const total = data?.total ?? 0;
@@ -98,6 +101,11 @@ export function CatalogPage() {
           size="md"
           radius="md"
           className="search-input__field"
+          value={searchTerm}
+          onChange={(e) => {
+            setSearchTerm(e.currentTarget.value);
+            setPage(1);
+          }}
           leftSection={
             <svg
               xmlns="http://www.w3.org/2000/svg"
