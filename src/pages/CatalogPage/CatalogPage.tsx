@@ -30,6 +30,8 @@ export function CatalogPage() {
     [],
   );
 
+  const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
+
   const [page, setPage] = useState(1);
   const combobox: ComboboxStore = useCombobox({
     onDropdownClose: (): void => combobox.resetSelectedOption(),
@@ -61,6 +63,20 @@ export function CatalogPage() {
 
   const resetCategories = () => {
     setSelectedCategorySlugs([]);
+    setPage(1);
+  };
+
+  const toggleCountry = (country: string) => {
+    setSelectedCountries((prev) =>
+      prev.includes(country)
+        ? prev.filter((c) => c !== country)
+        : [...prev, country],
+    );
+    setPage(1);
+  };
+
+  const resetCountries = () => {
+    setSelectedCountries([]);
     setPage(1);
   };
 
@@ -133,12 +149,31 @@ export function CatalogPage() {
             );
           })}
 
+          {['France', 'Spain', 'Italy'].map((country) => {
+            const selected = selectedCountries.includes(country);
+            return (
+              <Grid.Col
+                key={country}
+                span={{ base: 'auto', sm: 'auto', md: 'auto' }}
+              >
+                <CategoryButton
+                  label={country}
+                  selected={selected}
+                  onToggle={() => toggleCountry(country)}
+                />
+              </Grid.Col>
+            );
+          })}
+
           <Grid.Col span={{ base: 'auto', sm: 'auto', md: 'auto' }}>
             <Button
               fullWidth
               className="filter-button"
               variant="default"
-              onClick={resetCategories}
+              onClick={() => {
+                resetCategories();
+                resetCountries();
+              }}
             >
               Reset All
             </Button>
