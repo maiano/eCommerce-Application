@@ -82,6 +82,7 @@ export function CatalogPage() {
 
   const { data, isLoading } = useProductCards({
     categoryIds: selectedCategoryIds,
+    countries: selectedCountries,
     sortBy,
     page,
   });
