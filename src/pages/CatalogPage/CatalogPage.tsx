@@ -22,6 +22,7 @@ import {
   productSortOptions,
   ProductSortOption,
 } from '@/shared/constants/sorting';
+import { useDebouncedValue } from '@/shared/hooks/useDebouncedValue';
 import { CategoryButton } from '@/shared/ui/CategoryButton';
 
 export function CatalogPage() {
@@ -33,7 +34,8 @@ export function CatalogPage() {
   const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
 
   const [page, setPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchInput, setSearchInput] = useState('');
+  const debouncedSearchTerm = useDebouncedValue(searchInput.toLowerCase());
 
   const combobox: ComboboxStore = useCombobox({
     onDropdownClose: (): void => combobox.resetSelectedOption(),
@@ -87,7 +89,7 @@ export function CatalogPage() {
     countries: selectedCountries,
     sortBy,
     page,
-    searchTerm,
+    searchTerm: debouncedSearchTerm.length >= 3 ? debouncedSearchTerm : '',
   });
 
   const total = data?.total ?? 0;
@@ -97,13 +99,13 @@ export function CatalogPage() {
     <Container fluid className="page">
       <Box style={{ marginTop: 20 }} className="search-input">
         <TextInput
-          placeholder="Enter product name"
+          placeholder="Search by word (min 3 letters, e.g. 'Spain')"
           size="md"
           radius="md"
           className="search-input__field"
-          value={searchTerm}
+          value={searchInput}
           onChange={(e) => {
-            setSearchTerm(e.currentTarget.value);
+            setSearchInput(e.currentTarget.value);
             setPage(1);
           }}
           leftSection={

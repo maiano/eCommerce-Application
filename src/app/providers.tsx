@@ -31,7 +31,7 @@ export const AppProvider = () => {
     };
 
     initializeApp();
-  }, [setUnauthenticated, setPending, setAuthenticated]);
+  }, [setUnauthenticated, setPending, setAuthenticated, setClientReady]);
   return (
     <MantineProvider theme={theme} defaultColorScheme="dark">
       <Notifications
