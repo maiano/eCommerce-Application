@@ -14,21 +14,6 @@ import { debug } from '@/shared/utils/debug-log.ts';
 
 const projectKey = env.VITE_CTP_PROJECT_KEY;
 
-const ANONYMOUS_ID_KEY = 'wine-not-anonymous-id';
-
-export const getAnonymousId = (): string => {
-  let id = localStorage.getItem(ANONYMOUS_ID_KEY);
-  if (!id) {
-    id = crypto.randomUUID();
-    localStorage.setItem(ANONYMOUS_ID_KEY, id);
-  }
-  return id;
-};
-
-export const clearAnonymousId = () => {
-  localStorage.removeItem(ANONYMOUS_ID_KEY);
-};
-
 const anonymousTokenCache = makeTokenCache('wine-not-anonymous-token');
 
 export const createAnonymousClient = (): ByProjectKeyRequestBuilder => {
@@ -38,7 +23,6 @@ export const createAnonymousClient = (): ByProjectKeyRequestBuilder => {
     credentials: {
       clientId: env.VITE_CTP_CLIENT_ID,
       clientSecret: env.VITE_CTP_CLIENT_SECRET,
-      anonymousId: getAnonymousId(),
     },
     scopes: anonymousScopes,
     fetch,

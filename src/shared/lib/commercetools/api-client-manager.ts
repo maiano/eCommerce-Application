@@ -4,10 +4,7 @@ import {
   MyCustomerDraft,
   MyCustomerSignin,
 } from '@commercetools/platform-sdk';
-import {
-  createAnonymousClient,
-  getAnonymousId,
-} from '@/shared/lib/commercetools/create-anonymous-client';
+import { createAnonymousClient } from '@/shared/lib/commercetools/create-anonymous-client';
 import { createPasswordClient } from '@/shared/lib/commercetools/create-password-client';
 import { createRefreshClient } from '@/shared/lib/commercetools/create-refresh-client';
 import {
@@ -82,7 +79,6 @@ export const apiClientManager = (() => {
   ): Promise<ClientResponse<CustomerSignInResult>> => {
     const draft = {
       ...body,
-      anonymousId: getAnonymousId(),
       anonymousCartSignInMode: 'MergeWithExistingCustomerCart',
     };
 
@@ -99,7 +95,6 @@ export const apiClientManager = (() => {
 
     const body: MyExtendedCustomerSignin = {
       ...credentials,
-      anonymousId: getAnonymousId(),
       activeCartSignInMode: 'MergeWithExistingCustomerCart',
       updateProductData: true,
     };
