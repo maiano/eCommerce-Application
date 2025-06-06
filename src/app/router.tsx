@@ -11,10 +11,13 @@ import { ErrorLayout } from '@/app/layouts/ErrorLayout';
 import { MainLayout } from '@/app/layouts/MainLayout';
 import { ROUTES } from '@/app/routes';
 import { useAuthStore } from '@/features/auth/auth-state';
+import { CatalogPage } from '@/pages/CatalogPage/CatalogPage.tsx';
 import { HomePage } from '@/pages/HomePage/HomePage';
 import { LoginPage } from '@/pages/LoginPage';
 import { NotFoundPage } from '@/pages/NotFoundPage/NotFoundPage';
-import { RegistrationPage } from '@/pages/RegistrationPage';
+import { ProductPage } from '@/pages/ProductPage/ProductPage.tsx';
+import { ProfilePage } from '@/pages/ProfilePage/ProfilePage';
+import { RegistrationPage } from '@/pages/RegistrationPage/RegistrationPage';
 import { CenterLoader } from '@/shared/ui/CenterLoader';
 
 const RedirectGuard = () => {
@@ -87,14 +90,28 @@ export const router = createBrowserRouter([
     element: <RedirectGuard />,
     children: [
       {
+        element: <MainLayout />,
+        children: [
+          {
+            path: ROUTES.CATALOG,
+            element: <CatalogPage />,
+          },
+          {
+            path: ROUTES.PRODUCT,
+            element: <ProductPage />,
+          },
+        ],
+      },
+
+      {
         element: <PrivateGuard />,
         children: [
           {
             element: <MainLayout />,
             children: [
               {
-                path: '/profile',
-                element: <div>ProfilePage</div>,
+                path: ROUTES.PROFILE,
+                element: <ProfilePage />,
               },
             ],
           },

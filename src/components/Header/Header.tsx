@@ -1,12 +1,25 @@
-import { Link } from 'react-router-dom';
-import { useMantineTheme, Button, Burger, Box, Group, Title, Text, Menu } from '@mantine/core';
-import { useDisclosure, useClickOutside, useMediaQuery, useDidUpdate } from '@mantine/hooks';
+import {
+  useMantineTheme,
+  Button,
+  Burger,
+  Box,
+  Group,
+  Title,
+  Text,
+  Menu,
+  Anchor,
+} from '@mantine/core';
+import { useDisclosure, useClickOutside, useMediaQuery } from '@mantine/hooks';
+import { useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { ROUTES } from '@/app/routes';
 import { useAuthStore } from '@/features/auth/auth-state';
 import { apiClientManager } from '@/shared/lib/commercetools/api-client-manager';
 
 export function Header() {
   const status = useAuthStore((state) => state.status);
   const isAuthenticated = status === 'AUTHENTICATED';
+  const location = useLocation();
 
   const handleLogout = () => {
     apiClientManager.logout();
@@ -18,8 +31,9 @@ export function Header() {
   const [opened, { toggle, close }] = useDisclosure();
   const isLargeScreen = useMediaQuery('(min-width: 768px)');
 
-  useDidUpdate(() => {
-    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+  useEffect(() => {
+    const scrollbarWidth =
+      window.innerWidth - document.documentElement.clientWidth;
 
     if (opened) {
       document.body.classList.add('no-scroll');
@@ -28,11 +42,20 @@ export function Header() {
       document.body.classList.remove('no-scroll');
       document.body.style.paddingRight = '';
     }
+
+    return () => {
+      document.body.classList.remove('no-scroll');
+      document.body.style.paddingRight = '';
+    };
   }, [opened]);
 
-  useDidUpdate(() => {
+  useEffect(() => {
     if (isLargeScreen) close();
-  }, [isLargeScreen]);
+  }, [isLargeScreen, close]);
+
+  useEffect(() => {
+    close();
+  }, [location.pathname, close]);
 
   useClickOutside(
     () => opened && close(),
@@ -46,14 +69,15 @@ export function Header() {
   return (
     <Box className="header" style={{ width: '100%', maxWidth: 1920 }}>
       <Group className="header__logo" style={{ justifyContent: 'start' }}>
-        <Link
-          to="/"
+        <Anchor
+          component={Link}
+          to={ROUTES.HOME}
           style={{
             color: theme.colors.red[9],
             display: 'flex',
             alignItems: 'center',
-            gap: '0.5rem'
-           }}
+            gap: '0.5rem',
+          }}
         >
           <svg
             className="header__logo-icon"
@@ -72,8 +96,8 @@ export function Header() {
               fill="currentColor"
             />
           </svg>
-        <Title className="header__logo-text">Wine not</Title>
-        </Link>
+          <Title className="header__logo-text">Wine not</Title>
+        </Anchor>
       </Group>
 
       <Group className={`header__nav ${opened ? 'open' : ''}`}>
@@ -85,29 +109,42 @@ export function Header() {
           aria-label="Toggle navigation"
           onClick={toggle}
         />
-        <Link className="header__nav-item" to="/">
+        <Anchor className="header__nav-item" component={Link} to={ROUTES.HOME}>
           <Text>Main</Text>
-        </Link>
-        <Link className="header__nav-item" to="/catalog">
+        </Anchor>
+        <Anchor
+          className="header__nav-item"
+          component={Link}
+          to={ROUTES.CATALOG}
+        >
           <Text>Catalog</Text>
-        </Link>
-        <Link className="header__nav-item" to="/about">
+        </Anchor>
+        <Anchor className="header__nav-item" component={Link} to="/about">
           <Text>About us</Text>
-        </Link>
-        <Link className="header__nav-item header__nav-item--cart" to="/cart">
+        </Anchor>
+        <Anchor
+          className="header__nav-item header__nav-item--cart"
+          component={Link}
+          to="/cart"
+        >
           <Text>Cart</Text>
-        </Link>
+        </Anchor>
 
         {opened ? (
           isAuthenticated ? (
-            <Button
-              variant="filled"
-              color={theme.colors.dark[4]}
-              className="button burger-button--secondary"
-              onClick={handleLogout}
-            >
-              <Text>Logout</Text>
-            </Button>
+            <>
+              <Link className="header__nav-item" to="/profile">
+                <Text>Profile</Text>
+              </Link>
+              <Button
+                variant="filled"
+                color={theme.colors.dark[4]}
+                className="button burger-button--secondary"
+                onClick={handleLogout}
+              >
+                <Text>Logout</Text>
+              </Button>
+            </>
           ) : (
             <>
               <Button
@@ -183,15 +220,20 @@ export function Header() {
 
               <Menu.Dropdown>
                 {isAuthenticated ? (
-                  <Menu.Item onClick={handleLogout}>
-                    <Text>Logout</Text>
-                  </Menu.Item>
+                  <>
+                    <Menu.Item component={Link} to="/profile">
+                      <Text>Profile</Text>
+                    </Menu.Item>
+                    <Menu.Item onClick={handleLogout}>
+                      <Text>Logout</Text>
+                    </Menu.Item>
+                  </>
                 ) : (
                   <>
-                    <Menu.Item component={Link} to="/login">
+                    <Menu.Item component={Link} to={ROUTES.LOGIN}>
                       <Text>Login</Text>
                     </Menu.Item>
-                    <Menu.Item component={Link} to="/registration">
+                    <Menu.Item component={Link} to={ROUTES.REGISTRATION}>
                       <Text>Register</Text>
                     </Menu.Item>
                   </>

@@ -1,16 +1,18 @@
 import { create } from 'zustand';
-import { persist, createJSONStorage  } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
 
 export type AuthStatus = 'AUTHENTICATED' | 'UNAUTHENTICATED' | 'PENDING';
 
 export type AuthState = {
   status: AuthStatus;
   isNeedToRedirect: boolean;
-  login: () => void;
+  setAuthenticated: () => void;
   logout: () => void;
   setPending: () => void;
   resetRedirect: () => void;
-  setUnauthenticated: () => void
+  setUnauthenticated: () => void;
+  clientReady: boolean;
+  setClientReady: (ready: boolean) => void;
 };
 
 export const useAuthStore = create<AuthState>()(
@@ -18,11 +20,14 @@ export const useAuthStore = create<AuthState>()(
     (set) => ({
       status: 'UNAUTHENTICATED',
       isNeedToRedirect: false,
-      login: () => set({ status: 'AUTHENTICATED' }),
-      logout: () => set({
-        status: 'UNAUTHENTICATED',
-        isNeedToRedirect: true
-      }),
+      clientReady: false,
+      setClientReady: (ready: boolean) => set({ clientReady: ready }),
+      setAuthenticated: () => set({ status: 'AUTHENTICATED' }),
+      logout: () =>
+        set({
+          status: 'UNAUTHENTICATED',
+          isNeedToRedirect: true,
+        }),
       setPending: () => set({ status: 'PENDING' }),
       resetRedirect: () => set({ isNeedToRedirect: false }),
       setUnauthenticated: () => set({ status: 'UNAUTHENTICATED' }),
@@ -31,8 +36,8 @@ export const useAuthStore = create<AuthState>()(
       name: 'auth-store',
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
-        status: state.status
+        status: state.status,
       }),
-    }
-  )
+    },
+  ),
 );

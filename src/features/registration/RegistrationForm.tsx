@@ -53,9 +53,9 @@ export function RegistrationForm() {
   dayjs.extend(customParseFormat);
 
   // Selects
-  const deliveryCountrySelect = useCombobox({
+  const shippingCountrySelect = useCombobox({
     onDropdownClose: () => {
-      deliveryCountrySelect.resetSelectedOption();
+      shippingCountrySelect.resetSelectedOption();
       setTimeout(() => {
         triggerErrorCheck();
       }, 200);
@@ -66,7 +66,7 @@ export function RegistrationForm() {
     onDropdownClose: () => billingCountrySelect.resetSelectedOption(),
   });
 
-  const [deliveryCountryValue, setDeliveryCountryValue] = useState<
+  const [shippingCountryValue, setShippingCountryValue] = useState<
     string | null
   >(null);
   const [billingCountryValue, setBillingCountryValue] = useState<string | null>(
@@ -106,33 +106,33 @@ export function RegistrationForm() {
     }
   };
 
-  const deliveryFields = watch([
-    'deliveryAddress.country',
-    'deliveryAddress.city',
-    'deliveryAddress.street',
-    'deliveryAddress.postcode',
+  const shippingFields = watch([
+    'shippingAddress.country',
+    'shippingAddress.city',
+    'shippingAddress.street',
+    'shippingAddress.postcode',
   ]);
 
   useEffect(() => {
     if (sameAddress) {
-      const [deliveryCountry, deliveryCity, deliveryStreet, deliveryPostcode] =
-        deliveryFields;
-      if (deliveryCountry) {
-        setValue('billingAddress.country', deliveryCountry);
-        setBillingCountryValue(deliveryCountry);
-        setValue('billingAddress.city', deliveryCity);
-        setValue('billingAddress.street', deliveryStreet);
-        setValue('billingAddress.postcode', deliveryPostcode);
+      const [shippingCountry, shippingCity, shippingStreet, shippingPostcode] =
+        shippingFields;
+      if (shippingCountry) {
+        setValue('billingAddress.country', shippingCountry);
+        setBillingCountryValue(shippingCountry);
+        setValue('billingAddress.city', shippingCity);
+        setValue('billingAddress.street', shippingStreet);
+        setValue('billingAddress.postcode', shippingPostcode);
       }
     }
-  }, [deliveryFields, sameAddress, setValue]);
+  }, [shippingFields, sameAddress, setValue]);
 
   // Address
   const renderCountrySelect = (
-    name: 'deliveryAddress.country' | 'billingAddress.country',
+    name: 'shippingAddress.country' | 'billingAddress.country',
     store: ComboboxStore,
     value: string | null,
-    addressType: 'deliveryAddress' | 'billingAddress',
+    addressType: 'shippingAddress' | 'billingAddress',
     setValue: (value: string) => void,
   ) => (
     <Controller<RegistrationFormData>
@@ -173,14 +173,14 @@ export function RegistrationForm() {
     />
   );
 
-  const renderAddressFields = (type: 'delivery' | 'billing') => {
+  const renderAddressFields = (type: 'shipping' | 'billing') => {
     const countrySelect =
-      type === 'delivery' ? deliveryCountrySelect : billingCountrySelect;
+      type === 'shipping' ? shippingCountrySelect : billingCountrySelect;
     const countryValue =
-      type === 'delivery' ? deliveryCountryValue : billingCountryValue;
+      type === 'shipping' ? shippingCountryValue : billingCountryValue;
     const setCountryValue =
-      type === 'delivery' ? setDeliveryCountryValue : setBillingCountryValue;
-    const isDisabledOnSameAddress = type === 'delivery' ? false : sameAddress;
+      type === 'shipping' ? setShippingCountryValue : setBillingCountryValue;
+    const isDisabledOnSameAddress = type === 'shipping' ? false : sameAddress;
 
     return (
       <Fieldset
@@ -326,15 +326,15 @@ export function RegistrationForm() {
         {errors.password?.message}
       </Text>
 
-      {renderAddressFields('delivery')}
+      {renderAddressFields('shipping')}
 
       <Checkbox
         styles={{
           input: { borderRadius: '5px' },
           root: { marginBottom: '1rem' },
         }}
-        {...register('deliveryAddress.isDefaultAddress')}
-        label="Set as default delivery address"
+        {...register('shippingAddress.isDefaultAddress')}
+        label="Set as default shipping address"
       />
 
       {renderAddressFields('billing')}
@@ -343,8 +343,8 @@ export function RegistrationForm() {
         <Grid.Col span={{ base: 12, sm: 6 }}>
           <Checkbox
             styles={{ input: { borderRadius: '5px' } }}
-            {...register('billingAddress.sameAsDelivery')}
-            label="Same as delivery address"
+            {...register('billingAddress.sameAsShipping')}
+            label="Same as shipping address"
             checked={sameAddress}
             onChange={handleSameAddressChange}
           />

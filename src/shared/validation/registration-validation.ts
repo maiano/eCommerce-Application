@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { email, password } from './login-validation';
 
-const firstName = z
+export const firstName = z
   .string()
   .trim()
   .min(1, 'First name is required')
@@ -11,7 +11,7 @@ const firstName = z
     'First name must not contain any special characters',
   );
 
-const lastName = z
+export const lastName = z
   .string()
   .trim()
   .min(1, 'Last name is required')
@@ -21,7 +21,7 @@ const lastName = z
     'Last name must not contain any special characters',
   );
 
-const birthDate = z
+export const birthDate = z
   .string()
   .min(1, 'Date of birth is required')
   .refine(
@@ -37,13 +37,13 @@ const birthDate = z
   .optional()
   .refine((val) => val !== undefined, 'Date of birth is required');
 
-const country = z
+export const country = z
   .string()
   .min(1, 'Country is required')
   .optional()
   .refine((val) => val !== undefined, 'Country is required');
 
-const city = z
+export const city = z
   .string()
   .trim()
   .min(1, 'City is required')
@@ -53,9 +53,9 @@ const city = z
     'City must not contain any special characters',
   );
 
-const street = z.string().trim().min(1, 'Street is required');
+export const street = z.string().trim().min(1, 'Street is required');
 
-const postcode = z
+export const postcode = z
   .string()
   .trim()
   .refine(
@@ -68,11 +68,10 @@ const postcode = z
   )
   .refine((val) => /^\b\d{5}\b/g.test(val), 'Postcode must contain 5 digits');
 
-const isDefaultAddress = z
-  // .union([z.number().int(), z.literal('')])
+export const isDefaultAddress = z
   .boolean();
 
-const deliveryAddress = z.object({
+const shippingAddress = z.object({
   country,
   city,
   street,
@@ -80,7 +79,7 @@ const deliveryAddress = z.object({
   isDefaultAddress,
 });
 
-const sameAsDelivery = z.boolean();
+const sameAsShipping = z.boolean();
 
 const billingAddress = z.object({
   country,
@@ -88,7 +87,7 @@ const billingAddress = z.object({
   street,
   postcode,
   isDefaultAddress,
-  sameAsDelivery,
+  sameAsShipping,
 });
 
 export const registrationSchema = z.object({
@@ -97,7 +96,7 @@ export const registrationSchema = z.object({
   firstName,
   lastName,
   birthDate,
-  deliveryAddress,
+  shippingAddress,
   billingAddress,
 });
 

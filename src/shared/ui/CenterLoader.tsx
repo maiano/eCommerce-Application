@@ -33,7 +33,7 @@ export function CenterLoader({ size = 'md' }: CenterLoaderProps) {
           zIndex: 1001,
         }}
       >
-        <Loader size={size} />
+        <Loader size={size} type="oval" />
       </Center>
     </>
   );

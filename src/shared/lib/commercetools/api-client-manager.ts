@@ -4,10 +4,7 @@ import {
   MyCustomerDraft,
   MyCustomerSignin,
 } from '@commercetools/platform-sdk';
-import {
-  clearAnonymousId,
-  createAnonymousClient,
-} from '@/shared/lib/commercetools/create-anonymous-client';
+import { createAnonymousClient } from '@/shared/lib/commercetools/create-anonymous-client';
 import { createPasswordClient } from '@/shared/lib/commercetools/create-password-client';
 import { createRefreshClient } from '@/shared/lib/commercetools/create-refresh-client';
 import {
@@ -23,6 +20,14 @@ type RefreshApiRoot = ReturnType<typeof createRefreshClient>;
 type ApiRoot = AnonymousApiRoot | PasswordApiRoot | RefreshApiRoot;
 
 type AuthType = 'anonymous' | 'password' | 'refresh';
+
+type MyExtendedCustomerSignin = MyCustomerSignin & {
+  anonymousId?: string;
+  activeCartSignInMode?:
+    | 'MergeWithExistingCustomerCart'
+    | 'UseAsNewActiveCustomerCart';
+  updateProductData?: boolean;
+};
 
 export const apiClientManager = (() => {
   let client: ApiRoot | null = null;
@@ -72,7 +77,12 @@ export const apiClientManager = (() => {
   const register = (
     body: MyCustomerDraft,
   ): Promise<ClientResponse<CustomerSignInResult>> => {
-    return get().me().signup().post({ body }).execute();
+    const draft = {
+      ...body,
+      anonymousCartSignInMode: 'MergeWithExistingCustomerCart',
+    };
+
+    return get().me().signup().post({ body: draft }).execute();
   };
 
   const login = async (
@@ -82,10 +92,17 @@ export const apiClientManager = (() => {
       credentials.email,
       credentials.password,
     );
+
+    const body: MyExtendedCustomerSignin = {
+      ...credentials,
+      activeCartSignInMode: 'MergeWithExistingCustomerCart',
+      updateProductData: true,
+    };
+
     return await authClient
       .me()
       .login()
-      .post({ body: credentials })
+      .post({ body })
       .execute()
       .then((response) => {
         client = authClient;
@@ -131,7 +148,6 @@ export const apiClientManager = (() => {
         };
       } catch {
         anonymousTokenCache.clear();
-        clearAnonymousId();
       }
     }
 

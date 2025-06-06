@@ -1,8 +1,8 @@
-import { Card, Title, Text } from '@mantine/core';
-import { ProductCardProps } from '@/types/types';
+import { Card, Title, Text} from '@mantine/core';
+import { FeatureCardProps } from '@/types/types';
 
 
-export function ProductCard({ feature }: ProductCardProps) {
+export function FeatureCard({ feature }: FeatureCardProps) {
   return (
     <Card padding="lg" className="feature-card">
         {feature.icon}

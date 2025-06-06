@@ -10,7 +10,7 @@ import {
 import { Link } from 'react-router-dom';
 import '@/pages/HomePage/HomePage.css';
 import { ROUTES } from '@/app/routes';
-import { ProductCard } from '@/components/Card/Card';
+import { FeatureCard } from '@/components/Card/FeatureCard.tsx';
 import { Slider } from '@/components/Slider/Slider';
 
 export function HomePage() {
@@ -65,7 +65,7 @@ export function HomePage() {
 
   return (
     <Container fluid className="page">
-      <Box style={{ marginTop: 80 }} className="hero">
+      <Box style={{ marginTop: 20 }} className="hero">
         <Title className="hero__title">Explore the Finest Wines</Title>
         <Text fz={'h2'} className="hero__subtitle">
           Discover a curated selection of exceptional wines from renowned
@@ -74,7 +74,7 @@ export function HomePage() {
         <Button
           className="button button--primary button--large"
           component={Link}
-          to="/catalog"
+          to={ROUTES.CATALOG}
           fz={'h4'}
         >
           Shop Now
@@ -126,7 +126,7 @@ export function HomePage() {
 
         <Group className="features__grid">
           {features.map((feature, index) => (
-            <ProductCard key={index} feature={feature} />
+            <FeatureCard key={index} feature={feature} />
           ))}
         </Group>
       </Box>

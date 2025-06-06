@@ -62,7 +62,7 @@
 }
 
 .error .form-input input:focus  {
-  border: 0px solid #c62828 !important;
+  border: 0 solid #c62828 !important;
 }
 
 .form-checkbox {

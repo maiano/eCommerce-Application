@@ -1,55 +1,23 @@
 import { Carousel } from '@mantine/carousel';
-import { Container, Box, Title, Text } from '@mantine/core';
+import { Box, Title } from '@mantine/core';
+import { useAuthStore } from '@/features/auth/auth-state';
+import { CatalogProductCard } from '@/features/catalog/CatalogProductCard';
+import { useFeaturedProducts } from '@/features/catalog/useFeatureProduct';
+import { CenterLoader } from '@/shared/ui/CenterLoader';
 
 export function Slider() {
-  const wines = [
-    {
-      title: 'Chardonnay',
-      description: 'Rich and buttery, a classic white wine',
-      imageClass: 'card__image--chardonnay',
-    },
-    {
-      title: 'Pinot Noir',
-      description: 'Light-bodied red with notes of cherry and raspberry',
-      imageClass: 'card__image--pinot',
-    },
-    {
-      title: 'Cabernet Sauvignon',
-      description: 'Full-bodied red with dark fruit and oak flavors',
-      imageClass: 'card__image--cabernet',
-    },
-    {
-      title: 'Sauvignon Blanc',
-      description: 'Crisp and refreshing white with citrus notes',
-      imageClass: 'card__image--sauvignon',
-    },
-    {
-      title: 'Chardonnay',
-      description: 'Rich and buttery, a classic white wine',
-      imageClass: 'card__image--chardonnay',
-    },
-    {
-      title: 'Pinot Noir',
-      description: 'Light-bodied red with notes of cherry and raspberry',
-      imageClass: 'card__image--pinot',
-    },
-    {
-      title: 'Cabernet Sauvignon',
-      description: 'Full-bodied red with dark fruit and oak flavors',
-      imageClass: 'card__image--cabernet',
-    },
-    {
-      title: 'Sauvignon Blanc',
-      description: 'Crisp and refreshing white with citrus notes',
-      imageClass: 'card__image--sauvignon',
-    },
-  ];
+  const clientReady = useAuthStore((s) => s.clientReady);
+  const { data, isLoading } = useFeaturedProducts();
+
+  if (!clientReady || isLoading || !data || data.length === 0) {
+    return <CenterLoader />;
+  }
 
   return (
     <Box className="carousel" style={{ maxWidth: 1920, width: '100%' }}>
       <Title className="section-title">Featured Selections</Title>
       <Carousel
-        height={500}
+        height={520}
         slideSize={{
           base: '100%',
           sm: '50%',
@@ -57,31 +25,21 @@ export function Slider() {
           lg: '25%',
         }}
         slideGap={{ base: 'xs', md: 'md' }}
-        align="start"
         slidesToScroll="auto"
         withControls
         controlSize={50}
         controlsOffset="xxs"
-        withIndicators
         loop
         dragFree
+        style={{ overflowY: 'visible' }}
       >
-        {wines.map((wine, index) => (
-          <Carousel.Slide key={index}>
-            <Container
-              className="card"
-              style={{ maxWidth: 460, width: '100%' }}
-            >
-              <div className={`card__image ${wine.imageClass}`}></div>
-              <Container className="card__content">
-                <Title className="card__title">{wine.title}</Title>
-                <Text className="card__description" c="dark.4">
-                  {wine.description}
-                </Text>
-              </Container>
-            </Container>
-          </Carousel.Slide>
-        ))}
+        {data.map((wine) => {
+          return (
+            <Carousel.Slide key={wine.id} style={{ overflow: 'hidden' }}>
+              <CatalogProductCard wine={wine} />
+            </Carousel.Slide>
+          );
+        })}
       </Carousel>
     </Box>
   );
