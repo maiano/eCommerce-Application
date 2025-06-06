@@ -22,6 +22,7 @@ import {
   productSortOptions,
   ProductSortOption,
 } from '@/shared/constants/sorting';
+import { useDebouncedValue } from '@/shared/hooks/useDebouncedValue';
 import { CategoryButton } from '@/shared/ui/CategoryButton';
 
 export function CatalogPage() {
@@ -30,7 +31,12 @@ export function CatalogPage() {
     [],
   );
 
+  const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
+
   const [page, setPage] = useState(1);
+  const [searchInput, setSearchInput] = useState('');
+  const debouncedSearchTerm = useDebouncedValue(searchInput.toLowerCase());
+
   const combobox: ComboboxStore = useCombobox({
     onDropdownClose: (): void => combobox.resetSelectedOption(),
   });
@@ -64,10 +70,26 @@ export function CatalogPage() {
     setPage(1);
   };
 
+  const toggleCountry = (country: string) => {
+    setSelectedCountries((prev) =>
+      prev.includes(country)
+        ? prev.filter((c) => c !== country)
+        : [...prev, country],
+    );
+    setPage(1);
+  };
+
+  const resetCountries = () => {
+    setSelectedCountries([]);
+    setPage(1);
+  };
+
   const { data, isLoading } = useProductCards({
     categoryIds: selectedCategoryIds,
+    countries: selectedCountries,
     sortBy,
     page,
+    searchTerm: debouncedSearchTerm.length >= 3 ? debouncedSearchTerm : '',
   });
 
   const total = data?.total ?? 0;
@@ -77,10 +99,15 @@ export function CatalogPage() {
     <Container fluid className="page">
       <Box style={{ marginTop: 20 }} className="search-input">
         <TextInput
-          placeholder="Enter product name"
+          placeholder="Search by word (min 3 letters, e.g. 'Spain')"
           size="md"
           radius="md"
           className="search-input__field"
+          value={searchInput}
+          onChange={(e) => {
+            setSearchInput(e.currentTarget.value);
+            setPage(1);
+          }}
           leftSection={
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -133,12 +160,31 @@ export function CatalogPage() {
             );
           })}
 
+          {['France', 'Spain', 'Italy'].map((country) => {
+            const selected = selectedCountries.includes(country);
+            return (
+              <Grid.Col
+                key={country}
+                span={{ base: 'auto', sm: 'auto', md: 'auto' }}
+              >
+                <CategoryButton
+                  label={country}
+                  selected={selected}
+                  onToggle={() => toggleCountry(country)}
+                />
+              </Grid.Col>
+            );
+          })}
+
           <Grid.Col span={{ base: 'auto', sm: 'auto', md: 'auto' }}>
             <Button
               fullWidth
               className="filter-button"
               variant="default"
-              onClick={resetCategories}
+              onClick={() => {
+                resetCategories();
+                resetCountries();
+              }}
             >
               Reset All
             </Button>

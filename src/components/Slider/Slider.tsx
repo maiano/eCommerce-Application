@@ -1,14 +1,20 @@
 import { Carousel } from '@mantine/carousel';
 import { Box, Title } from '@mantine/core';
-import { ProductCard } from '@/components/Card/ProductCard.tsx';
-import type { Wine } from '@/types/types.tsx';
-import { wines } from '@/types/types.tsx';
-
+import { useAuthStore } from '@/features/auth/auth-state';
+import { CatalogProductCard } from '@/features/catalog/CatalogProductCard';
+import { useFeaturedProducts } from '@/features/catalog/useFeatureProduct';
+import { CenterLoader } from '@/shared/ui/CenterLoader';
 
 export function Slider() {
+  const clientReady = useAuthStore((s) => s.clientReady);
+  const { data, isLoading } = useFeaturedProducts();
+
+  if (!clientReady || isLoading || !data || data.length === 0) {
+    return <CenterLoader />;
+  }
 
   return (
-    <Box className="carousel" style={{ maxWidth: 1920, width: '100%'}}>
+    <Box className="carousel" style={{ maxWidth: 1920, width: '100%' }}>
       <Title className="section-title">Featured Selections</Title>
       <Carousel
         height={520}
@@ -25,15 +31,15 @@ export function Slider() {
         controlsOffset="xxs"
         loop
         dragFree
-        style={{ overflowY: 'visible'}}
+        style={{ overflowY: 'visible' }}
       >
-        {wines.map((wine: Wine, index: number ) => (
-          <Carousel.Slide key={index} style={{ overflow: 'hidden'}}>
-            <ProductCard
-              wine={wine}
-            />
-          </Carousel.Slide>
-        ))}
+        {data.map((wine) => {
+          return (
+            <Carousel.Slide key={wine.id} style={{ overflow: 'hidden' }}>
+              <CatalogProductCard wine={wine} />
+            </Carousel.Slide>
+          );
+        })}
       </Carousel>
     </Box>
   );

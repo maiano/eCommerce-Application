@@ -11,6 +11,8 @@ export type AuthState = {
   setPending: () => void;
   resetRedirect: () => void;
   setUnauthenticated: () => void;
+  clientReady: boolean;
+  setClientReady: (ready: boolean) => void;
 };
 
 export const useAuthStore = create<AuthState>()(
@@ -18,6 +20,8 @@ export const useAuthStore = create<AuthState>()(
     (set) => ({
       status: 'UNAUTHENTICATED',
       isNeedToRedirect: false,
+      clientReady: false,
+      setClientReady: (ready: boolean) => set({ clientReady: ready }),
       setAuthenticated: () => set({ status: 'AUTHENTICATED' }),
       logout: () =>
         set({
