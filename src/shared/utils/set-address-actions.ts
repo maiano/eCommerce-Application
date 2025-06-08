@@ -17,12 +17,12 @@ export const setAddressActions = (id: string | undefined, currentUser: ClientRes
     if (!currentUser?.body.shippingAddressIds?.includes(id ?? '')) {
       actions.push(createAddressAction('addShippingAddressId', id));
     }
+    if (id === currentUser?.body.defaultShippingAddressId && !isDefaultShipping) {
+      actions.push(createAddressAction('setDefaultShippingAddress', undefined));
+    }
   } else {
     if (currentUser?.body.shippingAddressIds?.includes(id ?? '')) {
       actions.push(createAddressAction('removeShippingAddressId', id));
-    }
-    if (id === currentUser?.body.defaultShippingAddressId) {
-      actions.push(createAddressAction('setDefaultShippingAddress', undefined));
     }
   }
   
@@ -33,12 +33,12 @@ export const setAddressActions = (id: string | undefined, currentUser: ClientRes
     if (!currentUser?.body.billingAddressIds?.includes(id ?? '')) {
       actions.push(createAddressAction('addBillingAddressId', id));
     }
+    if (id === currentUser?.body.defaultBillingAddressId && !isDefaultBilling) {
+      actions.push(createAddressAction('setDefaultBillingAddress', undefined));
+    }
   } else {
     if (currentUser?.body.billingAddressIds?.includes(id ?? '')) {
       actions.push(createAddressAction('removeBillingAddressId', id));
-    }
-    if (id === currentUser?.body.defaultBillingAddressId) {
-      actions.push(createAddressAction('setDefaultBillingAddress', undefined));
     }
   }
   return actions;
