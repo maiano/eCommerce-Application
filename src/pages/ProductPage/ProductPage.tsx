@@ -158,7 +158,7 @@ export function ProductPage() {
 
           <Divider className="divider" />
 
-          <Title order={3} mb="md">
+          <Title className="subtitle" order={3} mb="md">
             Price:
           </Title>
           <Group className="price-content" mb="xl" align="center">

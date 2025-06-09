@@ -11,10 +11,11 @@ import {
 } from '@mantine/core';
 import { useDisclosure, useClickOutside, useMediaQuery } from '@mantine/hooks';
 import { useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/app/routes';
 import { useAuthStore } from '@/features/auth/auth-state';
 import { apiClientManager } from '@/shared/lib/commercetools/api-client-manager';
+import { getCart } from '@/shared/hooks/useCartStore.ts';
 
 export function Header() {
   const status = useAuthStore((state) => state.status);
@@ -30,6 +31,15 @@ export function Header() {
   const theme = useMantineTheme();
   const [opened, { toggle, close }] = useDisclosure();
   const isLargeScreen = useMediaQuery('(min-width: 768px)');
+
+  const handleCartClick = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    try {
+      await getCart();
+    } catch (error) {
+      console.error("[Cart Error]", error);
+    }
+  };
 
   useEffect(() => {
     const scrollbarWidth =
@@ -125,7 +135,8 @@ export function Header() {
         <Anchor
           className="header__nav-item header__nav-item--cart"
           component={Link}
-          to="/cart"
+          to={ROUTES.CART}
+          onClick={handleCartClick}
         >
           <Text>Cart</Text>
         </Anchor>
@@ -173,7 +184,8 @@ export function Header() {
           <>
             <Button
               component={Link}
-              to="/cart"
+              to={ROUTES.CART}
+              onClick={handleCartClick}
               color={theme.colors.dark[5]}
               className="button button--icon"
             >

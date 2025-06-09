@@ -30,7 +30,8 @@ const RedirectGuard = () => {
     if (isNeedToRedirect) {
       if (
         location.pathname === ROUTES.LOGIN ||
-        location.pathname === ROUTES.REGISTRATION
+        location.pathname === ROUTES.REGISTRATION ||
+        location.pathname === ROUTES.CART
       ) {
         resetRedirect();
         return;
@@ -99,6 +100,10 @@ export const router = createBrowserRouter([
           {
             path: ROUTES.PRODUCT,
             element: <ProductPage />,
+          },
+          {
+            path: ROUTES.CART,
+            element: <div>CART PAGE</div>
           },
         ],
       },
