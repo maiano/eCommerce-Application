@@ -11,6 +11,7 @@ import { ErrorLayout } from '@/app/layouts/ErrorLayout';
 import { MainLayout } from '@/app/layouts/MainLayout';
 import { ROUTES } from '@/app/routes';
 import { useAuthStore } from '@/features/auth/auth-state';
+import { AboutPage } from '@/pages/AboutPage/AboutPage';
 import { CatalogPage } from '@/pages/CatalogPage/CatalogPage.tsx';
 import { HomePage } from '@/pages/HomePage/HomePage';
 import { LoginPage } from '@/pages/LoginPage';
@@ -83,6 +84,16 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: <HomePage />,
+      },
+    ],
+  },
+  {
+    path: ROUTES.ABOUT,
+    element: <MainLayout />,
+    children: [
+      {
+        index: true,
+        element: <AboutPage />,
       },
     ],
   },

@@ -209,3 +209,16 @@ export interface ModalEmbla {
   scrollTo: (index: number) => void;
   reInit: () => void;
 }
+
+export interface TeamMember {
+  avatar: string;
+  name: string;
+  role: string;
+  description: string;
+  contributions: string[];
+  github: string, 
+}
+
+export interface TeamMemberCardProps {
+  member: TeamMember;
+}
