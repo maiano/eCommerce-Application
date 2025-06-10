@@ -2,6 +2,7 @@ import { Card, Text, Group, Image, Box, Button } from '@mantine/core';
 import { generatePath, Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/app/routes.tsx';
 import { ProductCard as WineCard } from '@/shared/schemas/product-card-schema';
+import { addToCart } from '@/shared/hooks/useCartStore.ts';
 
 type ProductCardProps = {
   wine: WineCard;
@@ -9,6 +10,17 @@ type ProductCardProps = {
 
 export function CatalogProductCard({ wine }: ProductCardProps) {
   const navigate = useNavigate();
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    addToCart(wine.id)
+      .then(() => {
+        console.log('Added to cart');
+      })
+      .catch(() => {
+        console.log('Fail adding to cart');
+      });
+  };
 
   return (
     <Card
@@ -110,9 +122,7 @@ export function CatalogProductCard({ wine }: ProductCardProps) {
           radius="md"
           size="sm"
           style={{ flexShrink: 0 }}
-          onClick={(e) => {
-            e.stopPropagation();
-          }}
+          onClick={handleAddToCart}
         >
           Add to Cart
         </Button>
