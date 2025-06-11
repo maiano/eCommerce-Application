@@ -12,10 +12,11 @@ import { debug } from '@/shared/utils/debug-log';
 interface CartState {
   cart: Cart | null;
   error: string | null;
+  createCart: () => Promise<ClientResponse<Cart>>;
   fetchCart: () => Promise<void>;
   addLineItem: (productId: string, variantId?: number, quantity?: number) => Promise<void>;
-  createCart: () => Promise<ClientResponse<Cart>>;
-  changeQuantity: (lineItemId: string, quantity: number) => Promise<void>;
+  removeLineItem: (lineItemId: string) => Promise<void>;
+  changeLineItemQuantity: (lineItemId: string, quantity: number) => Promise<void>;
 }
 
 const CART_STORAGE_KEY = 'wine-not-cart-id';
@@ -171,7 +172,8 @@ export const useCartStore = create<CartState>()(
           throw error;
         }
       },
-      changeQuantity: async (lineItemId, quantity) => {
+
+      changeLineItemQuantity: async (lineItemId, quantity) => {
         set({ error: null });
         try {
           const client = apiClientManager.get();
@@ -208,6 +210,41 @@ export const useCartStore = create<CartState>()(
           debug('Change quantity error:', errorMessage);
           throw error;
         }
+      },
+      removeLineItem: async (lineItemId) => {
+        set({ error: null });
+        try {
+          const client = apiClientManager.get();
+          if (!client) throw new Error;
+
+          const { cart } = get();
+          if (!cart) throw new Error('No cart');
+
+          const updateActions: CartUpdate = {
+            version: cart.version,
+            actions: [{
+              action: 'removeLineItem',
+              lineItemId
+            }]
+          };
+
+          const response = await client
+            .carts()
+            .withId({ ID: cart.id })
+            .post({ body: updateActions })
+            .execute();
+
+          set({ cart: response.body });
+          debug(`Removed ${lineItemId}`);
+        } catch (error) {
+          let errorMessage = 'Failed to remove product';
+          if (error instanceof Object && 'message' in error && typeof error.message === 'string') {
+            errorMessage = error.message;
+          }
+          set({ error: errorMessage });
+          debug('Remove error:', errorMessage);
+          throw error;
+        }
       }
     }),
     {
@@ -223,4 +260,7 @@ export const addToCart = (productId: string, variantId?: number, quantity?: numb
   useCartStore.getState().addLineItem(productId, variantId, quantity);
 
 export const changeQuantity = (lineItemId: string, quantity: number) =>
-useCartStore.getState().changeQuantity(lineItemId, quantity);
+useCartStore.getState().changeLineItemQuantity(lineItemId, quantity);
+
+export const removeFromCart = (lineItemId: string) =>
+ useCartStore.getState().removeLineItem(lineItemId);
