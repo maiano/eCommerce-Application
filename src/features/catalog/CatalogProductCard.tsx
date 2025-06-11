@@ -2,7 +2,7 @@ import { Card, Text, Group, Image, Box, Button } from '@mantine/core';
 import { generatePath, Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/app/routes.tsx';
 import { ProductCard as WineCard } from '@/shared/schemas/product-card-schema';
-import { addToCart } from '@/shared/hooks/useCartStore.ts';
+import { addToCart, changeQuantity, useCartStore } from '@/shared/hooks/useCartStore.ts';
 
 type ProductCardProps = {
   wine: WineCard;
@@ -11,16 +11,37 @@ type ProductCardProps = {
 export function CatalogProductCard({ wine }: ProductCardProps) {
   const navigate = useNavigate();
 
+  const cart = useCartStore(state => state.cart);
+  const cartItem = cart?.lineItems.find(
+    item => item.productId === wine.id && item.variant?.id === 1
+  );
+
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
     addToCart(wine.id)
-      .then(() => {
-        console.log('Added to cart');
-      })
-      .catch(() => {
-        console.log('Fail adding to cart');
-      });
+      .then(() => console.log('Added to cart'))
+      .catch(() => console.log('Failed adding to cart'));
   };
+
+  const handleIncrease = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (cartItem) {
+      changeQuantity(cartItem.id, cartItem.quantity + 1)
+        .then(() => console.log('Quantity increased'))
+        .catch(() => console.log('Failed to increase'));
+    }
+  };
+
+  const handleDecrease = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (cartItem && cartItem.quantity > 1) {
+      changeQuantity(cartItem.id, cartItem.quantity - 1)
+        .then(() => console.log('Quantity decreased'))
+        .catch(() => console.log('Failed to decrease'));
+    }
+  };
+
+
 
   return (
     <Card
@@ -76,6 +97,8 @@ export function CatalogProductCard({ wine }: ProductCardProps) {
               height: 35,
               alignSelf: 'center',
             }}
+            // onClick={handleIncrease}
+            onClick={handleDecrease}
           >
             More info
           </Button>

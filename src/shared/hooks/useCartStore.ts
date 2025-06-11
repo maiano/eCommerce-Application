@@ -12,10 +12,10 @@ import { debug } from '@/shared/utils/debug-log';
 interface CartState {
   cart: Cart | null;
   error: string | null;
-  isLoading: boolean;
   fetchCart: () => Promise<void>;
   addLineItem: (productId: string, variantId?: number, quantity?: number) => Promise<void>;
   createCart: () => Promise<ClientResponse<Cart>>;
+  changeQuantity: (lineItemId: string, quantity: number) => Promise<void>;
 }
 
 const CART_STORAGE_KEY = 'wine-not-cart-id';
@@ -119,7 +119,7 @@ export const useCartStore = create<CartState>()(
             set({ cart: response.body });
           }
         } catch (error) {
-          let errorMessage = 'Unknown cart error';
+          let errorMessage;
 
           if (error instanceof Object && 'message' in error && typeof error.message === 'string') {
             errorMessage = error.message;
@@ -131,10 +131,10 @@ export const useCartStore = create<CartState>()(
       },
 
       addLineItem: async (productId, variantId = 1, quantity = 1) => {
-        set({ isLoading: true, error: null });
+        set({error: null });
         try {
           const client = apiClientManager.get();
-          if (!client) throw new Error('Client not initialized');
+          if (!client) throw new Error;
 
           const { cart } = get();
           let currentCart = cart;
@@ -169,8 +169,44 @@ export const useCartStore = create<CartState>()(
           set({ error: errorMessage });
           debug('Add to cart error:', errorMessage);
           throw error;
-        } finally {
-          set({ isLoading: false });
+        }
+      },
+      changeQuantity: async (lineItemId, quantity) => {
+        set({ error: null });
+        try {
+          const client = apiClientManager.get();
+          if (!client) throw new Error;
+
+          const { cart } = get();
+          if (!cart) throw new Error('No cart');
+
+          const updateActions: CartUpdate = {
+            version: cart.version,
+            actions: [{
+              action: 'changeLineItemQuantity',
+              lineItemId,
+              quantity,
+            }]
+          };
+
+          const response = await client
+            .carts()
+            .withId({ ID: cart.id })
+            .post({ body: updateActions })
+            .execute();
+
+          set({ cart: response.body });
+          console.log(`Changed quantity for ${lineItemId} to ${quantity}`);
+        } catch (error) {
+          let errorMessage = 'Failed to change quantity';
+
+          if (error instanceof Object && 'message' in error && typeof error.message === 'string') {
+            errorMessage = error.message;
+          }
+
+          set({ error: errorMessage });
+          debug('Change quantity error:', errorMessage);
+          throw error;
         }
       }
     }),
@@ -185,3 +221,6 @@ export const getCart = () => useCartStore.getState().fetchCart();
 
 export const addToCart = (productId: string, variantId?: number, quantity?: number) =>
   useCartStore.getState().addLineItem(productId, variantId, quantity);
+
+export const changeQuantity = (lineItemId: string, quantity: number) =>
+useCartStore.getState().changeQuantity(lineItemId, quantity);
