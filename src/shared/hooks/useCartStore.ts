@@ -15,46 +15,11 @@ interface CartState {
   isLoading: boolean;
   fetchCart: () => Promise<void>;
   addLineItem: (productId: string, variantId?: number, quantity?: number) => Promise<void>;
+  createCart: () => Promise<ClientResponse<Cart>>;
 }
 
 const CART_STORAGE_KEY = 'wine-not-cart-id';
 const ANONYMOUS_ID_KEY = 'wine-not-anonymous-id';
-
-const createCart = async (): Promise<ClientResponse<Cart>> => {
-  const client = apiClientManager.get();
-  if (!client) throw new Error;
-
-  const authType = apiClientManager.getAuthType();
-  debug('Creating new cart');
-
-  if (authType === 'password') {
-    const draft: CartDraft = {
-      currency: 'EUR',
-      country: 'FR',
-      lineItems: []
-    };
-
-    return client.me().carts().post({ body: draft }).execute();
-  } else {
-    const anonymousId = localStorage.getItem(ANONYMOUS_ID_KEY) || undefined;
-    debug(`Using anonymous ID: ${anonymousId}`);
-
-    const draft: CartDraft = {
-      currency: 'EUR',
-      country: 'FR',
-      lineItems: [],
-      anonymousId
-    };
-
-    const response = await client.me().carts().post({ body: draft }).execute();
-
-    localStorage.setItem(CART_STORAGE_KEY, response.body.id);
-    localStorage.setItem(ANONYMOUS_ID_KEY, response.body.anonymousId);
-
-    debug(`Anonymous cartID: ${response.body.id}, AnonymousID: ${response.body.anonymousId}`);
-    return response;
-  }
-};
 
 export const useCartStore = create<CartState>()(
   persist(
@@ -62,6 +27,42 @@ export const useCartStore = create<CartState>()(
       cart: null,
       error: null,
       isLoading: false,
+
+      createCart: async () => {
+        const client = apiClientManager.get();
+        if (!client) throw new Error;
+
+        const authType = apiClientManager.getAuthType();
+        debug('Creating new cart');
+
+        if (authType === 'password') {
+          const draft: CartDraft = {
+            currency: 'EUR',
+            country: 'FR',
+            lineItems: []
+          };
+
+          return client.me().carts().post({ body: draft }).execute();
+        } else {
+          const anonymousId = localStorage.getItem(ANONYMOUS_ID_KEY) || undefined;
+          debug(`Using anonymous ID: ${anonymousId}`);
+
+          const draft: CartDraft = {
+            currency: 'EUR',
+            country: 'FR',
+            lineItems: [],
+            anonymousId
+          };
+
+          const response = await client.me().carts().post({ body: draft }).execute();
+
+          localStorage.setItem(CART_STORAGE_KEY, response.body.id);
+          localStorage.setItem(ANONYMOUS_ID_KEY, response.body.anonymousId);
+
+          debug(`Anonymous cartID: ${response.body.id}, AnonymousID: ${response.body.anonymousId}`);
+          return response;
+        }
+      },
 
       fetchCart: async () => {
         set({ error: null });
@@ -82,7 +83,7 @@ export const useCartStore = create<CartState>()(
             } catch (error) {
               if (error instanceof Object && 'statusCode' in error && error.statusCode === 404) {
                 debug('No active cart, creating new');
-                const response = await createCart();
+                const response = await get().createCart();
                 set({ cart: response.body });
                 debug(`New cart created: ${response.body.id}`);
               } else {
@@ -99,7 +100,7 @@ export const useCartStore = create<CartState>()(
                 const client = apiClientManager.get();
                 if (!client) throw new Error;
 
-                const response = await client.me().activeCart().get().execute();
+                const response = await client.me().carts().withId({ ID: savedCartId }).get().execute();
                 set({ cart: response.body });
                 debug('Anonymous cart loaded');
 
@@ -114,7 +115,7 @@ export const useCartStore = create<CartState>()(
             }
 
             debug('Creating new anonymous cart');
-            const response = await createCart();
+            const response = await get().createCart();
             set({ cart: response.body });
           }
         } catch (error) {
@@ -157,7 +158,7 @@ export const useCartStore = create<CartState>()(
             .execute();
 
           set({ cart: response.body });
-          debug(`Add product ${productId} to cart`);
+          debug(`Added product ${productId} to cart`);
         } catch (error) {
           let errorMessage = 'Failed to add product';
 
@@ -182,4 +183,5 @@ export const useCartStore = create<CartState>()(
 
 export const getCart = () => useCartStore.getState().fetchCart();
 
-export const addToCart = (productId: string) => useCartStore.getState().addLineItem(productId);
+export const addToCart = (productId: string, variantId?: number, quantity?: number) =>
+  useCartStore.getState().addLineItem(productId, variantId, quantity);
