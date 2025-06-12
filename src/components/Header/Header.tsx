@@ -11,7 +11,7 @@ import {
 } from '@mantine/core';
 import { useDisclosure, useClickOutside, useMediaQuery } from '@mantine/hooks';
 import { useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation} from 'react-router-dom';
 import { ROUTES } from '@/app/routes';
 import { useAuthStore } from '@/features/auth/auth-state';
 import { apiClientManager } from '@/shared/lib/commercetools/api-client-manager';
@@ -125,7 +125,7 @@ export function Header() {
         <Anchor
           className="header__nav-item header__nav-item--cart"
           component={Link}
-          to="/cart"
+          to={ROUTES.CART}
         >
           <Text>Cart</Text>
         </Anchor>
@@ -173,7 +173,7 @@ export function Header() {
           <>
             <Button
               component={Link}
-              to="/cart"
+              to={ROUTES.CART}
               color={theme.colors.dark[5]}
               className="button button--icon"
             >

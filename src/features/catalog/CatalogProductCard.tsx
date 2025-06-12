@@ -2,6 +2,7 @@ import { Card, Text, Group, Image, Box, Button } from '@mantine/core';
 import { generatePath, Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/app/routes.tsx';
 import { ProductCard as WineCard } from '@/shared/schemas/product-card-schema';
+import { addToCart, useCartStore, removeFromCart } from '@/shared/hooks/useCartStore.ts';
 
 type ProductCardProps = {
   wine: WineCard;
@@ -9,6 +10,27 @@ type ProductCardProps = {
 
 export function CatalogProductCard({ wine }: ProductCardProps) {
   const navigate = useNavigate();
+
+  const cart = useCartStore(state => state.cart);
+  const cartItem = cart?.lineItems.find(
+    item => item.productId === wine.id && item.variant?.id === 1
+  );
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    addToCart(wine.id)
+      .then(() => console.log('Added to cart'))
+      .catch(() => console.log('Failed adding to cart'));
+  };
+
+  const handleRemove = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (cartItem) {
+      removeFromCart(cartItem.id)
+        .then(() => console.log('Product removed'))
+        .catch(() => console.log('Failed to remove'));
+    }
+  };
 
   return (
     <Card
@@ -105,17 +127,27 @@ export function CatalogProductCard({ wine }: ProductCardProps) {
           </Text>
         )}
 
-        <Button
-          className="button button--primary"
-          radius="md"
-          size="sm"
-          style={{ flexShrink: 0 }}
-          onClick={(e) => {
-            e.stopPropagation();
-          }}
-        >
-          Add to Cart
-        </Button>
+        {cartItem ? (
+          <Button
+            className="button button--remove"
+            radius="md"
+            size="sm"
+            style={{ flexShrink: 0 }}
+            onClick={handleRemove}
+          >
+            Remove from Cart
+          </Button>
+        ) : (
+          <Button
+            className="button button--primary"
+            radius="md"
+            size="sm"
+            style={{ flexShrink: 0 }}
+            onClick={handleAddToCart}
+          >
+            Add to Cart
+          </Button>
+        )}
       </Group>
     </Card>
   );
