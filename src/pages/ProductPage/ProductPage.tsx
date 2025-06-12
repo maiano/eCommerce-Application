@@ -22,6 +22,7 @@ import { CenterLoader } from '@/shared/ui/CenterLoader';
 import { notifyError } from '@/shared/utils/custom-notifications';
 import type { ModalEmbla, Wine, WineAttribute } from '@/types/types.tsx';
 import './ProductPage.css';
+import { addToCart, changeQuantity, removeFromCart, useCartStore } from '@/shared/hooks/useCartStore.ts';
 
 const TRANSITION_DURATION = 300;
 
@@ -46,6 +47,45 @@ export function ProductPage() {
     useRef<ModalEmbla | null>(null);
   const [modalOpened, setModalOpened] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const cart = useCartStore(state => state.cart);
+  const cartItem = cart?.lineItems.find(
+    item => item.productId === wine.id && item.variant?.id === 1
+  );
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    addToCart(wine.id)
+      .then(() => console.log('Added to cart'))
+      .catch(() => console.log('Failed adding to cart'));
+  };
+
+  const handleIncrease = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (cartItem) {
+      changeQuantity(cartItem.id, cartItem.quantity + 1)
+        .then(() => console.log('Quantity increased'))
+        .catch(() => console.log('Failed to increase'));
+    }
+  };
+
+  const handleDecrease = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (cartItem && cartItem.quantity > 1) {
+      changeQuantity(cartItem.id, cartItem.quantity - 1)
+        .then(() => console.log('Quantity decreased'))
+        .catch(() => console.log('Failed to decrease'));
+    }
+  };
+
+  const handleRemove = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (cartItem) {
+      removeFromCart(cartItem.id)
+        .then(() => console.log('Product removed'))
+        .catch(() => console.log('Failed to remove'));
+    }
+  };
 
   const { handleImageLoad } = useImageHandler();
 
@@ -226,9 +266,27 @@ export function ProductPage() {
           </Table>
 
           <Group justify="center" wrap="nowrap">
-            <Button className="button button--primary button--large" w="50%">
-              Add to Cart
-            </Button>
+            {cartItem ? (
+              <Button
+                className="button button--remove button--large" w="50%"
+                radius="md"
+                size="sm"
+                style={{ flexShrink: 0 }}
+                onClick={handleRemove}
+              >
+                Remove from Cart
+              </Button>
+            ) : (
+              <Button
+                className="button button--primary button--large" w="50%"
+                radius="md"
+                size="sm"
+                style={{ flexShrink: 0 }}
+                onClick={handleAddToCart}
+              >
+                Add to Cart
+              </Button>
+            )}
             <Button
               className="button button--secondary button--large"
               w="50%"

@@ -28,11 +28,10 @@ export const useCartStore = create<CartState>()(
     (set, get) => ({
       cart: null,
       error: null,
-      isLoading: false,
 
       createCart: async () => {
         const client = apiClientManager.get();
-        if (!client) throw new Error;
+        if (!client) throw new Error('Client is not initialized');
 
         const authType = apiClientManager.getAuthType();
 
@@ -74,7 +73,7 @@ export const useCartStore = create<CartState>()(
           if (authType === 'password') {
             try {
               const client = apiClientManager.get();
-              if (!client) throw new Error;
+              if (!client) throw new Error('Client is not initialized');
 
               const response = await client
                 .me()
@@ -103,7 +102,7 @@ export const useCartStore = create<CartState>()(
               try {
                 debug(`Fetching cart by ID: ${savedCartId}`);
                 const client = apiClientManager.get();
-                if (!client) throw new Error;
+                if (!client) throw new Error('Client is not initialized');
 
                 const response = await client
                   .me()
@@ -145,7 +144,7 @@ export const useCartStore = create<CartState>()(
         set({error: null });
         try {
           const client = apiClientManager.get();
-          if (!client) throw new Error;
+          if (!client) throw new Error('Client is not initialized');
 
           const { cart } = get();
           let currentCart = cart;
@@ -187,7 +186,7 @@ export const useCartStore = create<CartState>()(
         set({ error: null });
         try {
           const client = apiClientManager.get();
-          if (!client) throw new Error;
+          if (!client) throw new Error('Client is not initialized');
 
           const { cart } = get();
           if (!cart) throw new Error('No cart');
@@ -225,7 +224,7 @@ export const useCartStore = create<CartState>()(
         set({ error: null });
         try {
           const client = apiClientManager.get();
-          if (!client) throw new Error;
+          if (!client) throw new Error('Client is not initialized');
 
           const { cart } = get();
           if (!cart) throw new Error('No cart');
@@ -261,7 +260,7 @@ export const useCartStore = create<CartState>()(
         set({ error: null });
         try {
           const client = apiClientManager.get();
-          if (!client) throw new Error;
+          if (!client) throw new Error('Client is not initialized');
 
           const { cart } = get();
           if (!cart || cart.lineItems.length === 0) {

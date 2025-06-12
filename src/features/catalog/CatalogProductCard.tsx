@@ -41,7 +41,8 @@ export function CatalogProductCard({ wine }: ProductCardProps) {
     }
   };
 
-  const handleRemove = () => {
+  const handleRemove = (e: React.MouseEvent) => {
+    e.stopPropagation();
     if (cartItem) {
       removeFromCart(cartItem.id)
         .then(() => console.log('Product removed'))
@@ -49,7 +50,8 @@ export function CatalogProductCard({ wine }: ProductCardProps) {
     }
   };
 
-  const handleClearCart = () => {
+  const handleClearCart = (e: React.MouseEvent) => {
+    e.stopPropagation();
     clearCart()
       .then(() => console.log('Cart cleared'))
       .catch(() => console.log('Failed to clear cart'));
@@ -109,8 +111,6 @@ export function CatalogProductCard({ wine }: ProductCardProps) {
               height: 35,
               alignSelf: 'center',
             }}
-            // onClick={handleIncrease}
-            onClick={handleClearCart}
           >
             More info
           </Button>
@@ -152,15 +152,27 @@ export function CatalogProductCard({ wine }: ProductCardProps) {
           </Text>
         )}
 
-        <Button
-          className="button button--primary"
-          radius="md"
-          size="sm"
-          style={{ flexShrink: 0 }}
-          onClick={handleAddToCart}
-        >
-          Add to Cart
-        </Button>
+        {cartItem ? (
+          <Button
+            className="button button--remove"
+            radius="md"
+            size="sm"
+            style={{ flexShrink: 0 }}
+            onClick={handleRemove}
+          >
+            Remove from Cart
+          </Button>
+        ) : (
+          <Button
+            className="button button--primary"
+            radius="md"
+            size="sm"
+            style={{ flexShrink: 0 }}
+            onClick={handleAddToCart}
+          >
+            Add to Cart
+          </Button>
+        )}
       </Group>
     </Card>
   );

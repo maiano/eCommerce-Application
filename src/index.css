@@ -178,6 +178,16 @@ body {
   color: #f8f9fb;
 }
 
+.button--remove {
+  background-color: #ff6b6b;
+  color: #1d2a36;
+}
+
+.button--remove:hover {
+  background-color: #ff5252;
+  color: #f8f9fb;
+}
+
 .button--secondary:hover {
   background-color: #516185;
   border-color: #516185;
@@ -195,6 +205,8 @@ body {
   background-color: #29374c;
   color: #f8f9fb;
 }
+
+
 
 .button--icon {
   min-width: 0;
