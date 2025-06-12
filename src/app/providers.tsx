@@ -8,16 +8,23 @@ import { theme } from '@/app/theme';
 import { useAuthStore } from '@/features/auth/auth-state';
 import { apiClientManager } from '@/shared/lib/commercetools';
 import { notifyError } from '@/shared/utils/custom-notifications';
+import { useCartStore } from '@/shared/hooks/useCartStore';
 
 export const AppProvider = () => {
   const { setPending, setUnauthenticated, setAuthenticated, setClientReady } =
     useAuthStore();
+
+  const fetchCart = useCartStore(state => state.fetchCart);
+
   useEffect(() => {
     const initializeApp = async () => {
       setPending();
       try {
         const { authType } = await apiClientManager.init();
         setClientReady(true);
+
+        await fetchCart();
+
         if (authType === 'password') {
           setAuthenticated();
         } else {
@@ -31,7 +38,7 @@ export const AppProvider = () => {
     };
 
     initializeApp();
-  }, [setUnauthenticated, setPending, setAuthenticated, setClientReady]);
+  }, [setUnauthenticated, setPending, setAuthenticated, setClientReady, fetchCart]);
   return (
     <MantineProvider theme={theme} defaultColorScheme="dark">
       <Notifications
