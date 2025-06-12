@@ -18,6 +18,8 @@ interface CartState {
   removeLineItem: (lineItemId: string) => Promise<void>;
   changeLineItemQuantity: (lineItemId: string, quantity: number) => Promise<void>;
   clearCart: () => Promise<void>;
+  addDiscount: (code: string) => Promise<void>;
+  removeDiscount: (discountCodeId: string) => Promise<void>;
 }
 
 const CART_STORAGE_KEY = 'wine-not-cart-id';
@@ -293,6 +295,81 @@ export const useCartStore = create<CartState>()(
           debug('Clear cart error:', errorMessage);
           throw error;
         }
+      },
+
+      addDiscount: async (code: string) => {
+        set({ error: null });
+        try {
+          const client = apiClientManager.get();
+          if (!client) throw new Error('Client not initialized');
+
+          const { cart } = get();
+          if (!cart) throw new Error('No cart');
+
+          const updateActions: CartUpdate = {
+            version: cart.version,
+            actions: [{
+              action: 'addDiscountCode',
+              code
+            }]
+          };
+
+          const response = await client
+            .carts()
+            .withId({ ID: cart.id })
+            .post({ body: updateActions })
+            .execute();
+
+          set({ cart: response.body });
+          debug(`Discount added: ${code}`);
+        } catch (error) {
+          let errorMessage = 'Failed to add discount';
+          if (error instanceof Object && 'message' in error && typeof error.message === 'string') {
+            errorMessage = error.message;
+          }
+          set({ error: errorMessage });
+          debug('Add discount error:', errorMessage);
+          throw error;
+        }
+      },
+
+      removeDiscount: async (discountCodeId: string) => {
+        set({ error: null });
+        try {
+          const client = apiClientManager.get();
+          if (!client) throw new Error('Client not initialized');
+
+          const { cart } = get();
+          if (!cart) throw new Error('No cart');
+
+          const updateActions: CartUpdate = {
+            version: cart.version,
+            actions: [{
+              action: 'removeDiscountCode',
+              discountCode: {
+                typeId: 'discount-code',
+                id: discountCodeId
+              }
+            }]
+          };
+
+          const response = await client
+            .carts()
+            .withId({ ID: cart.id })
+            .post({ body: updateActions })
+            .execute();
+
+          set({ cart: response.body });
+          debug(`Discount removed: ${discountCodeId}`);
+        } catch (error) {
+          let errorMessage = 'Failed to remove discount';
+          if (error instanceof Object && 'message' in error && typeof error.message === 'string') {
+            errorMessage = error.message;
+          }
+          set({ error: errorMessage });
+          debug('Remove discount error:', errorMessage);
+          throw error;
+        }
       }
     }),
     {
@@ -314,3 +391,9 @@ export const removeFromCart = (lineItemId: string) =>
  useCartStore.getState().removeLineItem(lineItemId);
 
 export const clearCart = () => useCartStore.getState().clearCart();
+
+export const addDiscount = (code: string) =>
+  useCartStore.getState().addDiscount(code);
+
+export const removeDiscount = (discountCodeId: string) =>
+  useCartStore.getState().removeDiscount(discountCodeId);

@@ -22,7 +22,7 @@ import { CenterLoader } from '@/shared/ui/CenterLoader';
 import { notifyError } from '@/shared/utils/custom-notifications';
 import type { ModalEmbla, Wine, WineAttribute } from '@/types/types.tsx';
 import './ProductPage.css';
-import { addToCart, changeQuantity, removeFromCart, useCartStore } from '@/shared/hooks/useCartStore.ts';
+import { addToCart, removeFromCart, useCartStore } from '@/shared/hooks/useCartStore.ts';
 
 const TRANSITION_DURATION = 300;
 
@@ -58,24 +58,6 @@ export function ProductPage() {
     addToCart(wine.id)
       .then(() => console.log('Added to cart'))
       .catch(() => console.log('Failed adding to cart'));
-  };
-
-  const handleIncrease = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (cartItem) {
-      changeQuantity(cartItem.id, cartItem.quantity + 1)
-        .then(() => console.log('Quantity increased'))
-        .catch(() => console.log('Failed to increase'));
-    }
-  };
-
-  const handleDecrease = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (cartItem && cartItem.quantity > 1) {
-      changeQuantity(cartItem.id, cartItem.quantity - 1)
-        .then(() => console.log('Quantity decreased'))
-        .catch(() => console.log('Failed to decrease'));
-    }
   };
 
   const handleRemove = (e: React.MouseEvent) => {
