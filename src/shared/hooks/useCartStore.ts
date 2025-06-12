@@ -17,6 +17,7 @@ interface CartState {
   addLineItem: (productId: string, variantId?: number, quantity?: number) => Promise<void>;
   removeLineItem: (lineItemId: string) => Promise<void>;
   changeLineItemQuantity: (lineItemId: string, quantity: number) => Promise<void>;
+  clearCart: () => Promise<void>;
 }
 
 const CART_STORAGE_KEY = 'wine-not-cart-id';
@@ -34,7 +35,6 @@ export const useCartStore = create<CartState>()(
         if (!client) throw new Error;
 
         const authType = apiClientManager.getAuthType();
-        debug('Creating new cart');
 
         if (authType === 'password') {
           const draft: CartDraft = {
@@ -73,11 +73,15 @@ export const useCartStore = create<CartState>()(
 
           if (authType === 'password') {
             try {
-              debug('Fetching active cart');
               const client = apiClientManager.get();
               if (!client) throw new Error;
 
-              const response = await client.me().activeCart().get().execute();
+              const response = await client
+                .me()
+                .activeCart()
+                .get()
+                .execute();
+
               set({ cart: response.body });
               debug(`Active cart loaded: ${response.body.id}`);
               return;
@@ -101,7 +105,13 @@ export const useCartStore = create<CartState>()(
                 const client = apiClientManager.get();
                 if (!client) throw new Error;
 
-                const response = await client.me().carts().withId({ ID: savedCartId }).get().execute();
+                const response = await client
+                  .me()
+                  .carts()
+                  .withId({ ID: savedCartId })
+                  .get()
+                  .execute();
+
                 set({ cart: response.body });
                 debug('Anonymous cart loaded');
 
@@ -245,6 +255,45 @@ export const useCartStore = create<CartState>()(
           debug('Remove error:', errorMessage);
           throw error;
         }
+      },
+
+      clearCart: async () => {
+        set({ error: null });
+        try {
+          const client = apiClientManager.get();
+          if (!client) throw new Error;
+
+          const { cart } = get();
+          if (!cart || cart.lineItems.length === 0) {
+            debug('Cart is already empty');
+            return;
+          }
+
+          const updateActions: CartUpdate = {
+            version: cart.version,
+            actions: cart.lineItems.map(item => ({
+              action: 'removeLineItem',
+              lineItemId: item.id
+            }))
+          };
+
+          const response = await client
+            .carts()
+            .withId({ ID: cart.id })
+            .post({ body: updateActions })
+            .execute();
+
+          set({ cart: response.body });
+          debug('Cart cleared');
+        } catch (error) {
+          let errorMessage = 'Failed to clear cart';
+          if (error instanceof Object && 'message' in error && typeof error.message === 'string') {
+            errorMessage = error.message;
+          }
+          set({ error: errorMessage });
+          debug('Clear cart error:', errorMessage);
+          throw error;
+        }
       }
     }),
     {
@@ -264,3 +313,5 @@ useCartStore.getState().changeLineItemQuantity(lineItemId, quantity);
 
 export const removeFromCart = (lineItemId: string) =>
  useCartStore.getState().removeLineItem(lineItemId);
+
+export const clearCart = () => useCartStore.getState().clearCart();

@@ -2,7 +2,7 @@ import { Card, Text, Group, Image, Box, Button } from '@mantine/core';
 import { generatePath, Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/app/routes.tsx';
 import { ProductCard as WineCard } from '@/shared/schemas/product-card-schema';
-import { addToCart, changeQuantity, useCartStore, removeFromCart } from '@/shared/hooks/useCartStore.ts';
+import { addToCart, changeQuantity, useCartStore, removeFromCart, clearCart } from '@/shared/hooks/useCartStore.ts';
 
 type ProductCardProps = {
   wine: WineCard;
@@ -47,6 +47,12 @@ export function CatalogProductCard({ wine }: ProductCardProps) {
         .then(() => console.log('Product removed'))
         .catch(() => console.log('Failed to remove'));
     }
+  };
+
+  const handleClearCart = () => {
+    clearCart()
+      .then(() => console.log('Cart cleared'))
+      .catch(() => console.log('Failed to clear cart'));
   };
 
   return (
@@ -104,7 +110,7 @@ export function CatalogProductCard({ wine }: ProductCardProps) {
               alignSelf: 'center',
             }}
             // onClick={handleIncrease}
-            onClick={handleRemove}
+            onClick={handleClearCart}
           >
             More info
           </Button>
