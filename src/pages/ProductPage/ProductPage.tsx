@@ -13,7 +13,7 @@ import {
   Modal,
   CloseButton,
 } from '@mantine/core';
-import { useState, useRef, useEffect, RefObject } from 'react';
+import { useState, useRef, useEffect, RefObject, useMemo } from 'react';
 import { useParams, useNavigate, NavigateFunction } from 'react-router-dom';
 import { ROUTES } from '@/app/routes';
 import { useProductById } from '@/features/product/useProductById';
@@ -24,7 +24,10 @@ import {
 } from '@/shared/hooks/useCartStore.ts';
 import { useImageHandler } from '@/shared/hooks/useImageHandler.ts';
 import { CenterLoader } from '@/shared/ui/CenterLoader';
-import { notifyError } from '@/shared/utils/custom-notifications';
+import {
+  notifyError,
+  notifySuccess,
+} from '@/shared/utils/custom-notifications';
 import type { ModalEmbla, Wine, WineAttribute } from '@/types/types.tsx';
 import './ProductPage.css';
 
@@ -53,23 +56,30 @@ export default function ProductPage() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const cart = useCartStore((state) => state.cart);
-  const cartItem = cart?.lineItems.find(
-    (item) => item.productId === wine.id && item.variant?.id === 1,
-  );
+  const cartItem = useMemo(() => {
+    if (!wine) return undefined;
+    return cart?.lineItems.find(
+      (item) => item.productId === wine.id && item.variant?.id === 1,
+    );
+  }, [cart, wine]);
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
     addToCart(wine.id)
-      .then(() => console.log('Added to cart'))
-      .catch(() => console.log('Failed adding to cart'));
+      .then(() => notifySuccess({ message: 'Added to cart', autoClose: 2000 }))
+      .catch((error) =>
+        notifyError(error, { message: 'Failed adding to cart' }),
+      );
   };
 
   const handleRemove = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (cartItem) {
       removeFromCart(cartItem.id)
-        .then(() => console.log('Product removed'))
-        .catch(() => console.log('Failed to remove'));
+        .then(() =>
+          notifySuccess({ message: 'Product removed', autoClose: 2000 }),
+        )
+        .catch((error) => notifyError(error, { message: 'Failed to remove' }));
     }
   };
 
