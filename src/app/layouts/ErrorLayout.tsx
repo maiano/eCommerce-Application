@@ -1,6 +1,6 @@
 import { AppShell } from '@mantine/core';
-import { Outlet } from 'react-router-dom';
 import { Header } from '@/components/Header/Header';
+import { AnimatedOutlet } from '@/shared/ui/AnimatedOutlet';
 
 export function ErrorLayout() {
   return (
@@ -10,7 +10,7 @@ export function ErrorLayout() {
       </AppShell.Header>
 
       <AppShell.Main>
-        <Outlet />
+        <AnimatedOutlet />
       </AppShell.Main>
     </AppShell>
   );

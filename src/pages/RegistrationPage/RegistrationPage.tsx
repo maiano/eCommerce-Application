@@ -4,7 +4,7 @@ import { RegistrationForm } from '@/features/registration/RegistrationForm';
 import '@/pages/RegistrationPage/RegistrationPage.css';
 import { LogoWithTitle } from '@/shared/ui/LogoWithTitle';
 
-export function RegistrationPage() {
+export default function RegistrationPage() {
   return (
     <Container className="page">
       <Box className="auth-form">
