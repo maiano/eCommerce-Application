@@ -13,10 +13,15 @@ import { LoginForm } from '@/features/login/LoginForm';
 import { LogoWithTitle } from '@/shared/ui/LogoWithTitle';
 import '@/pages/RegistrationPage/RegistrationPage.css';
 
-export function LoginPage() {
+export default function LoginPage() {
   return (
     <Container className="page" pt="20vh">
-      <Box w="100%" display="flex" style={{ justifyContent: 'center' }} maw={450}>
+      <Box
+        w="100%"
+        display="flex"
+        style={{ justifyContent: 'center' }}
+        maw={450}
+      >
         <Stack w="100%" className="auth-form">
           <LogoWithTitle />
           <Paper w="100%" radius="sm">
