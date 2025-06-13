@@ -9,16 +9,16 @@ export function AboutPage() {
     <Container className="page">
       <Box className="about-container">
         <Box style={{marginBottom: '60px'}}>
-          <Title order={1} size='32px' className="about-title" style={{marginBottom:'24px'}}>About Our Winery</Title>
+          <Title order={1} size='32px' className="about-title" style={{marginBottom:'24px'}} c={theme.colors.accent[4]}>About Our Winery</Title>
           <Text>At WineShop, we are dedicated to providing an exquisite online wine shopping experience. Our commitment is to quality wines, exceptional service, and innovative selection. Our team ensures we deliver the latest vintages, a seamless purchase process, and unparalleled support. We believe in integrity, innovation, and customer appreciation. Our values drive us to continuously improve our selections and enhance the wine-buying journey.</Text>
         </Box>
         <Box>
           <Title order={2} style={{marginBottom: '24px'}}>Meet our team:</Title>
           <Text style={{marginBottom: '32px'}}>We are the dedicated frontend engineers who architected and built this APP delivering a premium digital shopping experience.</Text>
-          <Grid gutter="lg" style={{marginBottom: '24px'}}>
+          <Grid gutter="lg" style={{marginBottom: '24px'}} align="stretch">
             {team.map((member, index) => (
-            <Grid.Col span={{ base: 12, sm: 4 }}>
-              <TeamMemberCard key={index} member={member} />
+            <Grid.Col span={{ base: 12, sm: 4 }} key={index}>
+              <TeamMemberCard member={member}/>
             </Grid.Col>
             ))}
           </Grid>

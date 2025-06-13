@@ -6,7 +6,7 @@ export function TeamMemberCard({ member }: TeamMemberCardProps) {
   const theme = useMantineTheme();
 
   return (
-    <Card padding="lg" className="container-dark">
+    <Card padding="lg" className="container-dark" style={{ height: '100%' }}>
       <Stack align="center">
         <Avatar size='100px' src={member.avatar}/> 
         <Title order={3} className="member-card__name" style={{marginTop: '16px'}}>
@@ -15,15 +15,15 @@ export function TeamMemberCard({ member }: TeamMemberCardProps) {
         <Text className="member-card__role" c={theme.colors.accent[4]} size="14px" style={{marginBottom: '16px'}}>
           {member.role}
         </Text>
-        <Text className="member-card__bio" c={theme.colors.primary[3]} size="14px" style={{marginBottom: '24px'}}>
+        <Text className="member-card__bio" c={theme.colors.primary[3]} size="14px" style={{marginBottom: '16px'}}>
           {member.description}
         </Text>
-        <List type="ordered" className="member-card__description" c={theme.colors.primary[3]} style={{marginBottom: '16px'}}>
+        <List type="unordered" className="member-card__description" c={theme.colors.primary[1]} style={{marginBottom: '16px'}}>
           {member.contributions.map((item, index) => (
             <List.Item key={index}>{item}</List.Item>
           ))}
         </List>
-        <Button component={Link} to={member.github} className="button button--primary">GitHub</Button>
+        <Button component={Link} to={member.github} className="button button--primary">{member.github.substring(member.github.lastIndexOf('/') + 1)}</Button>
       </Stack>
     </Card>
   )

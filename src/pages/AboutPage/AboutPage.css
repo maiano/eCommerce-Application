@@ -5,17 +5,19 @@
   text-align: center;
 }
 
-.member-card__description {
-  width: 80%;
+.member-card__bio {
+  line-height: 1.6;
 }
 
 .member-card__description li {
-  list-style: decimal;
+  list-style: disc;
   list-style-position: inside;
-  font-size: 0.75rem;
-  border-bottom: 1px solid #32415d;
-  text-align: left;
-  margin-bottom: 14px;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.member-card__description li > div {
+  display: inline;
 }
 
 .rsschool-logo {
