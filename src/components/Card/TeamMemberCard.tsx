@@ -8,7 +8,7 @@ export function TeamMemberCard({ member }: TeamMemberCardProps) {
   return (
     <Card padding="lg" className="container-dark" style={{ height: '100%' }}>
       <Stack align="center">
-        <Avatar size='100px' src={member.avatar}/> 
+        <Avatar className="member-card__avatar" size='100px' src={member.avatar}/> 
         <Title order={3} className="member-card__name" style={{marginTop: '16px'}}>
           {member.name}
         </Title>

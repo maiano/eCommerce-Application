@@ -20,12 +20,12 @@
   display: inline;
 }
 
-.rsschool-logo {
+.member-card__avatar, .rsschool-logo {
   max-width: 320px;
   transition: transform 0.3s ease;
 }
 
-.rsschool-logo:hover {
+.member-card__avatar:hover, .rsschool-logo:hover {
   transform: scale(1.1);
 }
 
