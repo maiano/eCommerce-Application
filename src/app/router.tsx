@@ -19,6 +19,7 @@ import { ProductPage } from '@/pages/ProductPage/ProductPage.tsx';
 import { ProfilePage } from '@/pages/ProfilePage/ProfilePage';
 import { RegistrationPage } from '@/pages/RegistrationPage/RegistrationPage';
 import { CenterLoader } from '@/shared/ui/CenterLoader';
+import { CartPage } from '@/pages/BasketPage/CartPage.tsx';
 
 const RedirectGuard = () => {
   const navigate = useNavigate();
@@ -103,7 +104,7 @@ export const router = createBrowserRouter([
           },
           {
             path: ROUTES.CART,
-            element: <div>CART PAGE</div>
+            element: <CartPage />
           },
         ],
       },
