@@ -2,7 +2,15 @@ import { Card, Text, Group, Image, Box, Button } from '@mantine/core';
 import { generatePath, Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/app/routes.tsx';
 import { ProductCard as WineCard } from '@/shared/schemas/product-card-schema';
-import { addToCart, useCartStore, removeFromCart } from '@/shared/hooks/useCartStore.ts';
+import {
+  addToCart,
+  useCartStore,
+  removeFromCart,
+} from '@/shared/hooks/useCartStore.ts';
+import {
+  notifySuccess,
+  notifyError,
+} from '@/shared/utils/custom-notifications';
 
 type ProductCardProps = {
   wine: WineCard;
@@ -11,24 +19,28 @@ type ProductCardProps = {
 export function CatalogProductCard({ wine }: ProductCardProps) {
   const navigate = useNavigate();
 
-  const cart = useCartStore(state => state.cart);
+  const cart = useCartStore((state) => state.cart);
   const cartItem = cart?.lineItems.find(
-    item => item.productId === wine.id && item.variant?.id === 1
+    (item) => item.productId === wine.id && item.variant?.id === 1,
   );
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
     addToCart(wine.id)
-      .then(() => console.log('Added to cart'))
-      .catch(() => console.log('Failed adding to cart'));
+      .then(() => notifySuccess({ message: 'Added to cart', autoClose: 2000 }))
+      .catch((error) =>
+        notifyError(error, { message: 'Failed adding to cart' }),
+      );
   };
 
   const handleRemove = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (cartItem) {
       removeFromCart(cartItem.id)
-        .then(() => console.log('Product removed'))
-        .catch(() => console.log('Failed to remove'));
+        .then(() =>
+          notifySuccess({ message: 'Product removed', autoClose: 2000 }),
+        )
+        .catch((error) => notifyError(error, { message: 'Failed to remove' }));
     }
   };
 
@@ -65,7 +77,7 @@ export function CatalogProductCard({ wine }: ProductCardProps) {
           style={{ alignItems: 'center' }}
         >
           <Text
-            className='wine-title'
+            className="wine-title"
             fw={500}
             size="lg"
             style={{

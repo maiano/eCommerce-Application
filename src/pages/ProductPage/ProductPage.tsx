@@ -13,20 +13,27 @@ import {
   Modal,
   CloseButton,
 } from '@mantine/core';
-import { useState, useRef, useEffect, RefObject } from 'react';
+import { useState, useRef, useEffect, RefObject, useMemo } from 'react';
 import { useParams, useNavigate, NavigateFunction } from 'react-router-dom';
 import { ROUTES } from '@/app/routes';
 import { useProductById } from '@/features/product/useProductById';
+import {
+  addToCart,
+  removeFromCart,
+  useCartStore,
+} from '@/shared/hooks/useCartStore.ts';
 import { useImageHandler } from '@/shared/hooks/useImageHandler.ts';
 import { CenterLoader } from '@/shared/ui/CenterLoader';
-import { notifyError } from '@/shared/utils/custom-notifications';
+import {
+  notifyError,
+  notifySuccess,
+} from '@/shared/utils/custom-notifications';
 import type { ModalEmbla, Wine, WineAttribute } from '@/types/types.tsx';
 import './ProductPage.css';
-import { addToCart, removeFromCart, useCartStore } from '@/shared/hooks/useCartStore.ts';
 
 const TRANSITION_DURATION = 300;
 
-export function ProductPage() {
+export default function ProductPage() {
   const { id } = useParams<{ id: string }>();
 
   const {
@@ -48,24 +55,31 @@ export function ProductPage() {
   const [modalOpened, setModalOpened] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  const cart = useCartStore(state => state.cart);
-  const cartItem = cart?.lineItems.find(
-    item => item.productId === wine.id && item.variant?.id === 1
-  );
+  const cart = useCartStore((state) => state.cart);
+  const cartItem = useMemo(() => {
+    if (!wine) return undefined;
+    return cart?.lineItems.find(
+      (item) => item.productId === wine.id && item.variant?.id === 1,
+    );
+  }, [cart, wine]);
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
     addToCart(wine.id)
-      .then(() => console.log('Added to cart'))
-      .catch(() => console.log('Failed adding to cart'));
+      .then(() => notifySuccess({ message: 'Added to cart', autoClose: 2000 }))
+      .catch((error) =>
+        notifyError(error, { message: 'Failed adding to cart' }),
+      );
   };
 
   const handleRemove = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (cartItem) {
       removeFromCart(cartItem.id)
-        .then(() => console.log('Product removed'))
-        .catch(() => console.log('Failed to remove'));
+        .then(() =>
+          notifySuccess({ message: 'Product removed', autoClose: 2000 }),
+        )
+        .catch((error) => notifyError(error, { message: 'Failed to remove' }));
     }
   };
 
@@ -197,7 +211,7 @@ export function ProductPage() {
                 </Badge>
               </>
             ) : (
-              <Text fw={700} size="xl" className="price"  c="dark.2">
+              <Text fw={700} size="xl" className="price" c="dark.2">
                 ${wine.price}
               </Text>
             )}
@@ -205,7 +219,7 @@ export function ProductPage() {
 
           <Divider className="divider" />
 
-          <Title className='subtitle' order={3} mb="md">
+          <Title className="subtitle" order={3} mb="md">
             Wine Details:
           </Title>
           <Table mb="xl" verticalSpacing="sm" withTableBorder withColumnBorders>
@@ -250,7 +264,8 @@ export function ProductPage() {
           <Group justify="center" wrap="nowrap">
             {cartItem ? (
               <Button
-                className="button button--remove button--large" w="50%"
+                className="button button--remove button--large"
+                w="50%"
                 radius="md"
                 size="sm"
                 style={{ flexShrink: 0 }}
@@ -260,7 +275,8 @@ export function ProductPage() {
               </Button>
             ) : (
               <Button
-                className="button button--primary button--large" w="50%"
+                className="button button--primary button--large"
+                w="50%"
                 radius="md"
                 size="sm"
                 style={{ flexShrink: 0 }}
