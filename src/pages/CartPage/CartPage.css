@@ -38,7 +38,7 @@
 
 .cart-item {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   gap: 1.5rem;
   padding: 1.5rem;
   border-radius: 0.75rem;

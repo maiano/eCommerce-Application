@@ -13,7 +13,6 @@ import { ROUTES } from '@/app/routes';
 import { useAuthStore } from '@/features/auth/auth-state';
 import { HomePage } from '@/pages/HomePage/HomePage';
 import { CenterLoader } from '@/shared/ui/CenterLoader';
-import { CartPage } from '@/pages/BasketPage/CartPage.tsx';
 
 const CatalogPage = lazy(() => import('@/pages/CatalogPage/CatalogPage'));
 const ProductPage = lazy(() => import('@/pages/ProductPage/ProductPage'));
@@ -23,6 +22,7 @@ const RegistrationPage = lazy(
   () => import('@/pages/RegistrationPage/RegistrationPage'),
 );
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage/NotFoundPage'));
+const CartPage = lazy(() => import('@/pages/CartPage/CartPage'));
 
 const RedirectGuard = () => {
   const navigate = useNavigate();
@@ -32,14 +32,7 @@ const RedirectGuard = () => {
 
   useEffect(() => {
     if (isNeedToRedirect) {
-      if (
-        location.pathname === ROUTES.LOGIN ||
-        location.pathname === ROUTES.REGISTRATION ||
-        location.pathname === ROUTES.CART
-      ) {
-        resetRedirect();
-        return;
-      }
+
 
       navigate(ROUTES.HOME);
       resetRedirect();
@@ -92,7 +85,7 @@ export const router = createBrowserRouter([
         children: [
           { path: ROUTES.CATALOG, element: <CatalogPage /> },
           { path: ROUTES.PRODUCT, element: <ProductPage /> },
-          { path: ROUTES.CART, element: < CartPage /> },
+          { path: ROUTES.CART, element: <CartPage /> },
           {
             element: <PrivateGuard />,
             children: [{ path: ROUTES.PROFILE, element: <ProfilePage /> }],
