@@ -17,7 +17,7 @@ const cardVariants = {
   }),
 };
 
-export function AboutPage() {
+export default function AboutPage() {
   const theme = useMantineTheme();
   return(
     <Container className="page">

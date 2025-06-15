@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { lazy, useEffect } from 'react';
 import {
   createBrowserRouter,
   Navigate,
@@ -11,15 +11,19 @@ import { ErrorLayout } from '@/app/layouts/ErrorLayout';
 import { MainLayout } from '@/app/layouts/MainLayout';
 import { ROUTES } from '@/app/routes';
 import { useAuthStore } from '@/features/auth/auth-state';
-import { AboutPage } from '@/pages/AboutPage/AboutPage';
-import { CatalogPage } from '@/pages/CatalogPage/CatalogPage.tsx';
+// import { AboutPage } from '@/pages/AboutPage/AboutPage';
 import { HomePage } from '@/pages/HomePage/HomePage';
-import { LoginPage } from '@/pages/LoginPage';
-import { NotFoundPage } from '@/pages/NotFoundPage/NotFoundPage';
-import { ProductPage } from '@/pages/ProductPage/ProductPage.tsx';
-import { ProfilePage } from '@/pages/ProfilePage/ProfilePage';
-import { RegistrationPage } from '@/pages/RegistrationPage/RegistrationPage';
 import { CenterLoader } from '@/shared/ui/CenterLoader';
+
+const CatalogPage = lazy(() => import('@/pages/CatalogPage/CatalogPage'));
+const ProductPage = lazy(() => import('@/pages/ProductPage/ProductPage'));
+const ProfilePage = lazy(() => import('@/pages/ProfilePage/ProfilePage'));
+const LoginPage = lazy(() => import('@/pages/LoginPage'));
+const RegistrationPage = lazy(
+  () => import('@/pages/RegistrationPage/RegistrationPage'),
+);
+const AboutUsPage = lazy(() => import('@/pages/AboutPage/AboutPage'));
+const NotFoundPage = lazy(() => import('@/pages/NotFoundPage/NotFoundPage'));
 
 const RedirectGuard = () => {
   const navigate = useNavigate();
@@ -31,7 +35,8 @@ const RedirectGuard = () => {
     if (isNeedToRedirect) {
       if (
         location.pathname === ROUTES.LOGIN ||
-        location.pathname === ROUTES.REGISTRATION
+        location.pathname === ROUTES.REGISTRATION ||
+        location.pathname === ROUTES.CART
       ) {
         resetRedirect();
         return;
@@ -80,83 +85,34 @@ export const router = createBrowserRouter([
   {
     path: ROUTES.HOME,
     element: <MainLayout />,
+    errorElement: <ErrorLayout />,
     children: [
+      { index: true, element: <HomePage /> },
       {
-        index: true,
-        element: <HomePage />,
-      },
-    ],
-  },
-  {
-    path: ROUTES.ABOUT,
-    element: <MainLayout />,
-    children: [
-      {
-        index: true,
-        element: <AboutPage />,
-      },
-    ],
-  },
-  {
-    element: <RedirectGuard />,
-    children: [
-      {
-        element: <MainLayout />,
+        element: <RedirectGuard />,
         children: [
+          { path: ROUTES.CATALOG, element: <CatalogPage /> },
+          { path: ROUTES.PRODUCT, element: <ProductPage /> },
+          { path: ROUTES.CART, element: <div>CART PAGE</div> },
+          { path: ROUTES.ABOUT, element: <AboutUsPage />},
           {
-            path: ROUTES.CATALOG,
-            element: <CatalogPage />,
+            element: <PrivateGuard />,
+            children: [{ path: ROUTES.PROFILE, element: <ProfilePage /> }],
           },
           {
-            path: ROUTES.PRODUCT,
-            element: <ProductPage />,
-          },
-        ],
-      },
-
-      {
-        element: <PrivateGuard />,
-        children: [
-          {
-            element: <MainLayout />,
+            element: <AuthGuard />,
             children: [
               {
-                path: ROUTES.PROFILE,
-                element: <ProfilePage />,
+                element: <AuthLayout />,
+                children: [
+                  { path: ROUTES.LOGIN, element: <LoginPage /> },
+                  { path: ROUTES.REGISTRATION, element: <RegistrationPage /> },
+                ],
               },
             ],
           },
-        ],
-      },
-      {
-        element: <AuthGuard />,
-        children: [
-          {
-            element: <AuthLayout />,
-            children: [
-              {
-                path: ROUTES.LOGIN,
-                element: <LoginPage />,
-              },
-              {
-                path: ROUTES.REGISTRATION,
-                element: <RegistrationPage />,
-              },
-            ],
-          },
-        ],
-      },
-      {
-        element: <ErrorLayout />,
-        children: [
-          {
-            path: ROUTES.NOT_FOUND,
-            element: <NotFoundPage />,
-          },
-          {
-            path: '*',
-            element: <Navigate to={ROUTES.NOT_FOUND} replace />,
-          },
+          { path: ROUTES.NOT_FOUND, element: <NotFoundPage /> },
+          { path: '*', element: <Navigate to={ROUTES.NOT_FOUND} replace /> },
         ],
       },
     ],

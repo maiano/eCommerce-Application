@@ -25,7 +25,7 @@ import {
 import { useDebouncedValue } from '@/shared/hooks/useDebouncedValue';
 import { CategoryButton } from '@/shared/ui/CategoryButton';
 
-export function CatalogPage() {
+export default function CatalogPage() {
   const { data: categories = [] } = useCategories();
   const [selectedCategorySlugs, setSelectedCategorySlugs] = useState<string[]>(
     [],
