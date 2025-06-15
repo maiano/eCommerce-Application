@@ -5,7 +5,7 @@ export function TeamMemberCard({ member }: TeamMemberCardProps) {
   const theme = useMantineTheme();
 
   return (
-    <Card padding="lg" className="container-dark" style={{ height: '100%' }}>
+    <Card padding="lg" className="container__dark" style={{ height: '100%' }}>
       <Stack align="center">
         <Avatar className="member-card__avatar" size='100px' src={member.avatar}/> 
         <Title order={3} className="member-card__name" style={{marginTop: '16px'}}>
@@ -31,7 +31,7 @@ export function TeamMemberCard({ member }: TeamMemberCardProps) {
         <Text className="member-card__bio" c={theme.colors.primary[3]} size="14px" style={{marginBottom: '16px'}}>
           {member.description}
         </Text>
-        <List type="unordered" className="member-card__description" c={theme.colors.primary[1]}>
+        <List type="unordered" className="member-card__contribution" c={theme.colors.primary[1]}>
           {member.contributions.map((item, index) => (
             <List.Item key={index}>{item}</List.Item>
           ))}

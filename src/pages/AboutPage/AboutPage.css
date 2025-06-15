@@ -5,18 +5,24 @@
   text-align: center;
 }
 
+.container__dark {
+  background-color: #1d2a36;
+  border: 1px solid #32415d;
+  border-radius: 0.75rem;
+}
+
 .member-card__bio {
   line-height: 1.6;
 }
 
-.member-card__description li {
+.member-card__contribution li {
   list-style: disc;
   list-style-position: inside;
   font-size: 14px;
   margin-bottom: 8px;
 }
 
-.member-card__description li > div {
+.member-card__contribution li > div {
   display: inline;
 }
 
@@ -46,4 +52,17 @@
 .rsschool-description {
   max-width: 680px;
   line-height: 1.6;
+}
+
+.team-collaboration-item {
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (max-width: 1265px) {
+  .team-collaboration-item {
+    flex-direction: column;
+  }
+
 }
