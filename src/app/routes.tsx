@@ -6,5 +6,6 @@ export const ROUTES = {
   PRODUCT: '/product/:id',
   PROFILE: '/profile',
   CART: '/cart',
+  ABOUT: '/about',
   NOT_FOUND: '*',
 } as const;
