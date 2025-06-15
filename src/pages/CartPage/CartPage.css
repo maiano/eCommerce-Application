@@ -213,6 +213,11 @@
   font-weight: 500;
 }
 
+.modal {
+  display: flex;
+  justify-content: center;
+}
+
 
 @keyframes fadeIn {
   from {
@@ -227,4 +232,23 @@
 
 .cart-item {
   animation: fadeIn 0.3s ease-out forwards;
+}
+
+
+@media (max-width: 600px) {
+  .cart-inner {
+    display: flex;
+    flex-direction: column;
+    padding: 0 !important;
+
+  }
+  .cart-column {
+    padding: 0 !important;
+  }
+  .button--cart {
+    min-width: 140px;
+  }
+  .cart-image {
+   max-width: 100% !important;
+  }
 }

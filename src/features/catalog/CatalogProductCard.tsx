@@ -24,7 +24,7 @@ export function CatalogProductCard({ wine }: ProductCardProps) {
     (item) => item.productId === wine.id && item.variant?.id === 1,
   );
 
-  const cartCurrency = cart?.totalPrice.currencyCode;
+  const cartCurrency = cart?.totalPrice.currencyCode || 'EUR';
 
   const formatCurrency = (price: number, currencyCode: string) => {
     return new Intl.NumberFormat('en-US', {

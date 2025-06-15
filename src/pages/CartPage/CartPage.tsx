@@ -15,6 +15,7 @@ import {
   useMantineTheme,
   TextInput,
   Badge,
+  Modal
 } from '@mantine/core';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '@/app/routes';
@@ -31,12 +32,15 @@ import { CartMessage } from '@/components/CartMessage/CartMessage.tsx';
 import { useEffect, useState } from 'react';
 import { ShippingMethod } from '@commercetools/platform-sdk';
 import { apiClientManager } from '@/shared/lib/commercetools/api-client-manager';
+import { useDisclosure } from '@mantine/hooks';
 
 export default function CartPage() {
   const cart = useCartStore(state => state.cart);
   const cartError = useCartStore(state => state.error);
   const theme = useMantineTheme();
-  const cartCurrency = cart?.totalPrice.currencyCode
+  const cartCurrency = cart?.totalPrice.currencyCode || 'EUR';
+
+  const [opened, { open, close }] = useDisclosure(false);
 
   const [shippingMethod, setShippingMethod] = useState<ShippingMethod | null>(null);
   const [promoCode, setPromoCode] = useState('');
@@ -91,17 +95,23 @@ export default function CartPage() {
       });
   };
 
-  const handleClearCartWrapper = (e: React.MouseEvent) => {
-    e.stopPropagation();
-
+  const handleClearCart = () => {
     const removalPromises = appliedDiscounts.map(dc =>
       removeDiscount(dc.discountCode.id)
     );
 
     Promise.all(removalPromises)
       .then(() => clearCart())
-      .then(() => console.log('Cart cleared'))
+      .then(() => {
+        console.log('Cart cleared');
+        close();
+      })
       .catch(error => console.error('Failed to clear cart', error));
+  };
+
+  const handleClearCartClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    open();
   };
 
   const shippingMethodName = shippingMethod?.localizedName;
@@ -194,14 +204,13 @@ export default function CartPage() {
         </Title>
 
         <Grid gutter="xl">
-          <Grid.Col span={12}>
+          <Grid.Col span={12} className='cart-column'>
             <Stack>
               {cart.lineItems.map((item) => {
                 const formattedPrice = formatCurrency(
                   item.totalPrice.centAmount,
                   item.totalPrice.currencyCode
                 );
-                console.log(formattedPrice)
                 const imageUrl =
                   item.variant.images?.[0]?.url ||
                   '../src/assets/fallback_1.png';
@@ -210,7 +219,11 @@ export default function CartPage() {
 
                 return (
                   <Card key={item.id} className="cart-item">
-                    <Grid gutter="md" align="center">
+                    <Grid gutter="md" align="center"
+                          classNames={{
+                            inner: 'cart-inner',
+                          }}
+                    >
                       <Grid.Col
                         span={4}
                         bg='primary.0'
@@ -224,7 +237,7 @@ export default function CartPage() {
                         />
                       </Grid.Col>
 
-                      <Grid.Col span={8}>
+                      <Grid.Col span={8} maw="100%">
                         <Stack>
                           <Title order={3} size="h4">
                             {itemName}
@@ -307,7 +320,7 @@ export default function CartPage() {
             </Stack>
           </Grid.Col>
 
-          <Grid.Col span={12}>
+          <Grid.Col span={12} className='cart-column'>
             <Card withBorder radius="md" p="xl" className="cart-summary">
               <Stack>
                 <Title order={2} size="h3" mb="sm">
@@ -368,7 +381,6 @@ export default function CartPage() {
                 ) : (
                   <Group mt="sm" align="flex-end">
                     <TextInput
-                      // label="Promo Code"
                       placeholder="Enter promo code"
                       value={promoCode}
                       onChange={(event) => setPromoCode(event.currentTarget.value)}
@@ -413,16 +425,16 @@ export default function CartPage() {
                   <Button
                     component={Link}
                     to={ROUTES.CATALOG}
-                    className="button button--primary button--large"
+                    className="button button--primary button--large button--cart"
                     w="50%"
                   >
                     Continue Shopping
                   </Button>
 
                   <Button
-                    className="button button--secondary button--large"
+                    className="button button--secondary button--large button--cart"
                     w="50%"
-                    onClick={handleClearCartWrapper}
+                    onClick={handleClearCartClick}
                   >
                     Clear Cart
                   </Button>
@@ -432,6 +444,39 @@ export default function CartPage() {
           </Grid.Col>
         </Grid>
       </Box>
+
+      <Modal
+        className='modal'
+        opened={opened}
+        onClose={close}
+        title="Clear Shopping Cart"
+        centered
+        overlayProps={{
+          backgroundOpacity: 0.55,
+          blur: 3,
+        }}
+      >
+        <Text size="md" mb="xl">
+          Are you sure you want to clear your cart?
+        </Text>
+
+        <Group justify="flex-end">
+          <Button
+            variant="outline"
+            onClick={close}
+            className="button button--secondary"
+          >
+            Cancel
+          </Button>
+          <Button
+            color="red"
+            onClick={handleClearCart}
+            className="button button--remove"
+          >
+            Clear Cart
+          </Button>
+        </Group>
+      </Modal>
     </Container>
   );
 }

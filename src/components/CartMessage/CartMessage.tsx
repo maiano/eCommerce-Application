@@ -8,7 +8,7 @@ export function CartMessage() {
 
   return (
     <Container className="page" pt="20vh">
-      <Box className="cart-container">
+      <Box className="cart-container" maw={580}>
         <Group className="header__logo">
           <Link
             to={ROUTES.HOME}
@@ -16,7 +16,7 @@ export function CartMessage() {
               color: theme.colors.red[9],
               display: 'flex',
               alignItems: 'center',
-              gap: '0.5rem'
+              gap: '0.5rem',
             }}
           >
             <svg
@@ -42,7 +42,9 @@ export function CartMessage() {
         <Title order={1} className="section-title" mb="xl">
           Your shopping cart is empty
         </Title>
-        <Text size="xl" className="empty-cart__icon">🛒</Text>
+        <Text size="xl" className="empty-cart__icon">
+          🛒
+        </Text>
         <Button
           component={Link}
           to={ROUTES.CATALOG}
