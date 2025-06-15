@@ -92,9 +92,15 @@ export default function CartPage() {
 
   const handleClearCartWrapper = (e: React.MouseEvent) => {
     e.stopPropagation();
-    clearCart()
+
+    const removalPromises = appliedDiscounts.map(dc =>
+      removeDiscount(dc.discountCode.id)
+    );
+
+    Promise.all(removalPromises)
+      .then(() => clearCart())
       .then(() => console.log('Cart cleared'))
-      .catch(() => console.log('Failed to clear cart'));
+      .catch(error => console.error('Failed to clear cart', error));
   };
 
   const shippingMethodName = shippingMethod?.localizedName;
@@ -317,20 +323,26 @@ export default function CartPage() {
                   <Text fw={600}> ${shippingPrice.toFixed(2)} ({shipName})</Text>
                 </Group>
 
+                <Box mt="xs">
+                  <Text size="sm" c="dimmed">
+                    {shipDescription}
+                  </Text>
+                </Box>
+
                 {appliedDiscounts.length > 0 ? (
-                  <Group mt="sm" align="center">
+                  <Group mt="sm" align="center" justify="center">
                     {appliedDiscounts.map(dc => (
                       <Group key={dc.discountCode.id}>
                         <Badge
                           color="green"
-                          variant="light"
-                          size="lg"
+                          variant="dot"
+                          size="xl"
+                          radius="md"
                         >
                           Promo code applied
                         </Badge>
                         <Button
-                          variant="subtle"
-                          size="sm"
+                          className='button button--remove'
                           onClick={() => handleRemovePromo(dc.discountCode.id)}
                         >
                           Remove
@@ -358,11 +370,6 @@ export default function CartPage() {
                   </Group>
                 )}
 
-                <Box mt="xs">
-                  <Text size="sm" c="dimmed">
-                    {shipDescription}
-                  </Text>
-                </Box>
 
                 <Divider my="sm" />
 
