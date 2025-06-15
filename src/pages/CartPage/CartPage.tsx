@@ -36,6 +36,7 @@ export default function CartPage() {
   const cart = useCartStore(state => state.cart);
   const cartError = useCartStore(state => state.error);
   const theme = useMantineTheme();
+  const cartCurrency = cart?.totalPrice.currencyCode
 
   const [shippingMethod, setShippingMethod] = useState<ShippingMethod | null>(null);
   const [promoCode, setPromoCode] = useState('');
@@ -156,6 +157,16 @@ export default function CartPage() {
       .catch(() => console.log('Failed to remove'));
   };
 
+  const formatCurrency = (amount: number, currencyCode: string) => {
+    const normalizedAmount = amount / 100;
+
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: currencyCode
+    }).format(normalizedAmount);
+  };
+
+
   const getLocalizedValue = (value: unknown, locale = 'en-US'): string => {
     if (typeof value === 'string') {
       return value;
@@ -186,7 +197,11 @@ export default function CartPage() {
           <Grid.Col span={12}>
             <Stack>
               {cart.lineItems.map((item) => {
-                const price = item.price.value.centAmount / 100;
+                const formattedPrice = formatCurrency(
+                  item.totalPrice.centAmount,
+                  item.totalPrice.currencyCode
+                );
+                console.log(formattedPrice)
                 const imageUrl =
                   item.variant.images?.[0]?.url ||
                   '../src/assets/fallback_1.png';
@@ -215,7 +230,7 @@ export default function CartPage() {
                             {itemName}
                           </Title>
                           <Text fw={700} size="lg">
-                            ${price.toFixed(2)}
+                            {formattedPrice}
                           </Text>
 
                           <Group mt="sm" justify="center">
@@ -306,21 +321,21 @@ export default function CartPage() {
 
                 <Group>
                   <Text>Subtotal: </Text>
-                  <Text fw={600}>${subtotal.toFixed(2)}</Text>
+                  <Text fw={600}>{formatCurrency(subtotal * 100, cartCurrency)}</Text>
                 </Group>
 
                 {itemsDiscount > 0 && (
                   <Group mt="xs">
                     <Text>Discount:</Text>
                     <Text fw={600} c="green">
-                      -${itemsDiscount.toFixed(2)}
+                      - {formatCurrency(itemsDiscount * 100,  cartCurrency)}
                     </Text>
                   </Group>
                 )}
 
                 <Group>
                   <Text>Shipping: </Text>
-                  <Text fw={600}> ${shippingPrice.toFixed(2)} ({shipName})</Text>
+                  <Text fw={600}> {formatCurrency(shippingPrice * 100, cartCurrency)} ({shipName})</Text>
                 </Group>
 
                 <Box mt="xs">
@@ -381,15 +396,15 @@ export default function CartPage() {
                   {itemsDiscount > 0 ? (
                     <Group>
                       <Text size="lg" fw={700} c="yellow">
-                        ${totalWithShipping.toFixed(2)}
+                        {formatCurrency(totalWithShipping * 100, cartCurrency)}
                       </Text>
                       <Text size="lg" fw={700} td="line-through" c="dimmed">
-                        ${totalWithoutDiscount.toFixed(2)}
+                        {formatCurrency(totalWithoutDiscount * 100, cartCurrency)}
                       </Text>
                     </Group>
                   ) : (
                     <Text size="lg" fw={700}>
-                      ${totalWithShipping.toFixed(2)}
+                      {formatCurrency(totalWithoutDiscount * 100, cartCurrency)}
                     </Text>
                   )}
                 </Group>
