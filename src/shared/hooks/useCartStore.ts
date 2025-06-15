@@ -8,10 +8,12 @@ import {
 } from '@commercetools/platform-sdk';
 import { apiClientManager } from '@/shared/lib/commercetools/api-client-manager';
 import { debug } from '@/shared/utils/debug-log';
+import { ShippingMethod } from '@commercetools/platform-sdk';
 
 interface CartState {
   cart: Cart | null;
   error: string | null;
+  shippingMethod: ShippingMethod | null;
   createCart: () => Promise<ClientResponse<Cart>>;
   fetchCart: () => Promise<void>;
   addLineItem: (productId: string, variantId?: number, quantity?: number) => Promise<void>;
@@ -20,6 +22,7 @@ interface CartState {
   clearCart: () => Promise<void>;
   addDiscount: (code: string) => Promise<void>;
   removeDiscount: (discountCodeId: string) => Promise<void>;
+  fetchShippingMethod: () => Promise<void>;
 }
 
 const CART_STORAGE_KEY = 'wine-not-cart-id';
@@ -30,6 +33,7 @@ export const useCartStore = create<CartState>()(
     (set, get) => ({
       cart: null,
       error: null,
+      shippingMethod: null,
 
       createCart: async () => {
         const client = apiClientManager.get();
@@ -372,7 +376,29 @@ export const useCartStore = create<CartState>()(
           debug('Remove discount error:', errorMessage);
           throw error;
         }
-      }
+      },
+      fetchShippingMethod: async () => {
+        try {
+          const client = apiClientManager.get();
+          if (!client) throw new Error('Client not initialized');
+
+          const response = await client
+            .shippingMethods()
+            .get()
+            .execute();
+
+          const firstMethod = response.body.results[0] || null;
+          set({ shippingMethod: firstMethod });
+          debug('Shipping method fetched');
+        } catch (error) {
+          let errorMessage = 'Failed to fetch shipping methods';
+          if (error instanceof Object && 'message' in error && typeof error.message === 'string') {
+            errorMessage = error.message;
+          }
+          debug('Fetch shipping methods error:', errorMessage);
+          set({ shippingMethod: null });
+        }
+      },
     }),
     {
       name: 'cart-storage',
@@ -399,3 +425,5 @@ export const addDiscount = (code: string) =>
 
 export const removeDiscount = (discountCodeId: string) =>
   useCartStore.getState().removeDiscount(discountCodeId);
+
+export const fetchShippingMethod = () => useCartStore.getState().fetchShippingMethod();

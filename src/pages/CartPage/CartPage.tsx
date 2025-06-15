@@ -27,47 +27,31 @@ import {
   clearCart,
   addDiscount,
   removeDiscount,
+  fetchShippingMethod
 } from '@/shared/hooks/useCartStore.ts';
 import { CartMessage } from '@/components/CartMessage/CartMessage.tsx';
 import { useEffect, useState } from 'react';
-import { ShippingMethod } from '@commercetools/platform-sdk';
-import { apiClientManager } from '@/shared/lib/commercetools/api-client-manager';
 import { useDisclosure } from '@mantine/hooks';
 
 export default function CartPage() {
   const cart = useCartStore(state => state.cart);
   const cartError = useCartStore(state => state.error);
+  const shipMethod = useCartStore(state => state.shippingMethod);
+
   const theme = useMantineTheme();
   const cartCurrency = cart?.totalPrice.currencyCode || 'EUR';
 
   const [opened, { open, close }] = useDisclosure(false);
-
-  const [shippingMethod, setShippingMethod] = useState<ShippingMethod | null>(null);
   const [promoCode, setPromoCode] = useState('');
   const [discountError, setDiscountError] = useState('');
 
   useEffect(() => {
-    const fetchShippingMethod = async () => {
-      try {
-        const client = apiClientManager.get();
-        if (!client) throw new Error('Client not initialized');
-
-        const response = await client
-          .shippingMethods()
-          .get()
-          .execute();
-
-        const firstMethod = response.body.results[0];
-        if (firstMethod) {
-          setShippingMethod(firstMethod);
-        }
-      } catch (error) {
-        console.error('Failed to fetch shipping methods:', error);
-      }
-    };
-
-    fetchShippingMethod();
-  }, []);
+    if (!shipMethod) {
+      fetchShippingMethod().catch(() => {
+        console.log('Error fetching shipmethod');
+      });
+    }
+  }, [shipMethod]);
 
   const handleApplyPromo = () => {
     if (!promoCode.trim()) return;
@@ -114,8 +98,8 @@ export default function CartPage() {
     open();
   };
 
-  const shippingMethodName = shippingMethod?.localizedName;
-  const shippingDescription = shippingMethod?.localizedDescription;
+  const shippingMethodName = shipMethod?.localizedName;
+  const shippingDescription = shipMethod?.localizedDescription;
 
   if (!shippingMethodName) return null;
   if (!shippingDescription) return null;
@@ -128,7 +112,7 @@ export default function CartPage() {
     0
   ) || 0;
 
-  const shippingCents = shippingMethod?.zoneRates?.[0]?.shippingRates?.[0]?.price?.centAmount ?? 0;
+  const shippingCents = shipMethod?.zoneRates?.[0]?.shippingRates?.[0]?.price?.centAmount ?? 0;
   const shippingPrice = shippingCents / 100;
 
   const totalForItems = cart?.totalPrice.centAmount / 100 || subtotal;
@@ -142,7 +126,6 @@ export default function CartPage() {
   const appliedDiscounts = cart?.discountCodes.filter(
     dc => dc.state === 'MatchesCart'
   ) || [];
-
 
   const handleIncrease = (e: React.MouseEvent, lineItemId: string, currentQuantity: number) => {
     e.stopPropagation();
@@ -169,13 +152,11 @@ export default function CartPage() {
 
   const formatCurrency = (amount: number, currencyCode: string) => {
     const normalizedAmount = amount / 100;
-
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: currencyCode
     }).format(normalizedAmount);
   };
-
 
   const getLocalizedValue = (value: unknown, locale = 'en-US'): string => {
     if (typeof value === 'string') {
@@ -242,7 +223,7 @@ export default function CartPage() {
                           <Title order={3} size="h4">
                             {itemName}
                           </Title>
-                          <Text fw={700} size="lg">
+                          <Text fw={700} size="lg" c="dimmed">
                             {formattedPrice}
                           </Text>
 
@@ -396,7 +377,6 @@ export default function CartPage() {
                     </Button>
                   </Group>
                 )}
-
 
                 <Divider my="sm" />
 
