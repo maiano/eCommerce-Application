@@ -162,12 +162,15 @@ body {
 }
 
 .button:disabled {
-  background-color: #32415D !important;
-  color: #f8f9fb !important;
+  background-color: grey !important;
+  opacity: 0.3 !important;
 }
 
 .button:hover:disabled {
   cursor: not-allowed;
+  background-color: grey !important;
+  opacity: 0.3 !important;
+  color: #141c24 !important;
 }
 
 .button--secondary {

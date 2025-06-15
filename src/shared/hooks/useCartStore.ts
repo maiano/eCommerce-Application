@@ -322,6 +322,8 @@ export const useCartStore = create<CartState>()(
 
           set({ cart: response.body });
           debug(`Discount added: ${code}`);
+
+          console.log(response.body)
         } catch (error) {
           let errorMessage = 'Failed to add discount';
           if (error instanceof Object && 'message' in error && typeof error.message === 'string') {

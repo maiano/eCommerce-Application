@@ -46,7 +46,7 @@ export function CatalogProductCard({ wine }: ProductCardProps) {
 
   return (
     <Card
-      padding="lg"
+      padding="sm"
       className={'product-card'}
       onClick={() => navigate(generatePath(ROUTES.PRODUCT, { id: wine.id }))}
       style={{
@@ -144,6 +144,7 @@ export function CatalogProductCard({ wine }: ProductCardProps) {
             className="button button--remove"
             radius="md"
             size="sm"
+            w="50%"
             style={{ flexShrink: 0 }}
             onClick={handleRemove}
           >

@@ -11,12 +11,22 @@ import {
   NumberInput,
   ActionIcon,
   Card,
-  Divider, useMantineTheme,
+  Divider,
+  useMantineTheme,
+  TextInput,
+  Badge,
 } from '@mantine/core';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '@/app/routes';
 import '@/pages/CartPage/CartPage.css';
-import { useCartStore, removeFromCart, changeQuantity, clearCart } from '@/shared/hooks/useCartStore.ts';
+import {
+  useCartStore,
+  removeFromCart,
+  changeQuantity,
+  clearCart,
+  addDiscount,
+  removeDiscount,
+} from '@/shared/hooks/useCartStore.ts';
 import { CartMessage } from '@/components/CartMessage/CartMessage.tsx';
 import { useEffect, useState } from 'react';
 import { ShippingMethod } from '@commercetools/platform-sdk';
@@ -24,9 +34,12 @@ import { apiClientManager } from '@/shared/lib/commercetools/api-client-manager'
 
 export default function CartPage() {
   const cart = useCartStore(state => state.cart);
-  const theme = useMantineTheme()
+  const cartError = useCartStore(state => state.error);
+  const theme = useMantineTheme();
 
   const [shippingMethod, setShippingMethod] = useState<ShippingMethod | null>(null);
+  const [promoCode, setPromoCode] = useState('');
+  const [discountError, setDiscountError] = useState('');
 
   useEffect(() => {
     const fetchShippingMethod = async () => {
@@ -51,6 +64,38 @@ export default function CartPage() {
     fetchShippingMethod();
   }, []);
 
+  const handleApplyPromo = () => {
+    if (!promoCode.trim()) return;
+
+    addDiscount(promoCode.trim())
+      .then(() => {
+        console.log('Promo code applied');
+        setPromoCode('');
+        setDiscountError('');
+      })
+      .catch(() => {
+        console.log('Failed to apply promo code');
+        setDiscountError(cartError || 'Invalid promo code');
+      });
+  };
+
+  const handleRemovePromo = (discountCodeId: string) => {
+    removeDiscount(discountCodeId)
+      .then(() => {
+        console.log('Discount removed');
+      })
+      .catch(() => {
+        console.log('Failed to remove discount');
+        setDiscountError('Failed to remove discount');
+      });
+  };
+
+  const handleClearCartWrapper = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    clearCart()
+      .then(() => console.log('Cart cleared'))
+      .catch(() => console.log('Failed to clear cart'));
+  };
 
   const shippingMethodName = shippingMethod?.localizedName;
   const shippingDescription = shippingMethod?.localizedDescription;
@@ -61,7 +106,6 @@ export default function CartPage() {
   const shipName: string = shippingMethodName['en-US'] || '';
   const shipDescription: string = shippingDescription['en-US'] || '';
 
-
   const subtotal = cart?.lineItems.reduce(
     (sum, item) => sum + (item.price.value.centAmount / 100) * item.quantity,
     0
@@ -69,10 +113,18 @@ export default function CartPage() {
 
   const shippingCents = shippingMethod?.zoneRates?.[0]?.shippingRates?.[0]?.price?.centAmount ?? 0;
   const shippingPrice = shippingCents / 100;
-  const shipping = subtotal > 0 ? shippingPrice : 0;
-  const total = subtotal + shipping;
 
-  console.log(shippingCents);
+  const totalForItems = cart?.totalPrice.centAmount / 100 || subtotal;
+
+  const itemsDiscount = Math.max(0, subtotal - totalForItems);
+
+  const totalWithShipping = totalForItems + (subtotal > 0 ? shippingPrice : 0);
+
+  const totalWithoutDiscount = subtotal + (subtotal > 0 ? shippingPrice : 0);
+
+  const appliedDiscounts = cart?.discountCodes.filter(
+    dc => dc.state === 'MatchesCart'
+  ) || [];
 
 
   const handleIncrease = (e: React.MouseEvent, lineItemId: string, currentQuantity: number) => {
@@ -97,20 +149,6 @@ export default function CartPage() {
       .then(() => console.log('Product removed'))
       .catch(() => console.log('Failed to remove'));
   };
-
-  const handleClearCart = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    clearCart()
-      .then(() => console.log('Cart cleared'))
-      .catch(() => console.log('Failed to clear cart'));
-  };
-
-  const handleQuantityChange = (lineItemId: string, newQuantity: number) => {
-    changeQuantity(lineItemId, newQuantity)
-      .then(() => console.log('Quantity changed'))
-      .catch(() => console.log('Failed to change'));
-  };
-
 
   const getLocalizedValue = (value: unknown, locale = 'en-US'): string => {
     if (typeof value === 'string') {
@@ -156,7 +194,7 @@ export default function CartPage() {
                         span={4}
                         bg='primary.0'
                         className='card-image'
-                        >
+                      >
                         <Image
                           src={imageUrl}
                           height={120}
@@ -194,11 +232,6 @@ export default function CartPage() {
                                 step={1}
                                 hideControls
                                 color={theme.colors.dark[5]}
-                                onChange={(value) => {
-                                  if (typeof value === 'number') {
-                                    handleQuantityChange(item.id, value);
-                                  }
-                                }}
                                 styles={{
                                   input: { width: 50, textAlign: 'center',  border: '1px solid #32415d'  },
                                 }}
@@ -270,11 +303,60 @@ export default function CartPage() {
                   <Text fw={600}>${subtotal.toFixed(2)}</Text>
                 </Group>
 
+                {itemsDiscount > 0 && (
+                  <Group mt="xs">
+                    <Text>Discount:</Text>
+                    <Text fw={600} c="green">
+                      -${itemsDiscount.toFixed(2)}
+                    </Text>
+                  </Group>
+                )}
+
                 <Group>
                   <Text>Shipping: </Text>
                   <Text fw={600}> ${shippingPrice.toFixed(2)} ({shipName})</Text>
                 </Group>
 
+                {appliedDiscounts.length > 0 ? (
+                  <Group mt="sm" align="center">
+                    {appliedDiscounts.map(dc => (
+                      <Group key={dc.discountCode.id}>
+                        <Badge
+                          color="green"
+                          variant="light"
+                          size="lg"
+                        >
+                          Promo code applied
+                        </Badge>
+                        <Button
+                          variant="subtle"
+                          size="sm"
+                          onClick={() => handleRemovePromo(dc.discountCode.id)}
+                        >
+                          Remove
+                        </Button>
+                      </Group>
+                    ))}
+                  </Group>
+                ) : (
+                  <Group mt="sm" align="flex-end">
+                    <TextInput
+                      // label="Promo Code"
+                      placeholder="Enter promo code"
+                      value={promoCode}
+                      onChange={(event) => setPromoCode(event.currentTarget.value)}
+                      error={discountError}
+                      style={{ flex: 1 }}
+                    />
+                    <Button
+                      className='button button--primary'
+                      onClick={handleApplyPromo}
+                      disabled={!promoCode.trim()}
+                    >
+                      Apply
+                    </Button>
+                  </Group>
+                )}
 
                 <Box mt="xs">
                   <Text size="sm" c="dimmed">
@@ -284,13 +366,25 @@ export default function CartPage() {
 
                 <Divider my="sm" />
 
-                <Group className="total">
+                <Group className="total" align="baseline">
                   <Text size="lg" fw={700}>
                     Total:
                   </Text>
-                  <Text size="lg" fw={700}>
-                    ${total.toFixed(2)}
-                  </Text>
+
+                  {itemsDiscount > 0 ? (
+                    <Group>
+                      <Text size="lg" fw={700} c="yellow">
+                        ${totalWithShipping.toFixed(2)}
+                      </Text>
+                      <Text size="lg" fw={700} td="line-through" c="dimmed">
+                        ${totalWithoutDiscount.toFixed(2)}
+                      </Text>
+                    </Group>
+                  ) : (
+                    <Text size="lg" fw={700}>
+                      ${totalWithShipping.toFixed(2)}
+                    </Text>
+                  )}
                 </Group>
 
                 <Group justify="center">
@@ -306,7 +400,7 @@ export default function CartPage() {
                   <Button
                     className="button button--secondary button--large"
                     w="50%"
-                    onClick={handleClearCart}
+                    onClick={handleClearCartWrapper}
                   >
                     Clear Cart
                   </Button>
