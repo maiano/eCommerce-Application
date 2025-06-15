@@ -6,7 +6,7 @@ import { RouterProvider } from 'react-router-dom';
 import { router } from '@/app/router';
 import { theme } from '@/app/theme';
 import { useAuthStore } from '@/features/auth/auth-state';
-import { useCartStore } from '@/shared/hooks/useCartStore';
+import { getCart } from '@/shared/hooks/useCartStore';
 import { apiClientManager } from '@/shared/lib/commercetools';
 import { CenterLoader } from '@/shared/ui/CenterLoader';
 import { notifyError } from '@/shared/utils/custom-notifications';
@@ -15,8 +15,6 @@ export const AppProvider = () => {
   const { setPending, setUnauthenticated, setAuthenticated, setClientReady } =
     useAuthStore();
 
-  const fetchCart = useCartStore((state) => state.fetchCart);
-
   useEffect(() => {
     const initializeApp = async () => {
       setPending();
@@ -24,7 +22,7 @@ export const AppProvider = () => {
         const { authType } = await apiClientManager.init();
         setClientReady(true);
 
-        await fetchCart();
+        await getCart();
 
         if (authType === 'password') {
           setAuthenticated();
@@ -44,8 +42,8 @@ export const AppProvider = () => {
     setPending,
     setAuthenticated,
     setClientReady,
-    fetchCart,
   ]);
+
   return (
     <MantineProvider theme={theme} defaultColorScheme="dark">
       <Notifications
