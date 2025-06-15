@@ -20,6 +20,20 @@
   display: inline;
 }
 
+.member-card_github:hover{
+  text-decoration: none;
+}
+
+.member-card_github:hover > div > p {
+  transition: color 0.2s;
+  color: #d4d8e9 !important;
+}
+
+.member-card_github:hover > div > svg {
+  transition: fill 0.2s;
+  fill: #d4d8e9;
+}
+
 .member-card__avatar, .rsschool-logo {
   max-width: 320px;
   transition: transform 0.3s ease;
