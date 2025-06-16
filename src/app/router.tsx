@@ -33,8 +33,6 @@ const RedirectGuard = () => {
 
   useEffect(() => {
     if (isNeedToRedirect) {
-
-
       navigate(ROUTES.HOME);
       resetRedirect();
     }
@@ -76,38 +74,42 @@ const PrivateGuard = () => {
 
 export const router = createBrowserRouter([
   {
-    path: ROUTES.HOME,
     element: <MainLayout />,
     errorElement: <ErrorLayout />,
     children: [
-      { index: true, element: <HomePage /> },
+      { path: ROUTES.HOME, element: <HomePage /> },
       {
         element: <RedirectGuard />,
         children: [
           { path: ROUTES.CATALOG, element: <CatalogPage /> },
           { path: ROUTES.PRODUCT, element: <ProductPage /> },
           { path: ROUTES.CART, element: <CartPage /> },
-          { path: ROUTES.ABOUT, element: <AboutUsPage />},
+          { path: ROUTES.ABOUT, element: <AboutUsPage /> },
           {
             element: <PrivateGuard />,
             children: [{ path: ROUTES.PROFILE, element: <ProfilePage /> }],
           },
-          {
-            element: <AuthGuard />,
-            children: [
-              {
-                element: <AuthLayout />,
-                children: [
-                  { path: ROUTES.LOGIN, element: <LoginPage /> },
-                  { path: ROUTES.REGISTRATION, element: <RegistrationPage /> },
-                ],
-              },
-            ],
-          },
-          { path: ROUTES.NOT_FOUND, element: <NotFoundPage /> },
-          { path: '*', element: <Navigate to={ROUTES.NOT_FOUND} replace /> },
         ],
       },
     ],
   },
+  {
+    element: <AuthGuard />,
+    children: [
+      {
+        element: <AuthLayout />,
+        children: [
+          { path: ROUTES.LOGIN, element: <LoginPage /> },
+          { path: ROUTES.REGISTRATION, element: <RegistrationPage /> },
+        ],
+      },
+    ],
+  },
+  {
+    path: ROUTES.NOT_FOUND,
+    element: <ErrorLayout />,
+    children: [{ path: ROUTES.NOT_FOUND, element: <NotFoundPage /> }],
+  },
+  // { path: ROUTES.NOT_FOUND, element: <NotFoundPage /> },
+  // { path: '*', element: <Navigate to={ROUTES.NOT_FOUND} replace /> },
 ]);
