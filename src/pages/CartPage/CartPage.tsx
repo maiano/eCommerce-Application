@@ -15,7 +15,7 @@ import {
   useMantineTheme,
   TextInput,
   Badge,
-  Modal
+  Modal,
 } from '@mantine/core';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '@/app/routes';
@@ -27,16 +27,16 @@ import {
   clearCart,
   addDiscount,
   removeDiscount,
-  fetchShippingMethod
+  fetchShippingMethod,
 } from '@/shared/hooks/useCartStore.ts';
 import { CartMessage } from '@/components/CartMessage/CartMessage.tsx';
 import { useEffect, useState } from 'react';
 import { useDisclosure } from '@mantine/hooks';
 
 export default function CartPage() {
-  const cart = useCartStore(state => state.cart);
-  const cartError = useCartStore(state => state.error);
-  const shipMethod = useCartStore(state => state.shippingMethod);
+  const cart = useCartStore((state) => state.cart);
+  const cartError = useCartStore((state) => state.error);
+  const shipMethod = useCartStore((state) => state.shippingMethod);
 
   const theme = useMantineTheme();
   const cartCurrency = cart?.totalPrice.currencyCode || 'EUR';
@@ -80,8 +80,8 @@ export default function CartPage() {
   };
 
   const handleClearCart = () => {
-    const removalPromises = appliedDiscounts.map(dc =>
-      removeDiscount(dc.discountCode.id)
+    const removalPromises = appliedDiscounts.map((dc) =>
+      removeDiscount(dc.discountCode.id),
     );
 
     Promise.all(removalPromises)
@@ -90,7 +90,7 @@ export default function CartPage() {
         console.log('Cart cleared');
         close();
       })
-      .catch(error => console.error('Failed to clear cart', error));
+      .catch((error) => console.error('Failed to clear cart', error));
   };
 
   const handleClearCartClick = (e: React.MouseEvent) => {
@@ -107,12 +107,14 @@ export default function CartPage() {
   const shipName: string = shippingMethodName['en-US'] || '';
   const shipDescription: string = shippingDescription['en-US'] || '';
 
-  const subtotal = cart?.lineItems.reduce(
-    (sum, item) => sum + (item.price.value.centAmount / 100) * item.quantity,
-    0
-  ) || 0;
+  const subtotal =
+    cart?.lineItems.reduce(
+      (sum, item) => sum + (item.price.value.centAmount / 100) * item.quantity,
+      0,
+    ) || 0;
 
-  const shippingCents = shipMethod?.zoneRates?.[0]?.shippingRates?.[0]?.price?.centAmount ?? 0;
+  const shippingCents =
+    shipMethod?.zoneRates?.[0]?.shippingRates?.[0]?.price?.centAmount ?? 0;
   const shippingPrice = shippingCents / 100;
 
   const totalForItems = cart?.totalPrice.centAmount / 100 || subtotal;
@@ -123,18 +125,25 @@ export default function CartPage() {
 
   const totalWithoutDiscount = subtotal + (subtotal > 0 ? shippingPrice : 0);
 
-  const appliedDiscounts = cart?.discountCodes.filter(
-    dc => dc.state === 'MatchesCart'
-  ) || [];
+  const appliedDiscounts =
+    cart?.discountCodes.filter((dc) => dc.state === 'MatchesCart') || [];
 
-  const handleIncrease = (e: React.MouseEvent, lineItemId: string, currentQuantity: number) => {
+  const handleIncrease = (
+    e: React.MouseEvent,
+    lineItemId: string,
+    currentQuantity: number,
+  ) => {
     e.stopPropagation();
     changeQuantity(lineItemId, currentQuantity + 1)
       .then(() => console.log('Quantity increased'))
       .catch(() => console.log('Failed to increase'));
   };
 
-  const handleDecrease = (e: React.MouseEvent, lineItemId: string, currentQuantity: number) => {
+  const handleDecrease = (
+    e: React.MouseEvent,
+    lineItemId: string,
+    currentQuantity: number,
+  ) => {
     e.stopPropagation();
     if (currentQuantity > 1) {
       changeQuantity(lineItemId, currentQuantity - 1)
@@ -154,7 +163,7 @@ export default function CartPage() {
     const normalizedAmount = amount / 100;
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: currencyCode
+      currency: currencyCode,
     }).format(normalizedAmount);
   };
 
@@ -185,12 +194,12 @@ export default function CartPage() {
         </Title>
 
         <Grid gutter="xl">
-          <Grid.Col span={12} className='cart-column'>
+          <Grid.Col span={12} className="cart-column">
             <Stack>
               {cart.lineItems.map((item) => {
                 const formattedPrice = formatCurrency(
                   item.totalPrice.centAmount,
-                  item.totalPrice.currencyCode
+                  item.totalPrice.currencyCode,
                 );
                 const imageUrl =
                   item.variant.images?.[0]?.url ||
@@ -200,16 +209,14 @@ export default function CartPage() {
 
                 return (
                   <Card key={item.id} className="cart-item">
-                    <Grid gutter="md" align="center"
-                          classNames={{
-                            inner: 'cart-inner',
-                          }}
+                    <Grid
+                      gutter="md"
+                      align="center"
+                      classNames={{
+                        inner: 'cart-inner',
+                      }}
                     >
-                      <Grid.Col
-                        span={4}
-                        bg='primary.0'
-                        className='card-image'
-                      >
+                      <Grid.Col span={4} bg="primary.0" className="card-image">
                         <Image
                           src={imageUrl}
                           height={120}
@@ -231,7 +238,7 @@ export default function CartPage() {
                             <Group>
                               <ActionIcon
                                 color={theme.colors.dark[5]}
-                                size='lg'
+                                size="lg"
                                 disabled={item.quantity <= 1}
                                 onClick={(e) =>
                                   handleDecrease(e, item.id, item.quantity)
@@ -248,12 +255,16 @@ export default function CartPage() {
                                 hideControls
                                 color={theme.colors.dark[5]}
                                 styles={{
-                                  input: { width: 50, textAlign: 'center',  border: '1px solid #32415d'  },
+                                  input: {
+                                    width: 50,
+                                    textAlign: 'center',
+                                    border: '1px solid #32415d',
+                                  },
                                 }}
                               />
                               <ActionIcon
                                 color={theme.colors.dark[5]}
-                                size='lg'
+                                size="lg"
                                 onClick={(e) =>
                                   handleIncrease(e, item.id, item.quantity)
                                 }
@@ -265,7 +276,7 @@ export default function CartPage() {
                             <ActionIcon
                               onClick={(e) => handleRemove(e, item.id)}
                               color={theme.colors.dark[5]}
-                              size='lg'
+                              size="lg"
                             >
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -301,7 +312,7 @@ export default function CartPage() {
             </Stack>
           </Grid.Col>
 
-          <Grid.Col span={12} className='cart-column'>
+          <Grid.Col span={12} className="cart-column">
             <Card withBorder radius="md" p="xl" className="cart-summary">
               <Stack>
                 <Title order={2} size="h3" mb="sm">
@@ -315,21 +326,27 @@ export default function CartPage() {
 
                 <Group>
                   <Text>Subtotal: </Text>
-                  <Text fw={600}>{formatCurrency(subtotal * 100, cartCurrency)}</Text>
+                  <Text fw={600}>
+                    {formatCurrency(subtotal * 100, cartCurrency)}
+                  </Text>
                 </Group>
 
                 {itemsDiscount > 0 && (
                   <Group mt="xs">
                     <Text>Discount:</Text>
                     <Text fw={600} c="green">
-                      - {formatCurrency(itemsDiscount * 100,  cartCurrency)}
+                      - {formatCurrency(itemsDiscount * 100, cartCurrency)}
                     </Text>
                   </Group>
                 )}
 
                 <Group>
                   <Text>Shipping: </Text>
-                  <Text fw={600}> {formatCurrency(shippingPrice * 100, cartCurrency)} ({shipName})</Text>
+                  <Text fw={600}>
+                    {' '}
+                    {formatCurrency(shippingPrice * 100, cartCurrency)} (
+                    {shipName})
+                  </Text>
                 </Group>
 
                 <Box mt="xs">
@@ -340,7 +357,7 @@ export default function CartPage() {
 
                 {appliedDiscounts.length > 0 ? (
                   <Group mt="sm" align="center" justify="center">
-                    {appliedDiscounts.map(dc => (
+                    {appliedDiscounts.map((dc) => (
                       <Group key={dc.discountCode.id}>
                         <Badge
                           color="green"
@@ -351,7 +368,7 @@ export default function CartPage() {
                           Promo code applied
                         </Badge>
                         <Button
-                          className='button button--remove'
+                          className="button button--remove"
                           onClick={() => handleRemovePromo(dc.discountCode.id)}
                         >
                           Remove
@@ -364,12 +381,14 @@ export default function CartPage() {
                     <TextInput
                       placeholder="Enter promo code"
                       value={promoCode}
-                      onChange={(event) => setPromoCode(event.currentTarget.value)}
+                      onChange={(event) =>
+                        setPromoCode(event.currentTarget.value)
+                      }
                       error={discountError}
                       style={{ flex: 1 }}
                     />
                     <Button
-                      className='button button--primary'
+                      className="button button--primary"
                       onClick={handleApplyPromo}
                       disabled={!promoCode.trim()}
                     >
@@ -391,7 +410,10 @@ export default function CartPage() {
                         {formatCurrency(totalWithShipping * 100, cartCurrency)}
                       </Text>
                       <Text size="lg" fw={700} td="line-through" c="dimmed">
-                        {formatCurrency(totalWithoutDiscount * 100, cartCurrency)}
+                        {formatCurrency(
+                          totalWithoutDiscount * 100,
+                          cartCurrency,
+                        )}
                       </Text>
                     </Group>
                   ) : (
@@ -403,20 +425,19 @@ export default function CartPage() {
 
                 <Group justify="center">
                   <Button
+                    className="button button--secondary button--large button--cart"
+                    w="50%"
+                    onClick={handleClearCartClick}
+                  >
+                    Clear Cart
+                  </Button>
+                  <Button
                     component={Link}
                     to={ROUTES.CATALOG}
                     className="button button--primary button--large button--cart"
                     w="50%"
                   >
                     Continue Shopping
-                  </Button>
-
-                  <Button
-                    className="button button--secondary button--large button--cart"
-                    w="50%"
-                    onClick={handleClearCartClick}
-                  >
-                    Clear Cart
                   </Button>
                 </Group>
               </Stack>
@@ -426,7 +447,7 @@ export default function CartPage() {
       </Box>
 
       <Modal
-        className='modal'
+        className="modal"
         opened={opened}
         onClose={close}
         title="Clear Shopping Cart"
