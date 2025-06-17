@@ -110,6 +110,4 @@ export const router = createBrowserRouter([
     element: <ErrorLayout />,
     children: [{ path: ROUTES.NOT_FOUND, element: <NotFoundPage /> }],
   },
-  // { path: ROUTES.NOT_FOUND, element: <NotFoundPage /> },
-  // { path: '*', element: <Navigate to={ROUTES.NOT_FOUND} replace /> },
 ]);
