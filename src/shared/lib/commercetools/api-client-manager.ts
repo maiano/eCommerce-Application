@@ -107,6 +107,10 @@ export const apiClientManager = (() => {
       .then((response) => {
         client = authClient;
         authType = 'password';
+        const token = passwordTokenCache.get();
+        if (token?.token) {
+          passwordTokenCache.set(token);
+        }
         return response;
       });
   };

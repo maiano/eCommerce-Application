@@ -26,8 +26,10 @@ export function Header() {
   const cart = useCartStore((state) => state.cart);
   const itemCount = cart?.lineItems.length ?? 0;
 
-  const handleLogout = () => {
-    apiClientManager.logout();
+  const handleLogout = async () => {
+    useAuthStore.getState().setClientReady(false);
+    await apiClientManager.logout();
+    useAuthStore.getState().setClientReady(true);
     useAuthStore.getState().logout();
     close();
   };
