@@ -16,7 +16,14 @@ const projectKey = env.VITE_CTP_PROJECT_KEY;
 
 const anonymousTokenCache = makeTokenCache('wine-not-anonymous-token');
 
-export const createAnonymousClient = (): ByProjectKeyRequestBuilder => {
+export const createAnonymousClient = (
+  force = false,
+): ByProjectKeyRequestBuilder => {
+  if (force) {
+    anonymousTokenCache.clear();
+    debug('anonymousTokenCache cleared with force');
+  }
+
   const authOptions: AnonymousAuthMiddlewareOptions = {
     host: env.VITE_CTP_AUTH_URL,
     projectKey,
