@@ -11,6 +11,7 @@ import {
   notifySuccess,
   notifyError,
 } from '@/shared/utils/custom-notifications';
+import { useState } from 'react';
 
 type ProductCardProps = {
   wine: WineCard;
@@ -29,27 +30,39 @@ export function CatalogProductCard({ wine }: ProductCardProps) {
   const formatCurrency = (price: number, currencyCode: string) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: currencyCode
+      currency: currencyCode,
     }).format(price);
   };
 
-  const handleAddToCart = (e: React.MouseEvent) => {
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const handleAddToCart = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    addToCart(wine.id)
-      .then(() => notifySuccess({ message: 'Added to cart', autoClose: 2000 }))
-      .catch((error) =>
-        notifyError(error, { message: 'Failed adding to cart' }),
-      );
+    if (isProcessing) return;
+
+    setIsProcessing(true);
+    try {
+      await addToCart(wine.id);
+      notifySuccess({ message: 'Added to cart', autoClose: 2000 });
+    } catch (error) {
+      notifyError(error, { message: 'Failed adding to cart' });
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
-  const handleRemove = (e: React.MouseEvent) => {
+  const handleRemove = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (cartItem) {
-      removeFromCart(cartItem.id)
-        .then(() =>
-          notifySuccess({ message: 'Product removed', autoClose: 2000 }),
-        )
-        .catch((error) => notifyError(error, { message: 'Failed to remove' }));
+    if (!cartItem || isProcessing) return;
+
+    setIsProcessing(true);
+    try {
+      await removeFromCart(cartItem.id);
+      notifySuccess({ message: 'Product removed', autoClose: 2000 });
+    } catch (error) {
+      notifyError(error, { message: 'Failed to remove' });
+    } finally {
+      setIsProcessing(false);
     }
   };
 
@@ -68,7 +81,7 @@ export function CatalogProductCard({ wine }: ProductCardProps) {
       }}
     >
       <Box flex={1}>
-        <Card.Section bg='primary.0'>
+        <Card.Section bg="primary.0">
           <Image
             className={`product-card__image product-card__image--${wine.id}`}
             style={{ height: 300, objectFit: 'contain' }}
@@ -129,7 +142,7 @@ export function CatalogProductCard({ wine }: ProductCardProps) {
 
       <Group justify="space-between" wrap="nowrap">
         {typeof wine.discountedPrice === 'number' ? (
-          <Group gap="xs" h='60px'>
+          <Group gap="xs" h="60px">
             <Text fw={700} size="xl" c="yellow.4">
               {formatCurrency(wine.discountedPrice, cartCurrency)}
             </Text>
@@ -143,7 +156,7 @@ export function CatalogProductCard({ wine }: ProductCardProps) {
             </Text>
           </Group>
         ) : (
-          <Text fw={700} size="xl" h='60px' style={{ paddingTop: 14 }}>
+          <Text fw={700} size="xl" h="60px" style={{ paddingTop: 14 }}>
             {formatCurrency(wine.price, cartCurrency)}
           </Text>
         )}
@@ -154,6 +167,7 @@ export function CatalogProductCard({ wine }: ProductCardProps) {
             w="45%"
             style={{ flexShrink: 0, minWidth: '135px' }}
             onClick={handleRemove}
+            disabled={isProcessing}
           >
             Remove from Cart
           </Button>
@@ -164,6 +178,7 @@ export function CatalogProductCard({ wine }: ProductCardProps) {
             size="sm"
             style={{ flexShrink: 0 }}
             onClick={handleAddToCart}
+            disabled={isProcessing}
           >
             Add to Cart
           </Button>
