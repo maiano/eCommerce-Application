@@ -48,8 +48,8 @@ body.mantine-Modal-body {
 
 .main-product-image {
   flex: 1;
-  /*max-height: 100vh;*/
-  /*max-width: 100vw;*/
+  max-height: 100vh;
+  max-width: 100vw;
   border-radius: 0.75rem;
   cursor: pointer;
   object-fit: cover;
@@ -244,8 +244,11 @@ body.mantine-Modal-body {
     padding: 0 10px;
   }
 
-  .carousel .carousel-slide {
+  .carousel-slide {
     height: 50vh;
+  }
+  .modal-slide {
+    height: 70vh;
   }
 
   .thumbnail-item {
@@ -275,14 +278,22 @@ body.mantine-Modal-body {
 }
 
 @media (max-width: 480px) {
-  .carousel .carousel-slide {
-    max-height: 40vh;
+  .carousel-slide,
+  .main-product-image {
+    max-height: 40vh !important;
+  }
+  .modal-slide {
+    height: 65vh;
   }
 }
 
 @media (max-width: 400px) {
-  .carousel .carousel-slide {
-    max-height: 35vh;
+  .carousel-slide,
+  .main-product-image{
+    max-height: 35vh !important;
+  }
+  .modal-slide {
+    height: 58vh;
   }
 
   .thumbnail-item {

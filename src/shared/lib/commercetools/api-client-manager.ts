@@ -40,6 +40,11 @@ export const apiClientManager = (() => {
     if (!client) {
       throw new Error('client not initialized');
     }
+    debug(
+      'token: ',
+      anonymousTokenCache.get().token,
+      passwordTokenCache.get().token,
+    );
     return client;
   };
 
@@ -60,7 +65,7 @@ export const apiClientManager = (() => {
       }
     }
     debug('creating new anonymous client');
-    client = createAnonymousClient();
+    client = createAnonymousClient(true);
     authType = 'anonymous';
 
     try {
@@ -68,6 +73,13 @@ export const apiClientManager = (() => {
         .categories()
         .get({ queryArgs: { limit: 1 } })
         .execute();
+
+      const token = anonymousTokenCache.get();
+      debug('New anonymous token fetched:', token);
+
+      if (token?.token) {
+        anonymousTokenCache.set(token);
+      }
     } catch (error) {
       console.error('Anonymous client init failed:', error);
     }
@@ -107,21 +119,22 @@ export const apiClientManager = (() => {
       .then((response) => {
         client = authClient;
         authType = 'password';
+        const token = passwordTokenCache.get();
+        if (token?.token) {
+          passwordTokenCache.set(token);
+        }
         return response;
       });
   };
 
-  const logout = () => {
+  const logout = async () => {
     debug('Logging out...');
     passwordTokenCache.clear();
-    const restored = restore();
-    if (restored) {
-      client = restored.client;
-      authType = restored.authType;
-    } else {
-      client = createAnonymousClient();
-      authType = 'anonymous';
-    }
+    anonymousTokenCache.clear();
+
+    debug('Creating new anonymous client after logout...');
+
+    await init(true);
   };
 
   const restore = (): { client: ApiRoot; authType: AuthType } | null => {

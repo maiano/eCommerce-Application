@@ -1,21 +1,14 @@
-import {
-  useMantineTheme,
-  Container,
-  Title,
-  Text,
-  Button,
-  Group,
-  Box,
-} from '@mantine/core';
+import { Box, Button, Container, Group, Text, Title, useMantineTheme } from '@mantine/core';
 import { Link } from 'react-router-dom';
-import './NotFoundPage.css';
 import { ROUTES } from '@/app/routes.tsx';
+import '@/pages/CartPage/CartPage.css'
 
-export default function NotFoundPage() {
+export function CartMessage() {
   const theme = useMantineTheme();
+
   return (
     <Container className="page" pt="20vh">
-      <Box className="not-found-content">
+      <Box className="cart-container" maw={580}>
         <Group className="header__logo">
           <Link
             to={ROUTES.HOME}
@@ -46,25 +39,20 @@ export default function NotFoundPage() {
             <Title className="header__logo-text">Wine not</Title>
           </Link>
         </Group>
-
-        <Group className="not-found-text">
-          <Title className="not-found-title" order={1}>
-            404
-          </Title>
-          <Title className="not-found-subtitle" order={2}>
-            Page Not Found
-          </Title>
-          <Text className="not-found-description">
-            This page is unavailable or under construction.
-          </Text>
-        </Group>
-
+        <Title order={1} className="section-title" mb="xl">
+          Your shopping cart is empty
+        </Title>
+        <Text size="xl" className="empty-cart__icon">
+          🛒
+        </Text>
         <Button
-          className="button button--primary button--large"
           component={Link}
-          to={ROUTES.HOME}
+          to={ROUTES.CATALOG}
+          className="button button--primary button--large"
+          size="md"
+          radius="md"
         >
-          Go to Homepage
+          Start Shopping
         </Button>
       </Box>
     </Container>

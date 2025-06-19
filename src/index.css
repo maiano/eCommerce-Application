@@ -162,12 +162,15 @@ body {
 }
 
 .button:disabled {
-  background-color: #32415D !important;
-  color: #f8f9fb !important;
+  background-color: grey !important;
+  opacity: 0.3 !important;
 }
 
 .button:hover:disabled {
   cursor: not-allowed;
+  background-color: grey !important;
+  opacity: 0.3 !important;
+  color: #141c24 !important;
 }
 
 .button--secondary {
@@ -175,6 +178,16 @@ body {
   /*border-color: rgba(202, 157, 41, 0.38);*/
   background-color: #32415D;
   border-color: #516185;
+  color: #f8f9fb;
+}
+
+.button--remove {
+  background-color: #ff6b6b;
+  color: #1d2a36;
+}
+
+.button--remove:hover {
+  background-color: #ff5252;
   color: #f8f9fb;
 }
 
@@ -195,6 +208,8 @@ body {
   background-color: #29374c;
   color: #f8f9fb;
 }
+
+
 
 .button--icon {
   min-width: 0;

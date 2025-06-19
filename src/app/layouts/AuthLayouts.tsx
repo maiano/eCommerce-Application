@@ -1,19 +1,16 @@
 import { AppShell } from '@mantine/core';
-import { Outlet } from 'react-router-dom';
 import { Header } from '@/components/Header/Header.tsx';
+import { AnimatedOutlet } from '@/shared/ui/AnimatedOutlet';
 
 export function AuthLayout() {
   return (
-    <AppShell
-      withBorder={false}
-      header={{ height: 80 }}
-    >
+    <AppShell withBorder={false} header={{ height: 80 }}>
       <AppShell.Header>
         <Header />
       </AppShell.Header>
 
       <AppShell.Main>
-        <Outlet />
+        <AnimatedOutlet />
       </AppShell.Main>
     </AppShell>
   );

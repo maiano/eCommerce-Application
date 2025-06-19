@@ -1,4 +1,6 @@
 import { MutableRefObject, ReactElement, SyntheticEvent } from 'react';
+import { password } from '@/shared/validation/login-validation.ts';
+import { string } from 'zod';
 
 export interface Feature {
   title: string;
@@ -208,4 +210,17 @@ export const wines: Wine[] = [
 export interface ModalEmbla {
   scrollTo: (index: number) => void;
   reInit: () => void;
+}
+
+export interface TeamMember {
+  avatar: string;
+  name: string;
+  role: string;
+  description: string;
+  contributions: string[];
+  github: string, 
+}
+
+export interface TeamMemberCardProps {
+  member: TeamMember;
 }

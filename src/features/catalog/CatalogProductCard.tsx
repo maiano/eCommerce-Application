@@ -2,6 +2,16 @@ import { Card, Text, Group, Image, Box, Button } from '@mantine/core';
 import { generatePath, Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/app/routes.tsx';
 import { ProductCard as WineCard } from '@/shared/schemas/product-card-schema';
+import {
+  addToCart,
+  useCartStore,
+  removeFromCart,
+} from '@/shared/hooks/useCartStore.ts';
+import {
+  notifySuccess,
+  notifyError,
+} from '@/shared/utils/custom-notifications';
+import { useState } from 'react';
 
 type ProductCardProps = {
   wine: WineCard;
@@ -10,9 +20,55 @@ type ProductCardProps = {
 export function CatalogProductCard({ wine }: ProductCardProps) {
   const navigate = useNavigate();
 
+  const cart = useCartStore((state) => state.cart);
+  const cartItem = cart?.lineItems.find(
+    (item) => item.productId === wine.id && item.variant?.id === 1,
+  );
+
+  const cartCurrency = cart?.totalPrice.currencyCode || 'EUR';
+
+  const formatCurrency = (price: number, currencyCode: string) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: currencyCode,
+    }).format(price);
+  };
+
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const handleAddToCart = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (isProcessing) return;
+
+    setIsProcessing(true);
+    try {
+      await addToCart(wine.id);
+      notifySuccess({ message: 'Added to cart', autoClose: 2000 });
+    } catch (error) {
+      notifyError(error, { message: 'Failed adding to cart' });
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const handleRemove = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!cartItem || isProcessing) return;
+
+    setIsProcessing(true);
+    try {
+      await removeFromCart(cartItem.id);
+      notifySuccess({ message: 'Product removed', autoClose: 2000 });
+    } catch (error) {
+      notifyError(error, { message: 'Failed to remove' });
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
   return (
     <Card
-      padding="lg"
+      padding="sm"
       className={'product-card'}
       onClick={() => navigate(generatePath(ROUTES.PRODUCT, { id: wine.id }))}
       style={{
@@ -25,7 +81,7 @@ export function CatalogProductCard({ wine }: ProductCardProps) {
       }}
     >
       <Box flex={1}>
-        <Card.Section>
+        <Card.Section bg="primary.0">
           <Image
             className={`product-card__image product-card__image--${wine.id}`}
             style={{ height: 300, objectFit: 'contain' }}
@@ -43,7 +99,7 @@ export function CatalogProductCard({ wine }: ProductCardProps) {
           style={{ alignItems: 'center' }}
         >
           <Text
-            className='wine-title'
+            className="wine-title"
             fw={500}
             size="lg"
             style={{
@@ -84,11 +140,11 @@ export function CatalogProductCard({ wine }: ProductCardProps) {
         </Group>
       </Box>
 
-      <Group justify="space-between">
+      <Group justify="space-between" wrap="nowrap">
         {typeof wine.discountedPrice === 'number' ? (
-          <Group gap="xs">
+          <Group gap="xs" h="60px">
             <Text fw={700} size="xl" c="yellow.4">
-              ${wine.discountedPrice}
+              {formatCurrency(wine.discountedPrice, cartCurrency)}
             </Text>
             <Text
               fw={700}
@@ -96,26 +152,37 @@ export function CatalogProductCard({ wine }: ProductCardProps) {
               c="dimmed"
               style={{ textDecoration: 'line-through' }}
             >
-              ${wine.price}
+              {formatCurrency(wine.price, cartCurrency)}
             </Text>
           </Group>
         ) : (
-          <Text fw={700} size="xl">
-            ${wine.price}
+          <Text fw={700} size="xl" h="60px" style={{ paddingTop: 14 }}>
+            {formatCurrency(wine.price, cartCurrency)}
           </Text>
         )}
 
-        <Button
-          className="button button--primary"
-          radius="md"
-          size="sm"
-          style={{ flexShrink: 0 }}
-          onClick={(e) => {
-            e.stopPropagation();
-          }}
-        >
-          Add to Cart
-        </Button>
+        {cartItem ? (
+          <Button
+            className="button button--remove"
+            w="45%"
+            style={{ flexShrink: 0, minWidth: '135px' }}
+            onClick={handleRemove}
+            disabled={isProcessing}
+          >
+            Remove from Cart
+          </Button>
+        ) : (
+          <Button
+            className="button button--primary"
+            radius="md"
+            size="sm"
+            style={{ flexShrink: 0 }}
+            onClick={handleAddToCart}
+            disabled={isProcessing}
+          >
+            Add to Cart
+          </Button>
+        )}
       </Group>
     </Card>
   );

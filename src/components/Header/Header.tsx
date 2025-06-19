@@ -8,12 +8,14 @@ import {
   Text,
   Menu,
   Anchor,
+  Indicator,
 } from '@mantine/core';
 import { useDisclosure, useClickOutside, useMediaQuery } from '@mantine/hooks';
 import { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ROUTES } from '@/app/routes';
 import { useAuthStore } from '@/features/auth/auth-state';
+import { useCartStore } from '@/shared/hooks/useCartStore';
 import { apiClientManager } from '@/shared/lib/commercetools/api-client-manager';
 
 export function Header() {
@@ -21,8 +23,13 @@ export function Header() {
   const isAuthenticated = status === 'AUTHENTICATED';
   const location = useLocation();
 
-  const handleLogout = () => {
-    apiClientManager.logout();
+  const cart = useCartStore((state) => state.cart);
+  const itemCount = cart?.lineItems.length ?? 0;
+
+  const handleLogout = async () => {
+    useAuthStore.getState().setClientReady(false);
+    await apiClientManager.logout();
+    useAuthStore.getState().setClientReady(true);
     useAuthStore.getState().logout();
     close();
   };
@@ -96,7 +103,7 @@ export function Header() {
               fill="currentColor"
             />
           </svg>
-          <Title className="header__logo-text">Wine not</Title>
+          <Title className="header__logo-text">Wine not?</Title>
         </Anchor>
       </Group>
 
@@ -125,7 +132,7 @@ export function Header() {
         <Anchor
           className="header__nav-item header__nav-item--cart"
           component={Link}
-          to="/cart"
+          to={ROUTES.CART}
         >
           <Text>Cart</Text>
         </Anchor>
@@ -149,7 +156,7 @@ export function Header() {
             <>
               <Button
                 component={Link}
-                to="/login"
+                to={ROUTES.LOGIN}
                 variant="filled"
                 color="dark.5"
                 className="button burger-button--secondary"
@@ -158,7 +165,7 @@ export function Header() {
               </Button>
               <Button
                 component={Link}
-                to="/registration"
+                to={ROUTES.REGISTRATION}
                 variant="filled"
                 color={theme.colors.yellow[4]}
                 className="button burger-button--primary"
@@ -171,22 +178,30 @@ export function Header() {
 
         {!opened && (
           <>
-            <Button
-              component={Link}
-              to="/cart"
-              color={theme.colors.dark[5]}
-              className="button button--icon"
+            <Indicator
+              label={itemCount}
+              size={18}
+              disabled={itemCount === 0}
+              color={theme.colors.red[9]}
+              offset={4}
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20px"
-                height="20px"
-                fill="currentColor"
-                viewBox="0 0 256 256"
+              <Button
+                component={Link}
+                to={ROUTES.CART}
+                color={theme.colors.dark[5]}
+                className="button button--icon"
               >
-                <path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,160H40V56H216V200ZM176,88a48,48,0,0,1-96,0,8,8,0,0,1,16,0,32,32,0,0,0,64,0,8,8,0,0,1,16,0Z" />
-              </svg>
-            </Button>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20px"
+                  height="20px"
+                  fill="currentColor"
+                  viewBox="0 0 256 256"
+                >
+                  <path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,160H40V56H216V200ZM176,88a48,48,0,0,1-96,0,8,8,0,0,1,16,0,32,32,0,0,0,64,0,8,8,0,0,1,16,0Z" />
+                </svg>
+              </Button>
+            </Indicator>
 
             <Menu position="bottom-end" width={200} withinPortal>
               <Menu.Target>
