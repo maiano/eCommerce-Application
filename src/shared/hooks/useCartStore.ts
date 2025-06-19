@@ -1,14 +1,14 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
 import {
   Cart,
   ClientResponse,
   CartDraft,
   CartUpdate,
 } from '@commercetools/platform-sdk';
+import { ShippingMethod } from '@commercetools/platform-sdk';
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import { apiClientManager } from '@/shared/lib/commercetools/api-client-manager';
 import { debug } from '@/shared/utils/debug-log';
-import { ShippingMethod } from '@commercetools/platform-sdk';
 
 interface CartState {
   cart: Cart | null;
@@ -16,9 +16,16 @@ interface CartState {
   shippingMethod: ShippingMethod | null;
   createCart: () => Promise<ClientResponse<Cart>>;
   fetchCart: () => Promise<void>;
-  addLineItem: (productId: string, variantId?: number, quantity?: number) => Promise<void>;
+  addLineItem: (
+    productId: string,
+    variantId?: number,
+    quantity?: number,
+  ) => Promise<void>;
   removeLineItem: (lineItemId: string) => Promise<void>;
-  changeLineItemQuantity: (lineItemId: string, quantity: number) => Promise<void>;
+  changeLineItemQuantity: (
+    lineItemId: string,
+    quantity: number,
+  ) => Promise<void>;
   clearCart: () => Promise<void>;
   addDiscount: (code: string) => Promise<void>;
   removeDiscount: (discountCodeId: string) => Promise<void>;
@@ -45,27 +52,35 @@ export const useCartStore = create<CartState>()(
           const draft: CartDraft = {
             currency: 'EUR',
             country: 'FR',
-            lineItems: []
+            lineItems: [],
           };
 
           return client.me().carts().post({ body: draft }).execute();
         } else {
-          const anonymousId = localStorage.getItem(ANONYMOUS_ID_KEY) || undefined;
+          const anonymousId =
+            localStorage.getItem(ANONYMOUS_ID_KEY) || crypto.randomUUID();
+          localStorage.setItem(ANONYMOUS_ID_KEY, anonymousId);
           debug(`Using anonymous ID: ${anonymousId}`);
 
           const draft: CartDraft = {
             currency: 'EUR',
             country: 'FR',
             lineItems: [],
-            anonymousId
+            anonymousId,
           };
 
-          const response = await client.me().carts().post({ body: draft }).execute();
+          const response = await client
+            .me()
+            .carts()
+            .post({ body: draft })
+            .execute();
 
           localStorage.setItem(CART_STORAGE_KEY, response.body.id);
           localStorage.setItem(ANONYMOUS_ID_KEY, response.body.anonymousId);
 
-          debug(`Anonymous cartID: ${response.body.id}, AnonymousID: ${response.body.anonymousId}`);
+          debug(
+            `Anonymous cartID: ${response.body.id}, AnonymousID: ${response.body.anonymousId}`,
+          );
           return response;
         }
       },
@@ -75,24 +90,26 @@ export const useCartStore = create<CartState>()(
 
         try {
           const authType = apiClientManager.getAuthType();
+          const client = apiClientManager.get();
+          if (!client) throw new Error('Client is not initialized');
 
           if (authType === 'password') {
             try {
-              const client = apiClientManager.get();
-              if (!client) throw new Error('Client is not initialized');
-
-              const response = await client
-                .me()
-                .activeCart()
-                .get()
-                .execute();
-
+              const response = await client.me().activeCart().get().execute();
               set({ cart: response.body });
               debug(`Active cart loaded: ${response.body.id}`);
-              return;
-            } catch (error) {
-              if (error instanceof Object && 'statusCode' in error && error.statusCode === 404) {
-                debug('No active cart, creating new');
+            } catch (error: unknown) {
+              const isNotFound =
+                typeof error === 'object' &&
+                error !== null &&
+                (('statusCode' in error &&
+                  (error as { statusCode?: number }).statusCode === 404) ||
+                  ('response' in error &&
+                    (error as { response?: { status?: number } }).response
+                      ?.status === 404));
+
+              if (isNotFound) {
+                debug('Active cart not found');
                 const response = await get().createCart();
                 set({ cart: response.body });
                 debug(`New cart created: ${response.body.id}`);
@@ -120,24 +137,39 @@ export const useCartStore = create<CartState>()(
                 set({ cart: response.body });
                 debug('Anonymous cart loaded');
 
-                if (response.body.anonymousId && response.body.anonymousId !== savedAnonymousId) {
-                  localStorage.setItem(ANONYMOUS_ID_KEY, response.body.anonymousId);
+                if (
+                  response.body.anonymousId &&
+                  response.body.anonymousId !== savedAnonymousId
+                ) {
+                  localStorage.setItem(
+                    ANONYMOUS_ID_KEY,
+                    response.body.anonymousId,
+                  );
                 }
                 return;
               } catch (error) {
                 debug('No saved cart, removing ID', error);
                 localStorage.removeItem(CART_STORAGE_KEY);
+                localStorage.removeItem(ANONYMOUS_ID_KEY);
               }
             }
 
             debug('Creating new anonymous cart');
             const response = await get().createCart();
             set({ cart: response.body });
+            localStorage.setItem(CART_STORAGE_KEY, response.body.id);
+            if (response.body.anonymousId) {
+              localStorage.setItem(ANONYMOUS_ID_KEY, response.body.anonymousId);
+            }
           }
         } catch (error) {
-          let errorMessage;
+          let errorMessage = 'Unknown error';
 
-          if (error instanceof Object && 'message' in error && typeof error.message === 'string') {
+          if (
+            error instanceof Object &&
+            'message' in error &&
+            typeof error.message === 'string'
+          ) {
             errorMessage = error.message;
           }
 
@@ -147,7 +179,7 @@ export const useCartStore = create<CartState>()(
       },
 
       addLineItem: async (productId, variantId = 1, quantity = 1) => {
-        set({error: null });
+        set({ error: null });
         try {
           const client = apiClientManager.get();
           if (!client) throw new Error('Client is not initialized');
@@ -159,12 +191,14 @@ export const useCartStore = create<CartState>()(
 
           const updateActions: CartUpdate = {
             version: currentCart.version,
-            actions: [{
-              action: 'addLineItem',
-              productId,
-              variantId,
-              quantity
-            }]
+            actions: [
+              {
+                action: 'addLineItem',
+                productId,
+                variantId,
+                quantity,
+              },
+            ],
           };
 
           const response = await client
@@ -178,7 +212,11 @@ export const useCartStore = create<CartState>()(
         } catch (error) {
           let errorMessage = 'Failed to add product';
 
-          if (error instanceof Object && 'message' in error && typeof error.message === 'string') {
+          if (
+            error instanceof Object &&
+            'message' in error &&
+            typeof error.message === 'string'
+          ) {
             errorMessage = error.message;
           }
 
@@ -199,11 +237,13 @@ export const useCartStore = create<CartState>()(
 
           const updateActions: CartUpdate = {
             version: cart.version,
-            actions: [{
-              action: 'changeLineItemQuantity',
-              lineItemId,
-              quantity,
-            }]
+            actions: [
+              {
+                action: 'changeLineItemQuantity',
+                lineItemId,
+                quantity,
+              },
+            ],
           };
 
           const response = await client
@@ -217,7 +257,11 @@ export const useCartStore = create<CartState>()(
         } catch (error) {
           let errorMessage = 'Failed to change quantity';
 
-          if (error instanceof Object && 'message' in error && typeof error.message === 'string') {
+          if (
+            error instanceof Object &&
+            'message' in error &&
+            typeof error.message === 'string'
+          ) {
             errorMessage = error.message;
           }
 
@@ -237,10 +281,12 @@ export const useCartStore = create<CartState>()(
 
           const updateActions: CartUpdate = {
             version: cart.version,
-            actions: [{
-              action: 'removeLineItem',
-              lineItemId
-            }]
+            actions: [
+              {
+                action: 'removeLineItem',
+                lineItemId,
+              },
+            ],
           };
 
           const response = await client
@@ -253,7 +299,11 @@ export const useCartStore = create<CartState>()(
           debug(`Removed ${lineItemId}`);
         } catch (error) {
           let errorMessage = 'Failed to remove product';
-          if (error instanceof Object && 'message' in error && typeof error.message === 'string') {
+          if (
+            error instanceof Object &&
+            'message' in error &&
+            typeof error.message === 'string'
+          ) {
             errorMessage = error.message;
           }
           set({ error: errorMessage });
@@ -276,10 +326,10 @@ export const useCartStore = create<CartState>()(
 
           const updateActions: CartUpdate = {
             version: cart.version,
-            actions: cart.lineItems.map(item => ({
+            actions: cart.lineItems.map((item) => ({
               action: 'removeLineItem',
-              lineItemId: item.id
-            }))
+              lineItemId: item.id,
+            })),
           };
 
           const response = await client
@@ -292,7 +342,11 @@ export const useCartStore = create<CartState>()(
           debug('Cart cleared');
         } catch (error) {
           let errorMessage = 'Failed to clear cart';
-          if (error instanceof Object && 'message' in error && typeof error.message === 'string') {
+          if (
+            error instanceof Object &&
+            'message' in error &&
+            typeof error.message === 'string'
+          ) {
             errorMessage = error.message;
           }
           set({ error: errorMessage });
@@ -312,10 +366,12 @@ export const useCartStore = create<CartState>()(
 
           const updateActions: CartUpdate = {
             version: cart.version,
-            actions: [{
-              action: 'addDiscountCode',
-              code
-            }]
+            actions: [
+              {
+                action: 'addDiscountCode',
+                code,
+              },
+            ],
           };
 
           const response = await client
@@ -327,10 +383,14 @@ export const useCartStore = create<CartState>()(
           set({ cart: response.body });
           debug(`Discount added: ${code}`);
 
-          console.log(response.body)
+          console.log(response.body);
         } catch (error) {
           let errorMessage = 'Failed to add discount';
-          if (error instanceof Object && 'message' in error && typeof error.message === 'string') {
+          if (
+            error instanceof Object &&
+            'message' in error &&
+            typeof error.message === 'string'
+          ) {
             errorMessage = error.message;
           }
           set({ error: errorMessage });
@@ -350,13 +410,15 @@ export const useCartStore = create<CartState>()(
 
           const updateActions: CartUpdate = {
             version: cart.version,
-            actions: [{
-              action: 'removeDiscountCode',
-              discountCode: {
-                typeId: 'discount-code',
-                id: discountCodeId
-              }
-            }]
+            actions: [
+              {
+                action: 'removeDiscountCode',
+                discountCode: {
+                  typeId: 'discount-code',
+                  id: discountCodeId,
+                },
+              },
+            ],
           };
 
           const response = await client
@@ -369,7 +431,11 @@ export const useCartStore = create<CartState>()(
           debug(`Discount removed: ${discountCodeId}`);
         } catch (error) {
           let errorMessage = 'Failed to remove discount';
-          if (error instanceof Object && 'message' in error && typeof error.message === 'string') {
+          if (
+            error instanceof Object &&
+            'message' in error &&
+            typeof error.message === 'string'
+          ) {
             errorMessage = error.message;
           }
           set({ error: errorMessage });
@@ -382,17 +448,18 @@ export const useCartStore = create<CartState>()(
           const client = apiClientManager.get();
           if (!client) throw new Error('Client not initialized');
 
-          const response = await client
-            .shippingMethods()
-            .get()
-            .execute();
+          const response = await client.shippingMethods().get().execute();
 
           const firstMethod = response.body.results[0] || null;
           set({ shippingMethod: firstMethod });
           debug('Shipping method fetched');
         } catch (error) {
           let errorMessage = 'Failed to fetch shipping methods';
-          if (error instanceof Object && 'message' in error && typeof error.message === 'string') {
+          if (
+            error instanceof Object &&
+            'message' in error &&
+            typeof error.message === 'string'
+          ) {
             errorMessage = error.message;
           }
           debug('Fetch shipping methods error:', errorMessage);
@@ -403,20 +470,23 @@ export const useCartStore = create<CartState>()(
     {
       name: 'cart-storage',
       partialize: (state) => ({ cart: state.cart }),
-    }
-  )
+    },
+  ),
 );
 
 export const getCart = () => useCartStore.getState().fetchCart();
 
-export const addToCart = (productId: string, variantId?: number, quantity?: number) =>
-  useCartStore.getState().addLineItem(productId, variantId, quantity);
+export const addToCart = (
+  productId: string,
+  variantId?: number,
+  quantity?: number,
+) => useCartStore.getState().addLineItem(productId, variantId, quantity);
 
 export const changeQuantity = (lineItemId: string, quantity: number) =>
-useCartStore.getState().changeLineItemQuantity(lineItemId, quantity);
+  useCartStore.getState().changeLineItemQuantity(lineItemId, quantity);
 
 export const removeFromCart = (lineItemId: string) =>
- useCartStore.getState().removeLineItem(lineItemId);
+  useCartStore.getState().removeLineItem(lineItemId);
 
 export const clearCart = () => useCartStore.getState().clearCart();
 
@@ -426,4 +496,5 @@ export const addDiscount = (code: string) =>
 export const removeDiscount = (discountCodeId: string) =>
   useCartStore.getState().removeDiscount(discountCodeId);
 
-export const fetchShippingMethod = () => useCartStore.getState().fetchShippingMethod();
+export const fetchShippingMethod = () =>
+  useCartStore.getState().fetchShippingMethod();

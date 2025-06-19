@@ -10,12 +10,11 @@ import {
 import { Link } from 'react-router-dom';
 import { ROUTES } from '@/app/routes';
 import { LoginForm } from '@/features/login/LoginForm';
-import { LogoWithTitle } from '@/shared/ui/LogoWithTitle';
 import '@/pages/RegistrationPage/RegistrationPage.css';
 
 export default function LoginPage() {
   return (
-    <Container className="page" pt="20vh">
+    <Container className="page" pt="md">
       <Box
         w="100%"
         display="flex"
@@ -23,9 +22,8 @@ export default function LoginPage() {
         maw={450}
       >
         <Stack w="100%" className="auth-form">
-          <LogoWithTitle />
           <Paper w="100%" radius="sm">
-            <Title order={1} ta="center">
+            <Title order={1} pt="md" ta="center">
               Welcome Back
             </Title>
             <LoginForm />
