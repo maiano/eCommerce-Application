@@ -114,14 +114,6 @@ export function HomePage() {
             wines, tasting events, and convenient delivery options to enhance
             your appreciation.
           </Text>
-          <Button
-            className="button button--primary button--large"
-            component={Link}
-            to={ROUTES.REGISTRATION}
-            fz={'h4'}
-          >
-            Join
-          </Button>
         </Group>
 
         <Group className="features__grid">

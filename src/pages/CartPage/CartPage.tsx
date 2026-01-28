@@ -20,6 +20,7 @@ import {
 import { Link } from 'react-router-dom';
 import { ROUTES } from '@/app/routes';
 import '@/pages/CartPage/CartPage.css';
+import { CartMessage } from '@/components/CartMessage/CartMessage.tsx';
 import {
   useCartStore,
   removeFromCart,
@@ -29,7 +30,6 @@ import {
   removeDiscount,
   fetchShippingMethod,
 } from '@/shared/hooks/useCartStore.ts';
-import { CartMessage } from '@/components/CartMessage/CartMessage.tsx';
 import { useEffect, useState } from 'react';
 import { useDisclosure } from '@mantine/hooks';
 

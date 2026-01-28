@@ -1,17 +1,17 @@
 import { Card, Text, Group, Image, Box, Button } from '@mantine/core';
+import { useState } from 'react';
 import { generatePath, Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/app/routes.tsx';
-import { ProductCard as WineCard } from '@/shared/schemas/product-card-schema';
 import {
   addToCart,
   useCartStore,
   removeFromCart,
 } from '@/shared/hooks/useCartStore.ts';
+import { ProductCard as WineCard } from '@/shared/schemas/product-card-schema';
 import {
   notifySuccess,
   notifyError,
 } from '@/shared/utils/custom-notifications';
-import { useState } from 'react';
 
 type ProductCardProps = {
   wine: WineCard;

@@ -1,15 +1,13 @@
 import { Carousel } from '@mantine/carousel';
 import { Box, Title } from '@mantine/core';
-import { useAuthStore } from '@/features/auth/auth-state';
 import { CatalogProductCard } from '@/features/catalog/CatalogProductCard';
-import { useFeaturedProducts } from '@/features/catalog/useFeatureProduct';
+import { useFeaturedProducts } from '@/features/catalog/useFeatureProduct.mock';
 import { CenterLoader } from '@/shared/ui/CenterLoader';
 
 export function Slider() {
-  const clientReady = useAuthStore((s) => s.clientReady);
   const { data, isLoading } = useFeaturedProducts();
 
-  if (!clientReady || isLoading || !data || data.length === 0) {
+  if (isLoading || !data || data.length === 0) {
     return <CenterLoader />;
   }
 

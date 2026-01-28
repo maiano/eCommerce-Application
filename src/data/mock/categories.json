@@ -1,0 +1,27 @@
+[
+  {
+    "id": "cat-red",
+    "slug": { "en-US": "red" },
+    "name": { "en-US": "Red" }
+  },
+  {
+    "id": "cat-white",
+    "slug": { "en-US": "white" },
+    "name": { "en-US": "White" }
+  },
+  {
+    "id": "cat-rose",
+    "slug": { "en-US": "rose" },
+    "name": { "en-US": "Rosé" }
+  },
+  {
+    "id": "cat-sparkling",
+    "slug": { "en-US": "sparkling" },
+    "name": { "en-US": "Sparkling" }
+  },
+  {
+    "id": "cat-dessert",
+    "slug": { "en-US": "dessert" },
+    "name": { "en-US": "Dessert" }
+  }
+]

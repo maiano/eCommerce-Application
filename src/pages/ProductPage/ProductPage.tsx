@@ -13,21 +13,13 @@ import {
   Modal,
   CloseButton,
 } from '@mantine/core';
-import { useState, useRef, useEffect, RefObject, useMemo } from 'react';
+import { useState, useRef, useEffect, RefObject } from 'react';
 import { useParams, useNavigate, NavigateFunction } from 'react-router-dom';
 import { ROUTES } from '@/app/routes';
-import { useProductById } from '@/features/product/useProductById';
-import {
-  addToCart,
-  removeFromCart,
-  useCartStore,
-} from '@/shared/hooks/useCartStore.ts';
+import { useProductById } from '@/features/product/useProductById.mock';
 import { useImageHandler } from '@/shared/hooks/useImageHandler.ts';
 import { CenterLoader } from '@/shared/ui/CenterLoader';
-import {
-  notifyError,
-  notifySuccess,
-} from '@/shared/utils/custom-notifications';
+import { notifyError } from '@/shared/utils/custom-notifications';
 import type { ModalEmbla, Wine, WineAttribute } from '@/types/types.tsx';
 import './ProductPage.css';
 
@@ -55,44 +47,23 @@ export default function ProductPage() {
   const [modalOpened, setModalOpened] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  const cart = useCartStore((state) => state.cart);
-  const cartItem = useMemo(() => {
-    if (!wine) return undefined;
-    return cart?.lineItems.find(
-      (item) => item.productId === wine.id && item.variant?.id === 1,
-    );
-  }, [cart, wine]);
-
-  const [isProcessing, setIsProcessing] = useState(false);
+  // Cart functionality disabled in mock mode
+  const cartItem = undefined;
 
   const handleAddToCart = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (isProcessing) return;
-
-    setIsProcessing(true);
-    try {
-      await addToCart(wine.id);
-      notifySuccess({ message: 'Added to cart', autoClose: 2000 });
-    } catch (error) {
-      notifyError(error, { message: 'Failed adding to cart' });
-    } finally {
-      setIsProcessing(false);
-    }
+    // Cart functionality disabled in mock mode
+    notifyError(new Error('Cart is disabled in mock mode'), {
+      message: 'Cart functionality is currently unavailable'
+    });
   };
 
   const handleRemove = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (!cartItem || isProcessing) return;
-
-    setIsProcessing(true);
-    try {
-      await removeFromCart(cartItem.id);
-      notifySuccess({ message: 'Product removed', autoClose: 2000 });
-    } catch (error) {
-      notifyError(error, { message: 'Failed to remove' });
-    } finally {
-      setIsProcessing(false);
-    }
+    // Cart functionality disabled in mock mode
+    notifyError(new Error('Cart is disabled in mock mode'), {
+      message: 'Cart functionality is currently unavailable'
+    });
   };
 
   const { handleImageLoad } = useImageHandler();
@@ -282,7 +253,6 @@ export default function ProductPage() {
                 size="sm"
                 style={{ flexShrink: 0 }}
                 onClick={handleRemove}
-                disabled={isProcessing}
               >
                 Remove from Cart
               </Button>
@@ -294,7 +264,6 @@ export default function ProductPage() {
                 size="sm"
                 style={{ flexShrink: 0 }}
                 onClick={handleAddToCart}
-                disabled={isProcessing}
               >
                 Add to Cart
               </Button>
@@ -303,7 +272,6 @@ export default function ProductPage() {
               className="button button--secondary button--large"
               w="50%"
               onClick={(): void | Promise<void> => navigate(ROUTES.CATALOG)}
-              disabled={isProcessing}
             >
               Continue Shopping
             </Button>

@@ -16,8 +16,8 @@ import {
 } from '@mantine/core';
 import { useMemo, useState } from 'react';
 import { ProductCardList } from '@/features/catalog/ProductCardList';
-import { useCategories } from '@/features/catalog/useCategories';
-import { useProductCards } from '@/features/catalog/useProductCards';
+import { useCategories } from '@/features/catalog/useCategories.mock';
+import { useProductCards } from '@/features/catalog/useProductCards.mock';
 import {
   productSortOptions,
   ProductSortOption,
@@ -84,7 +84,7 @@ export default function CatalogPage() {
     setPage(1);
   };
 
-  const { data, isLoading } = useProductCards({
+  const { data } = useProductCards({
     categoryIds: selectedCategoryIds,
     countries: selectedCountries,
     sortBy,

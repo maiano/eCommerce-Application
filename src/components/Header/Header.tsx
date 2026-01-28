@@ -14,24 +14,22 @@ import { useDisclosure, useClickOutside, useMediaQuery } from '@mantine/hooks';
 import { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ROUTES } from '@/app/routes';
-import { useAuthStore } from '@/features/auth/auth-state';
-import { useCartStore } from '@/shared/hooks/useCartStore';
-import { apiClientManager } from '@/shared/lib/commercetools/api-client-manager';
+// Cart and auth functionality disabled in mock mode
+// import { useAuthStore } from '@/features/auth/auth-state';
+// import { useCartStore } from '@/shared/hooks/useCartStore';
+// import { apiClientManager } from '@/shared/lib/commercetools/api-client-manager';
 
 export function Header() {
-  const status = useAuthStore((state) => state.status);
-  const isAuthenticated = status === 'AUTHENTICATED';
+  // const status = useAuthStore((state) => state.status);
+  const isAuthenticated = false; // Mock mode - always unauthenticated
   const location = useLocation();
 
-  const cart = useCartStore((state) => state.cart);
-  const itemCount = cart?.lineItems.length ?? 0;
+  // const cart = useCartStore((state) => state.cart);
+  const itemCount = 0; // Mock mode - no cart items
 
-  const handleLogout = async () => {
-    useAuthStore.getState().setClientReady(false);
-    await apiClientManager.logout();
-    useAuthStore.getState().setClientReady(true);
-    useAuthStore.getState().logout();
-    close();
+  const handleDisabledClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
   };
 
   const theme = useMantineTheme();
@@ -131,8 +129,9 @@ export function Header() {
         </Anchor>
         <Anchor
           className="header__nav-item header__nav-item--cart"
-          component={Link}
-          to={ROUTES.CART}
+          component="div"
+          onClick={handleDisabledClick}
+          style={{ cursor: 'not-allowed', opacity: 0.5 }}
         >
           <Text>Cart</Text>
         </Anchor>
@@ -140,14 +139,20 @@ export function Header() {
         {opened ? (
           isAuthenticated ? (
             <>
-              <Link className="header__nav-item" to="/profile">
+              <div
+                className="header__nav-item"
+                onClick={handleDisabledClick}
+                style={{ cursor: 'not-allowed', opacity: 0.5 }}
+              >
                 <Text>Profile</Text>
-              </Link>
+              </div>
               <Button
                 variant="filled"
                 color={theme.colors.dark[4]}
                 className="button burger-button--secondary"
-                onClick={handleLogout}
+                onClick={handleDisabledClick}
+                disabled
+                style={{ cursor: 'not-allowed' }}
               >
                 <Text>Logout</Text>
               </Button>
@@ -155,20 +160,22 @@ export function Header() {
           ) : (
             <>
               <Button
-                component={Link}
-                to={ROUTES.LOGIN}
                 variant="filled"
                 color="dark.5"
                 className="button burger-button--secondary"
+                onClick={handleDisabledClick}
+                disabled
+                style={{ cursor: 'not-allowed' }}
               >
                 <Text>Login</Text>
               </Button>
               <Button
-                component={Link}
-                to={ROUTES.REGISTRATION}
                 variant="filled"
                 color={theme.colors.yellow[4]}
                 className="button burger-button--primary"
+                onClick={handleDisabledClick}
+                disabled
+                style={{ cursor: 'not-allowed' }}
               >
                 <Text c="primary.9">Register</Text>
               </Button>
@@ -186,10 +193,11 @@ export function Header() {
               offset={4}
             >
               <Button
-                component={Link}
-                to={ROUTES.CART}
                 color={theme.colors.dark[5]}
                 className="button button--icon"
+                onClick={handleDisabledClick}
+                disabled
+                style={{ cursor: 'not-allowed' }}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -208,6 +216,8 @@ export function Header() {
                 <Button
                   color={theme.colors.dark[5]}
                   className="button button--icon"
+                  disabled
+                  style={{ cursor: 'not-allowed' }}
                 >
                   <svg
                     className="header__user-icon"
@@ -236,19 +246,19 @@ export function Header() {
               <Menu.Dropdown>
                 {isAuthenticated ? (
                   <>
-                    <Menu.Item component={Link} to="/profile">
+                    <Menu.Item onClick={handleDisabledClick} style={{ cursor: 'not-allowed', opacity: 0.5 }}>
                       <Text>Profile</Text>
                     </Menu.Item>
-                    <Menu.Item onClick={handleLogout}>
+                    <Menu.Item onClick={handleDisabledClick} style={{ cursor: 'not-allowed', opacity: 0.5 }}>
                       <Text>Logout</Text>
                     </Menu.Item>
                   </>
                 ) : (
                   <>
-                    <Menu.Item component={Link} to={ROUTES.LOGIN}>
+                    <Menu.Item onClick={handleDisabledClick} style={{ cursor: 'not-allowed', opacity: 0.5 }}>
                       <Text>Login</Text>
                     </Menu.Item>
-                    <Menu.Item component={Link} to={ROUTES.REGISTRATION}>
+                    <Menu.Item onClick={handleDisabledClick} style={{ cursor: 'not-allowed', opacity: 0.5 }}>
                       <Text>Register</Text>
                     </Menu.Item>
                   </>

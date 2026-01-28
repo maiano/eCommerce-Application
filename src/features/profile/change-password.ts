@@ -1,6 +1,6 @@
 import { ClientResponse, Customer } from "@commercetools/platform-sdk";
-import { useLogin } from "../login/useLogin";
 import { getUserInfo } from "../../shared/utils/get-user-info";
+import { useLogin } from "../login/useLogin";
 import { apiClientManager } from "@/shared/lib/commercetools";
 import { notifyError, notifySuccess } from "@/shared/utils/custom-notifications";
 
