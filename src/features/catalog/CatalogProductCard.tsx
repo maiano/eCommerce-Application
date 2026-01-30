@@ -75,7 +75,6 @@ export function CatalogProductCard({ wine }: ProductCardProps) {
         display: 'flex',
         width: '100%',
         height: '100%',
-        maxWidth: 400,
         flexDirection: 'column',
         justifyContent: 'space-between',
       }}

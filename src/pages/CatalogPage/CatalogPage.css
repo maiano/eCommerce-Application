@@ -106,7 +106,6 @@
   height: 500px !important;
   justify-content: space-between;
   transition: all 0.3s ease-in-out;
-  margin: 7px;
 }
 
 .product-card:hover {

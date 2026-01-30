@@ -61,6 +61,13 @@ export const theme = createTheme({
     dark: darkColors,
     red: redColors,
   },
+  breakpoints: {
+    xs: '36em', // 576px
+    sm: '48em', // 768px
+    md: '62em', // 992px
+    lg: '75em', // 1200px
+    xl: '80em', // 1280px (custom for 4 cards layout)
+  },
   fontFamily: '"Plus Jakarta Sans", "Noto Sans", sans-serif',
   headings: {
     fontFamily: '"Plus Jakarta Sans", sans-serif',

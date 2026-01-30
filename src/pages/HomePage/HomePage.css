@@ -42,7 +42,7 @@
   padding: 1.25rem 1rem 0.75rem;
 }
 
-.card {
+.carousel .card {
   padding-top: 10px;
   /* min-width: 280px !important; */
   max-width: 400px !important;
