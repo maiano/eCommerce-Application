@@ -1,6 +1,6 @@
-import { apiClientManager } from "@/shared/lib/commercetools";
+import { apiClientManager } from '@/shared/lib/commercetools';
 
-export const getUserInfo = async() => {
+export const getUserInfo = async () => {
   try {
     const client = apiClientManager.get();
     if (client) {
@@ -12,4 +12,4 @@ export const getUserInfo = async() => {
   } catch (error) {
     console.error('getUserInfo failed:', error);
   }
-}
+};

@@ -49,7 +49,7 @@ export function ProductCard({ wine }: WineCardProps) {
           style={{ alignItems: 'center' }}
         >
           <Text
-            className='wine-title'
+            className="wine-title"
             fw={500}
             size="lg"
             style={{

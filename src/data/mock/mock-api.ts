@@ -25,7 +25,7 @@ export const mockApi = {
     limit?: number;
   }): Promise<MockProductsResponse> => {
     // Simulate network delay
-    await new Promise((resolve) => setTimeout(resolve, 300));
+    await new Promise((resolve) => setTimeout(resolve, 200));
 
     let filtered = [...productsData];
 
@@ -38,7 +38,9 @@ export const mockApi = {
 
     // Filter by countries
     if (countries.length > 0) {
-      filtered = filtered.filter((product) => countries.includes(product.country));
+      filtered = filtered.filter((product) =>
+        countries.includes(product.country),
+      );
     }
 
     // Filter by search term
@@ -109,6 +111,10 @@ export const mockApi = {
 
   getFeaturedProducts: async (limit = 12): Promise<ProductCard[]> => {
     await new Promise((resolve) => setTimeout(resolve, 200));
-    return productsData.slice(0, limit);
+    // Select products with high ratings and good images
+    const featured = productsData.filter(
+      (p) => p.rating >= 4.5 && !p.image.includes('.svg'),
+    );
+    return featured.slice(0, limit);
   },
 };

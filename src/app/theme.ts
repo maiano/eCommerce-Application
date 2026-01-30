@@ -138,7 +138,7 @@ export const theme = createTheme({
     Container: Container.extend({
       styles: () => ({
         root: {
-          maxWidth: rem(1920),
+          maxWidth: rem(1400),
         },
       }),
     }),
@@ -176,8 +176,8 @@ export const theme = createTheme({
     Fieldset: {
       styles: {
         root: {
-            backgroundColor: darkColors[6],
-            padding: '0 0.5rem',
+          backgroundColor: darkColors[6],
+          padding: '0 0.5rem',
         },
       },
     },
@@ -195,41 +195,41 @@ export const theme = createTheme({
         },
       },
     },
-  Anchor: {
-    styles: {
-      root: {
-        color: darkColors[2],
-        transition: 'all 0.3s ease-in-out',
+    Anchor: {
+      styles: {
+        root: {
+          color: darkColors[2],
+          transition: 'all 0.3s ease-in-out',
+        },
       },
     },
-   },
-  CloseButton: {
-    styles: {
-      root: {
-        color: darkColors[6],
-        transition: 'all 0.3s ease-in-out',
+    CloseButton: {
+      styles: {
+        root: {
+          color: darkColors[6],
+          transition: 'all 0.3s ease-in-out',
+        },
       },
     },
-    },
-  Modal: {
-    styles: {
-      root: {
-        backgroundColor: darkColors[6],
+    Modal: {
+      styles: {
+        root: {
+          backgroundColor: darkColors[6],
+        },
+        header: {
+          backgroundColor: darkColors[6],
+        },
+        close: {
+          color: darkColors[4],
+        },
       },
-      header: {
-        backgroundColor: darkColors[6],
-      },
-      close: {
-        color: darkColors[4],
-      }
     },
-  },
-  Notification: {
-    styles: {
-      closeButton: {
-        color: darkColors[4],
-      }
-    }
-  }
+    Notification: {
+      styles: {
+        closeButton: {
+          color: darkColors[4],
+        },
+      },
+    },
   },
 });

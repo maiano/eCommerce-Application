@@ -1,23 +1,51 @@
-import { ClientResponse, Customer, MyCustomerUpdateAction } from "@commercetools/platform-sdk";
+import {
+  ClientResponse,
+  Customer,
+  MyCustomerUpdateAction,
+} from '@commercetools/platform-sdk';
 
-type Action = 'setDefaultShippingAddress' | 'addShippingAddressId' | 'removeShippingAddressId' | 'setDefaultShippingAddress' | 'setDefaultBillingAddress' | 'addBillingAddressId' | 'removeBillingAddressId' | 'setDefaultBillingAddress';
+type Action =
+  | 'setDefaultShippingAddress'
+  | 'addShippingAddressId'
+  | 'removeShippingAddressId'
+  | 'setDefaultShippingAddress'
+  | 'setDefaultBillingAddress'
+  | 'addBillingAddressId'
+  | 'removeBillingAddressId'
+  | 'setDefaultBillingAddress';
 
-export const setAddressActions = (id: string | undefined, currentUser: ClientResponse<Customer> | undefined, isShipping: boolean, isBilling: boolean, isDefaultShipping: boolean, isDefaultBilling: boolean) => {
+export const setAddressActions = (
+  id: string | undefined,
+  currentUser: ClientResponse<Customer> | undefined,
+  isShipping: boolean,
+  isBilling: boolean,
+  isDefaultShipping: boolean,
+  isDefaultBilling: boolean,
+) => {
   let actions: MyCustomerUpdateAction[] = [];
 
-  const createAddressAction = (action: Action, addressId: string | undefined): MyCustomerUpdateAction => ({
+  const createAddressAction = (
+    action: Action,
+    addressId: string | undefined,
+  ): MyCustomerUpdateAction => ({
     action,
-    addressId
+    addressId,
   });
 
   if (isShipping) {
-    if (isDefaultShipping && id !== currentUser?.body.defaultShippingAddressId) {
+    if (
+      isDefaultShipping &&
+      id !== currentUser?.body.defaultShippingAddressId
+    ) {
       actions.push(createAddressAction('setDefaultShippingAddress', id));
     }
     if (!currentUser?.body.shippingAddressIds?.includes(id ?? '')) {
       actions.push(createAddressAction('addShippingAddressId', id));
     }
-    if (id === currentUser?.body.defaultShippingAddressId && !isDefaultShipping) {
+    if (
+      id === currentUser?.body.defaultShippingAddressId &&
+      !isDefaultShipping
+    ) {
       actions.push(createAddressAction('setDefaultShippingAddress', undefined));
     }
   } else {
@@ -25,7 +53,7 @@ export const setAddressActions = (id: string | undefined, currentUser: ClientRes
       actions.push(createAddressAction('removeShippingAddressId', id));
     }
   }
-  
+
   if (isBilling) {
     if (isDefaultBilling && id !== currentUser?.body.defaultBillingAddressId) {
       actions.push(createAddressAction('setDefaultBillingAddress', id));
@@ -42,4 +70,4 @@ export const setAddressActions = (id: string | undefined, currentUser: ClientRes
     }
   }
   return actions;
-}
+};

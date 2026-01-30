@@ -12,7 +12,7 @@ export function Slider() {
   }
 
   return (
-    <Box className="carousel" style={{ maxWidth: 1920, width: '100%' }}>
+    <Box className="carousel" style={{ maxWidth: 1400, width: '100%' }}>
       <Title className="section-title">Featured Selections</Title>
       <Carousel
         height={520}

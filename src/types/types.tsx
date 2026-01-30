@@ -218,7 +218,7 @@ export interface TeamMember {
   role: string;
   description: string;
   contributions: string[];
-  github: string, 
+  github: string;
 }
 
 export interface TeamMemberCardProps {

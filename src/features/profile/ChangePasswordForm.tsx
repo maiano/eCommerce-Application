@@ -1,8 +1,17 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, PasswordInput, Text, Title, useMantineTheme } from "@mantine/core";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { useChangePassword } from "./change-password";
-import { PasswordChangeFormData, passwordChangeSchema } from "@/shared/validation/profile-validation";
+import { zodResolver } from '@hookform/resolvers/zod';
+import {
+  Button,
+  PasswordInput,
+  Text,
+  Title,
+  useMantineTheme,
+} from '@mantine/core';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { useChangePassword } from './change-password';
+import {
+  PasswordChangeFormData,
+  passwordChangeSchema,
+} from '@/shared/validation/profile-validation';
 
 export function ChangePasswordForm({ onClose }: { onClose: () => void }) {
   const theme = useMantineTheme();
@@ -14,7 +23,7 @@ export function ChangePasswordForm({ onClose }: { onClose: () => void }) {
     formState: { errors, isValid },
   } = useForm<PasswordChangeFormData>({
     mode: 'onChange',
-    resolver: zodResolver(passwordChangeSchema)
+    resolver: zodResolver(passwordChangeSchema),
   });
 
   const { changePassword } = useChangePassword();
@@ -24,25 +33,29 @@ export function ChangePasswordForm({ onClose }: { onClose: () => void }) {
     onClose();
   };
 
-  return(
+  return (
     <>
-      <Title size='24px' style={{marginBottom: '32px', textAlign: 'center'}}>Change password</Title>
+      <Title size="24px" style={{ marginBottom: '32px', textAlign: 'center' }}>
+        Change password
+      </Title>
       <form onSubmit={handleSubmit(onSubmit)}>
         <PasswordInput
           {...register('password')}
-          label='Current Password'
+          label="Current Password"
           placeholder="Enter your current password"
           classNames={{ input: 'form-input' }}
           withAsterisk
         />
-        <Text style={{ color: theme.colors.red[8], marginBottom: '1rem' }} size="sm">
+        <Text
+          style={{ color: theme.colors.red[8], marginBottom: '1rem' }}
+          size="sm"
+        >
           {errors.password?.message}
         </Text>
 
         <PasswordInput
-        
           {...register('newPassword')}
-          label='New Password'
+          label="New Password"
           placeholder="Enter new password"
           onChange={(e) => {
             register('newPassword').onChange(e);
@@ -55,12 +68,15 @@ export function ChangePasswordForm({ onClose }: { onClose: () => void }) {
           classNames={{ input: 'form-input' }}
           withAsterisk
         />
-        <Text style={{ color: theme.colors.red[8], marginBottom: '1rem' }} size="sm">
+        <Text
+          style={{ color: theme.colors.red[8], marginBottom: '1rem' }}
+          size="sm"
+        >
           {errors.newPassword?.message}
         </Text>
         <PasswordInput
           {...register('confirmNewPassword')}
-          label='Confirm New Password'
+          label="Confirm New Password"
           placeholder="Enter new password"
           onChange={(e) => {
             register('confirmNewPassword').onChange(e);
@@ -80,19 +96,21 @@ export function ChangePasswordForm({ onClose }: { onClose: () => void }) {
           type="submit"
           disabled={!isValid}
           onClick={onClose}
-          style={{marginTop: '24px'}}
+          style={{ marginTop: '24px' }}
           className="button button--primary"
           fullWidth
-          >Save
+        >
+          Save
         </Button>
         <Button
           onClick={onClose}
-          style={{marginTop: '16px'}}
+          style={{ marginTop: '16px' }}
           className="button button--secondary"
           fullWidth
-          >Cancel
+        >
+          Cancel
         </Button>
       </form>
     </>
-  )
+  );
 }

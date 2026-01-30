@@ -1,7 +1,15 @@
-import { Box, Button, Container, Group, Text, Title, useMantineTheme } from '@mantine/core';
+import {
+  Box,
+  Button,
+  Container,
+  Group,
+  Text,
+  Title,
+  useMantineTheme,
+} from '@mantine/core';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '@/app/routes.tsx';
-import '@/pages/CartPage/CartPage.css'
+import '@/pages/CartPage/CartPage.css';
 
 export function CartMessage() {
   const theme = useMantineTheme();

@@ -54,7 +54,7 @@ export default function ProductPage() {
     e.stopPropagation();
     // Cart functionality disabled in mock mode
     notifyError(new Error('Cart is disabled in mock mode'), {
-      message: 'Cart functionality is currently unavailable'
+      message: 'Cart functionality is currently unavailable',
     });
   };
 
@@ -62,7 +62,7 @@ export default function ProductPage() {
     e.stopPropagation();
     // Cart functionality disabled in mock mode
     notifyError(new Error('Cart is disabled in mock mode'), {
-      message: 'Cart functionality is currently unavailable'
+      message: 'Cart functionality is currently unavailable',
     });
   };
 

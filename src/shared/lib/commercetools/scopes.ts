@@ -6,7 +6,7 @@ export const anonymousScopes = [
   'manage_customers:ecom-while-true-wine-not',
   'manage_my_orders:ecom-while-true-wine-not',
   'view_orders:ecom-while-true-wine-not',
-  'manage_orders:ecom-while-true-wine-not'
+  'manage_orders:ecom-while-true-wine-not',
 ];
 
 export const customerPasswordFlowScopes = [
@@ -20,5 +20,5 @@ export const customerPasswordFlowScopes = [
   'view_categories:ecom-while-true-wine-not',
   'manage_my_business_units:ecom-while-true-wine-not',
   'manage_my_shopping_lists:ecom-while-true-wine-not',
-  'manage_orders:ecom-while-true-wine-not'
+  'manage_orders:ecom-while-true-wine-not',
 ];

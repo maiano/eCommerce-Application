@@ -68,8 +68,7 @@ export const postcode = z
   )
   .refine((val) => /^\b\d{5}\b/g.test(val), 'Postcode must contain 5 digits');
 
-export const isDefaultAddress = z
-  .boolean();
+export const isDefaultAddress = z.boolean();
 
 const shippingAddress = z.object({
   country,

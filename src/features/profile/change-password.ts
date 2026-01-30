@@ -1,25 +1,32 @@
-import { ClientResponse, Customer } from "@commercetools/platform-sdk";
-import { getUserInfo } from "../../shared/utils/get-user-info";
-import { useLogin } from "../login/useLogin";
-import { apiClientManager } from "@/shared/lib/commercetools";
-import { notifyError, notifySuccess } from "@/shared/utils/custom-notifications";
+import { ClientResponse, Customer } from '@commercetools/platform-sdk';
+import { getUserInfo } from '../../shared/utils/get-user-info';
+import { useLogin } from '../login/useLogin';
+import { apiClientManager } from '@/shared/lib/commercetools';
+import {
+  notifyError,
+  notifySuccess,
+} from '@/shared/utils/custom-notifications';
 
-export function useChangePassword () {
+export function useChangePassword() {
   const { login } = useLogin();
 
-  const changePassword = async(password: string, newPassword: string) => {
+  const changePassword = async (password: string, newPassword: string) => {
     const client = apiClientManager.get();
     const currentUser = await getUserInfo();
 
     if (currentUser && client) {
       try {
-        const response: ClientResponse<Customer> = await client.me().password().post({
-          body: {
-            version: currentUser.body.version,
-            currentPassword: password,
-            newPassword: newPassword,
-          }
-        }).execute()
+        const response: ClientResponse<Customer> = await client
+          .me()
+          .password()
+          .post({
+            body: {
+              version: currentUser.body.version,
+              currentPassword: password,
+              newPassword: newPassword,
+            },
+          })
+          .execute();
         if (response.statusCode === 200) {
           notifySuccess({ message: 'Password has been changed' });
           apiClientManager.logout();
@@ -28,10 +35,12 @@ export function useChangePassword () {
         return response;
       } catch (error: unknown) {
         if ((error as ClientResponse<Customer>).statusCode === 400) {
-          notifyError(error, { message: 'Current password does not match. Try again' })
+          notifyError(error, {
+            message: 'Current password does not match. Try again',
+          });
         }
       }
     }
-  }
+  };
   return { changePassword };
 }

@@ -1,4 +1,4 @@
-import { countries } from "../constants/countries";
+import { countries } from '../constants/countries';
 
 export const getCountryCode = (country: string | undefined) => {
   if (country) {
@@ -6,4 +6,4 @@ export const getCountryCode = (country: string | undefined) => {
   } else {
     return '';
   }
-}
+};

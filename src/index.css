@@ -150,7 +150,7 @@ body {
 }
 
 .button--primary,
-.button--primary .mantine-CloseButton-root{
+.button--primary .mantine-CloseButton-root {
   background-color: #f4c753;
   color: #141c24;
 }
@@ -176,7 +176,7 @@ body {
 .button--secondary {
   /*background-color: #29374c;*/
   /*border-color: rgba(202, 157, 41, 0.38);*/
-  background-color: #32415D;
+  background-color: #32415d;
   border-color: #516185;
   color: #f8f9fb;
 }
@@ -208,8 +208,6 @@ body {
   background-color: #29374c;
   color: #f8f9fb;
 }
-
-
 
 .button--icon {
   min-width: 0;
@@ -410,7 +408,7 @@ body {
 }
 @media (max-width: 1100px) {
   .button--large {
-    font-size: 0.870rem;
+    font-size: 0.87rem;
   }
 }
 @media (max-width: 1024px) {

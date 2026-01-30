@@ -4,7 +4,6 @@
   margin-bottom: 1rem;
 }
 
-
 .search-input__field {
   flex: 1;
   min-width: 0;
@@ -22,7 +21,6 @@
 .search-input__field::placeholder {
   color: #8a9dc0;
 }
-
 
 .filters {
   width: 70%;
@@ -57,7 +55,7 @@
   background-color: #1d2a36;
   border: 1px solid #32415d;
   height: 3.5rem;
-  background-image: url("data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2724px%27 height=%2724px%27 fill=%27rgb(138,157,192)%27 viewBox=%270 0 256 256%27%3e%3cpath d=%27M181.66,170.34a8,8,0,0,1,0,11.32l-48,48a8,8,0,0,1-11.32,0l-48-48a8,8,0,0,1,11.32-11.32L128,212.69l42.34-42.35A8,8,0,0,1,181.66,170.34Zm-96-84.68L128,43.31l42.34,42.35a8,8,0,0,0,11.32-11.32l-48-48a8,8,0,0,0-11.32,0l-48,48A8,8,0,0,0,85.66,85.66Z%27%3e%3c/path%3e%3c/svg%3e");
+  background-image: url('data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2724px%27 height=%2724px%27 fill=%27rgb(138,157,192)%27 viewBox=%270 0 256 256%27%3e%3cpath d=%27M181.66,170.34a8,8,0,0,1,0,11.32l-48,48a8,8,0,0,1-11.32,0l-48-48a8,8,0,0,1,11.32-11.32L128,212.69l42.34-42.35A8,8,0,0,1,181.66,170.34Zm-96-84.68L128,43.31l42.34,42.35a8,8,0,0,0,11.32-11.32l-48-48a8,8,0,0,0-11.32,0l-48,48A8,8,0,0,0,85.66,85.66Z%27%3e%3c/path%3e%3c/svg%3e');
   background-repeat: no-repeat;
   background-position: right 1rem center;
   padding: 0.9375rem;
@@ -155,36 +153,34 @@
 /*  }*/
 /*}*/
 
-
-
 .product-card__image--1 {
-  background-image: url("../../../src/assets/Castillo Ygay Gran Reserva Especial Blanco 2001-1.jpg");
+  background-image: url('../../../src/assets/Castillo Ygay Gran Reserva Especial Blanco 2001-1.jpg');
 }
 
 .product-card__image--2 {
-  background-image: url("../../../src/assets/Montrachet Grand Cru 2010-2.jpg");
+  background-image: url('../../../src/assets/Montrachet Grand Cru 2010-2.jpg');
 }
 
 .product-card__image--3 {
-  background-image: url("https://images.vivino.com/thumbs/G3MU5UwBQ1eCX5A6CiPivg_pb_x600.png");
+  background-image: url('https://images.vivino.com/thumbs/G3MU5UwBQ1eCX5A6CiPivg_pb_x600.png');
 }
 
 .product-card__image--4 {
-  background-image: url("https://cdn.usegalileo.ai/sdxl10/0eea6aee-9921-49ac-bbaa-7def81318f98.png");
+  background-image: url('https://cdn.usegalileo.ai/sdxl10/0eea6aee-9921-49ac-bbaa-7def81318f98.png');
 }
 
 .product-card__image--5 {
-  background-image: url("https://cdn.usegalileo.ai/sdxl10/c6ab2f06-0ec1-4d34-bd49-6520fdd63180.png");
+  background-image: url('https://cdn.usegalileo.ai/sdxl10/c6ab2f06-0ec1-4d34-bd49-6520fdd63180.png');
 }
 
 .product-card__image--6 {
-  background-image: url("https://cdn.usegalileo.ai/sdxl10/d90f77b3-fdd9-4c18-aac8-5a54b27fe7de.png");
+  background-image: url('https://cdn.usegalileo.ai/sdxl10/d90f77b3-fdd9-4c18-aac8-5a54b27fe7de.png');
 }
 
 .product-card__image--7 {
-  background-image: url("https://cdn.usegalileo.ai/sdxl10/0f7256d8-8e72-4104-b428-cea3b42e76d9.png");
+  background-image: url('https://cdn.usegalileo.ai/sdxl10/0f7256d8-8e72-4104-b428-cea3b42e76d9.png');
 }
 
 .product-card__image--8 {
-  background-image: url("https://cdn.usegalileo.ai/sdxl10/9204a299-2794-4f6b-af2a-2fa313afab9c.png");
+  background-image: url('https://cdn.usegalileo.ai/sdxl10/9204a299-2794-4f6b-af2a-2fa313afab9c.png');
 }

@@ -72,7 +72,7 @@ export function Header() {
   );
 
   return (
-    <Box className="header" style={{ width: '100%', maxWidth: 1920 }}>
+    <Box className="header" style={{ width: '100%', maxWidth: 1400 }}>
       <Group className="header__logo" style={{ justifyContent: 'start' }}>
         <Anchor
           component={Link}
@@ -183,7 +183,7 @@ export function Header() {
           )
         ) : null}
 
-        {!opened && (
+        {isLargeScreen && (
           <>
             <Indicator
               label={itemCount}
@@ -246,19 +246,31 @@ export function Header() {
               <Menu.Dropdown>
                 {isAuthenticated ? (
                   <>
-                    <Menu.Item onClick={handleDisabledClick} style={{ cursor: 'not-allowed', opacity: 0.5 }}>
+                    <Menu.Item
+                      onClick={handleDisabledClick}
+                      style={{ cursor: 'not-allowed', opacity: 0.5 }}
+                    >
                       <Text>Profile</Text>
                     </Menu.Item>
-                    <Menu.Item onClick={handleDisabledClick} style={{ cursor: 'not-allowed', opacity: 0.5 }}>
+                    <Menu.Item
+                      onClick={handleDisabledClick}
+                      style={{ cursor: 'not-allowed', opacity: 0.5 }}
+                    >
                       <Text>Logout</Text>
                     </Menu.Item>
                   </>
                 ) : (
                   <>
-                    <Menu.Item onClick={handleDisabledClick} style={{ cursor: 'not-allowed', opacity: 0.5 }}>
+                    <Menu.Item
+                      onClick={handleDisabledClick}
+                      style={{ cursor: 'not-allowed', opacity: 0.5 }}
+                    >
                       <Text>Login</Text>
                     </Menu.Item>
-                    <Menu.Item onClick={handleDisabledClick} style={{ cursor: 'not-allowed', opacity: 0.5 }}>
+                    <Menu.Item
+                      onClick={handleDisabledClick}
+                      style={{ cursor: 'not-allowed', opacity: 0.5 }}
+                    >
                       <Text>Register</Text>
                     </Menu.Item>
                   </>

@@ -2,13 +2,13 @@
 
 ## About Us
 
-**Wine not?** brings you premium wines from around the world with:  
+**Wine not?** brings you premium wines from around the world with:
 
-- Handpicked wines from top vineyards  
-- Easy browsing and cart management  
-- Fast nationwide delivery  
-- Secure registration and checkout  
-- Exclusive deals for regular customers  
+- Handpicked wines from top vineyards
+- Easy browsing and cart management
+- Fast nationwide delivery
+- Secure registration and checkout
+- Exclusive deals for regular customers
 
 Discover your next favorite bottle in just a few clicks!
 

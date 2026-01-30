@@ -18,7 +18,9 @@ export function useProductById(id: string) {
         attributes: [
           { name: 'year', value: product.year },
           { name: 'country', value: product.country },
-          ...(product.rating ? [{ name: 'rating', value: product.rating.toString() }] : []),
+          ...(product.rating
+            ? [{ name: 'rating', value: product.rating.toString() }]
+            : []),
         ],
       });
     },

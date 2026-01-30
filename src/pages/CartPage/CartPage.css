@@ -185,7 +185,7 @@
   font-weight: 700;
   cursor: pointer;
   transition: background-color 0.2s ease-in-out;
-  font-family: "Plus Jakarta Sans", "Noto Sans", sans-serif;
+  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif;
 }
 
 .checkout-btn:hover {
@@ -218,7 +218,6 @@
   justify-content: center;
 }
 
-
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -234,13 +233,11 @@
   animation: fadeIn 0.3s ease-out forwards;
 }
 
-
 @media (max-width: 600px) {
   .cart-inner {
     display: flex;
     flex-direction: column;
     padding: 0 !important;
-
   }
   .cart-column {
     padding: 0 !important;
@@ -249,6 +246,6 @@
     min-width: 140px;
   }
   .cart-image {
-   max-width: 100% !important;
+    max-width: 100% !important;
   }
 }

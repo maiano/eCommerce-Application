@@ -1,6 +1,6 @@
 .about-container {
   margin-top: 1rem;
-  max-width: 1440px;
+  max-width: 1400px;
   width: 100%;
   text-align: center;
 }
@@ -26,7 +26,7 @@
   display: inline;
 }
 
-.member-card_github:hover{
+.member-card_github:hover {
   text-decoration: none;
 }
 
@@ -40,12 +40,14 @@
   fill: #d4d8e9;
 }
 
-.member-card__avatar, .rsschool-logo {
+.member-card__avatar,
+.rsschool-logo {
   max-width: 320px;
   transition: transform 0.3s ease;
 }
 
-.member-card__avatar:hover, .rsschool-logo:hover {
+.member-card__avatar:hover,
+.rsschool-logo:hover {
   transform: scale(1.1);
 }
 
@@ -64,5 +66,4 @@
   .team-collaboration-item {
     flex-direction: column;
   }
-
 }

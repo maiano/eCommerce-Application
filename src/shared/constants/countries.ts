@@ -1,5 +1,5 @@
 export const countries = {
-  "FR": "France",
-  "IT": "Italy",
-  "ES": "Spain",
-}
+  FR: 'France',
+  IT: 'Italy',
+  ES: 'Spain',
+};

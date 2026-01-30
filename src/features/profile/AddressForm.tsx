@@ -1,16 +1,47 @@
-import { BaseAddress, ClientResponse, Customer } from "@commercetools/platform-sdk";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, Checkbox, Combobox, Grid, Input, InputBase, Stack, Switch, Text, TextInput, Title, useCombobox, useMantineTheme } from "@mantine/core";
-import { JSX, useEffect, useState } from "react";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { getUserInfo } from "../../shared/utils/get-user-info";
-import { useAuthStore } from "../auth/auth-state";
-import { addAddress, updateAddress } from "./address";
-import { countries } from "@/shared/constants/countries";
-import { getCountryCode } from "@/shared/utils/get-country-code";
-import { AddressFormData, addressSchema } from "@/shared/validation/profile-validation";
+import {
+  BaseAddress,
+  ClientResponse,
+  Customer,
+} from '@commercetools/platform-sdk';
+import { zodResolver } from '@hookform/resolvers/zod';
+import {
+  Button,
+  Checkbox,
+  Combobox,
+  Grid,
+  Input,
+  InputBase,
+  Stack,
+  Switch,
+  Text,
+  TextInput,
+  Title,
+  useCombobox,
+  useMantineTheme,
+} from '@mantine/core';
+import { JSX, useEffect, useState } from 'react';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { getUserInfo } from '../../shared/utils/get-user-info';
+import { useAuthStore } from '../auth/auth-state';
+import { addAddress, updateAddress } from './address';
+import { countries } from '@/shared/constants/countries';
+import { getCountryCode } from '@/shared/utils/get-country-code';
+import {
+  AddressFormData,
+  addressSchema,
+} from '@/shared/validation/profile-validation';
 
-export function AddressForm({ onClose, type, address, onUpdate }: { onClose: () => void, type: 'add' | 'edit', address: BaseAddress | null, onUpdate?: () => void}) {
+export function AddressForm({
+  onClose,
+  type,
+  address,
+  onUpdate,
+}: {
+  onClose: () => void;
+  type: 'add' | 'edit';
+  address: BaseAddress | null;
+  onUpdate?: () => void;
+}) {
   const theme = useMantineTheme();
 
   const {
@@ -23,14 +54,14 @@ export function AddressForm({ onClose, type, address, onUpdate }: { onClose: () 
     formState: { errors, isValid },
   } = useForm<AddressFormData>({
     mode: 'onChange',
-    resolver: zodResolver(addressSchema)
+    resolver: zodResolver(addressSchema),
   });
 
   const status = useAuthStore((state) => state.status);
   const isAuthenticated = status === 'AUTHENTICATED';
-  
+
   const [user, setUser] = useState<ClientResponse<Customer> | null>(null);
-  
+
   useEffect(() => {
     const getUser = async () => {
       if (isAuthenticated) {
@@ -38,8 +69,13 @@ export function AddressForm({ onClose, type, address, onUpdate }: { onClose: () 
         if (user) {
           setUser(user);
           if (address?.country) {
-            setValue('country', countries[address.country as keyof typeof countries]);
-            setCountryValue(countries[address.country as keyof typeof countries]);
+            setValue(
+              'country',
+              countries[address.country as keyof typeof countries],
+            );
+            setCountryValue(
+              countries[address.country as keyof typeof countries],
+            );
             trigger('country');
           }
           if (address?.city) {
@@ -53,16 +89,28 @@ export function AddressForm({ onClose, type, address, onUpdate }: { onClose: () 
           }
           if (address?.id) {
             if (user.body.shippingAddressIds) {
-              setValue('isShippingAddress', user.body.shippingAddressIds?.includes(address.id ?? ''))
+              setValue(
+                'isShippingAddress',
+                user.body.shippingAddressIds?.includes(address.id ?? ''),
+              );
             }
             if (user.body.billingAddressIds) {
-              setValue('isBillingAddress', user.body.billingAddressIds?.includes(address.id ?? ''))
+              setValue(
+                'isBillingAddress',
+                user.body.billingAddressIds?.includes(address.id ?? ''),
+              );
             }
             if (user.body.defaultShippingAddressId) {
-              setValue('isDefaultShippingAddress', user.body.defaultShippingAddressId === address.id)
+              setValue(
+                'isDefaultShippingAddress',
+                user.body.defaultShippingAddressId === address.id,
+              );
             }
             if (user.body.defaultBillingAddressId) {
-              setValue('isDefaultBillingAddress', user.body.defaultBillingAddressId === address.id)
+              setValue(
+                'isDefaultBillingAddress',
+                user.body.defaultBillingAddressId === address.id,
+              );
             }
           }
         }
@@ -84,16 +132,37 @@ export function AddressForm({ onClose, type, address, onUpdate }: { onClose: () 
 
   const onNewAddressSubmit: SubmitHandler<AddressFormData> = async (data) => {
     const country = getCountryCode(data.country);
-    await addAddress(country, data.city, data.street, data.postcode, data.isShippingAddress, data.isBillingAddress, data.isDefaultShippingAddress, data.isDefaultBillingAddress);
+    await addAddress(
+      country,
+      data.city,
+      data.street,
+      data.postcode,
+      data.isShippingAddress,
+      data.isBillingAddress,
+      data.isDefaultShippingAddress,
+      data.isDefaultBillingAddress,
+    );
     if (onUpdate) {
       onUpdate();
     }
     onClose();
   };
 
-  const onUpdatedAddressSubmit: SubmitHandler<AddressFormData> = async (data) => {
+  const onUpdatedAddressSubmit: SubmitHandler<AddressFormData> = async (
+    data,
+  ) => {
     const country = getCountryCode(data.country);
-    await updateAddress(address?.id, country, data.city, data.street, data.postcode, data.isShippingAddress, data.isBillingAddress, data.isDefaultShippingAddress, data.isDefaultBillingAddress);
+    await updateAddress(
+      address?.id,
+      country,
+      data.city,
+      data.street,
+      data.postcode,
+      data.isShippingAddress,
+      data.isBillingAddress,
+      data.isDefaultShippingAddress,
+      data.isDefaultBillingAddress,
+    );
     if (onUpdate) {
       onUpdate();
     }
@@ -103,47 +172,62 @@ export function AddressForm({ onClose, type, address, onUpdate }: { onClose: () 
   const submit = type === 'add' ? onNewAddressSubmit : onUpdatedAddressSubmit;
   const titleText = type === 'add' ? 'Add new address' : 'Edit address';
 
-  return(
+  return (
     <>
-      <Title size='24px' style={{marginBottom: '32px', textAlign: 'center'}}>{titleText}</Title>
+      <Title size="24px" style={{ marginBottom: '32px', textAlign: 'center' }}>
+        {titleText}
+      </Title>
       <form onSubmit={handleSubmit(submit)}>
         <Grid gutter="md">
           <Grid.Col span={{ base: 12, sm: 6 }}>
             <Stack style={{ gap: 5 }}>
-            <Controller<AddressFormData>
-              name='country'
-              control={control}
-              render={({ field }): JSX.Element => (
-                <Combobox
-                store={countrySelect}
-                withinPortal={false}
-                onOptionSubmit={(val) => {
-                  field.onChange(val);
-                  setCountryValue(val);
-                  countrySelect.closeDropdown();
-                }}
-                >
-                <Combobox.Target>
-                  <InputBase
-                    label="Country"
-                    withAsterisk
-                    component="button"
-                    type="button"
-                    pointer
-                    rightSection={<Combobox.Chevron />}
-                    onClick={() => countrySelect.toggleDropdown()}
-                    rightSectionPointerEvents="none"
-                    classNames={{ input: 'form-input' }}
-                    >
-                    { type === 'add' ? countryValue ||<Input.Placeholder>Select country</Input.Placeholder> : countryValue || countries[address?.country as keyof typeof countries] ||<Input.Placeholder>Select country</Input.Placeholder>}
-                  </InputBase>
-                </Combobox.Target>
-                <Combobox.Dropdown>
-                  <Combobox.Options>{options}</Combobox.Options>
-                </Combobox.Dropdown>
-              </Combobox>
-              )}
-            />
+              <Controller<AddressFormData>
+                name="country"
+                control={control}
+                render={({ field }): JSX.Element => (
+                  <Combobox
+                    store={countrySelect}
+                    withinPortal={false}
+                    onOptionSubmit={(val) => {
+                      field.onChange(val);
+                      setCountryValue(val);
+                      countrySelect.closeDropdown();
+                    }}
+                  >
+                    <Combobox.Target>
+                      <InputBase
+                        label="Country"
+                        withAsterisk
+                        component="button"
+                        type="button"
+                        pointer
+                        rightSection={<Combobox.Chevron />}
+                        onClick={() => countrySelect.toggleDropdown()}
+                        rightSectionPointerEvents="none"
+                        classNames={{ input: 'form-input' }}
+                      >
+                        {type === 'add'
+                          ? countryValue || (
+                              <Input.Placeholder>
+                                Select country
+                              </Input.Placeholder>
+                            )
+                          : countryValue ||
+                            countries[
+                              address?.country as keyof typeof countries
+                            ] || (
+                              <Input.Placeholder>
+                                Select country
+                              </Input.Placeholder>
+                            )}
+                      </InputBase>
+                    </Combobox.Target>
+                    <Combobox.Dropdown>
+                      <Combobox.Options>{options}</Combobox.Options>
+                    </Combobox.Dropdown>
+                  </Combobox>
+                )}
+              />
               <Text style={{ color: theme.colors.red[8] }} size="sm">
                 {errors.country?.message}
               </Text>
@@ -153,7 +237,7 @@ export function AddressForm({ onClose, type, address, onUpdate }: { onClose: () 
             <Stack style={{ gap: 7 }}>
               <TextInput
                 {...register('city')}
-                label='City'
+                label="City"
                 placeholder="Enter city"
                 classNames={{ input: 'form-input' }}
                 withAsterisk
@@ -167,7 +251,7 @@ export function AddressForm({ onClose, type, address, onUpdate }: { onClose: () 
             <Stack style={{ gap: 7 }}>
               <TextInput
                 {...register('street')}
-                label='Street'
+                label="Street"
                 placeholder="Enter street"
                 classNames={{ input: 'form-input' }}
                 withAsterisk
@@ -181,7 +265,7 @@ export function AddressForm({ onClose, type, address, onUpdate }: { onClose: () 
             <Stack style={{ gap: 7 }}>
               <TextInput
                 {...register('postcode')}
-                label='Postcode'
+                label="Postcode"
                 placeholder="Enter postcode"
                 classNames={{ input: 'form-input' }}
                 withAsterisk
@@ -195,7 +279,7 @@ export function AddressForm({ onClose, type, address, onUpdate }: { onClose: () 
             <Checkbox
               styles={{
                 input: { borderRadius: '5px' },
-                root: { marginRight:'2rem' },
+                root: { marginRight: '2rem' },
               }}
               {...register('isShippingAddress')}
               label="Shipping address"
@@ -203,49 +287,59 @@ export function AddressForm({ onClose, type, address, onUpdate }: { onClose: () 
           </Grid.Col>
           <Grid.Col span={{ base: 12, xs: 6 }}>
             <Switch
-              style={{marginBottom: '1rem'}}
+              style={{ marginBottom: '1rem' }}
               {...register('isDefaultShippingAddress')}
-              label='Set as default'
+              label="Set as default"
               disabled={!watch('isShippingAddress')}
-              checked={watch('isShippingAddress') ? watch('isDefaultShippingAddress') : false}
+              checked={
+                watch('isShippingAddress')
+                  ? watch('isDefaultShippingAddress')
+                  : false
+              }
             />
           </Grid.Col>
           <Grid.Col span={{ base: 12, xs: 6 }}>
             <Checkbox
               styles={{
                 input: { borderRadius: '5px' },
-                root: { marginRight:'2rem' },
+                root: { marginRight: '2rem' },
               }}
               {...register('isBillingAddress')}
               label="Billing address"
             />
-            </Grid.Col>
-            <Grid.Col span={{ base: 12, xs: 6 }}>
-          <Switch
-            style={{marginBottom: '1rem'}}
-            {...register('isDefaultBillingAddress')}
-            label='Set as default'
-            disabled={!watch('isBillingAddress')}
-            checked={watch('isBillingAddress') ? watch('isDefaultBillingAddress') : false}
-          />
+          </Grid.Col>
+          <Grid.Col span={{ base: 12, xs: 6 }}>
+            <Switch
+              style={{ marginBottom: '1rem' }}
+              {...register('isDefaultBillingAddress')}
+              label="Set as default"
+              disabled={!watch('isBillingAddress')}
+              checked={
+                watch('isBillingAddress')
+                  ? watch('isDefaultBillingAddress')
+                  : false
+              }
+            />
           </Grid.Col>
         </Grid>
         <Button
           type="submit"
           disabled={!isValid}
-          style={{marginTop: '24px'}}
+          style={{ marginTop: '24px' }}
           className="button button--primary"
           fullWidth
-          >Save
+        >
+          Save
         </Button>
         <Button
           onClick={onClose}
-          style={{marginTop: '16px'}}
+          style={{ marginTop: '16px' }}
           className="button button--secondary"
           fullWidth
-          >Cancel
+        >
+          Cancel
         </Button>
       </form>
     </>
-  )
+  );
 }

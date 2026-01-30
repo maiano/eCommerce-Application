@@ -274,7 +274,6 @@ body.mantine-Modal-body {
       width: 18px;
     }
   }
-
 }
 
 @media (max-width: 480px) {
@@ -289,7 +288,7 @@ body.mantine-Modal-body {
 
 @media (max-width: 400px) {
   .carousel-slide,
-  .main-product-image{
+  .main-product-image {
     max-height: 35vh !important;
   }
   .modal-slide {
